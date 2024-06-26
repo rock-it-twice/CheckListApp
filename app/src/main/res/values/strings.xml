@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LetsCheck</string>
+    <!-- имена экранов -->
+    <string name="home">choose entity screen</string>
+</resources>
