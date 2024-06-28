@@ -21,16 +21,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.letscheck.data.User
+import com.example.letscheck.data.Dao
 import com.example.letscheck.navigation.Screens
 
 @Composable
-fun CheckListScreen(user: User, currentEntity: Int, navController: NavController) {
+fun CheckListScreen(
+    userDao: Dao, currentEntity: Int,
+    navController: NavController) {
+    val entityName = userDao.getUserEntity(currentEntity)
+    val checkLists = userDao.getCheckList(currentEntity)
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -46,7 +48,7 @@ fun CheckListScreen(user: User, currentEntity: Int, navController: NavController
             ) {
                 // Вывод имени текущего списка (entity)
                 Text(
-                    text = user.entity[currentEntity].first,
+                    text = entityName,
                     modifier = Modifier,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 10.em
@@ -60,17 +62,18 @@ fun CheckListScreen(user: User, currentEntity: Int, navController: NavController
 
             }
             // Вывод имени подсписка
-            user.entity[currentEntity].second.forEachIndexed { i, v ->
+            checkLists.forEach { v ->
                 Row(modifier = Modifier) {
                     Text(
-                        text = v.name,
+                        text = v.checkListName,
                         modifier = Modifier,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 8.em
                     )
                 }
                 // Вывод элементов подсписка
-                v.checkList.forEach {
+                userDao.getCheckBoxTexts(v.checkListId)
+                .forEach {
                     var isChecked by rememberSaveable { mutableStateOf(false) }
                     Row(modifier = Modifier
                         .fillMaxWidth()
@@ -86,7 +89,7 @@ fun CheckListScreen(user: User, currentEntity: Int, navController: NavController
 
                             )
                         Text(
-                            text = it,
+                            text = it.str,
                             fontSize = 4.5.em
                         )
                     }
@@ -98,9 +101,9 @@ fun CheckListScreen(user: User, currentEntity: Int, navController: NavController
 }
 
 
-@Preview
-@Composable
-fun LoadCheckListPreview(){
-    user.entity.add(dataLoader.fitnessEntity)
-    CheckListScreen(user = user, currentEntity = 0, navController = rememberNavController())
-}
+//@Preview
+//@Composable
+//fun LoadCheckListPreview(){
+//    user.entity.add(dataLoader.fitnessEntity)
+//    CheckListScreen(user = user, currentEntity = 0, navController = rememberNavController())
+//}

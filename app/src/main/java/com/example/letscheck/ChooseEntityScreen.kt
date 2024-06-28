@@ -13,17 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.letscheck.data.User
+import com.example.letscheck.data.Dao
 import com.example.letscheck.navigation.Screens
 
 
 @Composable
-fun ChooseEntityScreen(user: User, navController: NavController) {
-
+fun ChooseEntityScreen(userDao: Dao, navController: NavController) {
+    val user = userDao.getUserById(0)
+    val userId: Int = user.userId
+    val userEntity = userDao.getUserEntities(userId)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,8 +36,8 @@ fun ChooseEntityScreen(user: User, navController: NavController) {
         Spacer( modifier = Modifier.size(20.dp) )
 
         LazyRow {
-            items(user.entity.size) { item ->
-                user.entity.forEachIndexed { i, v ->
+            items(userEntity.size) { item ->
+                userEntity.forEach { v ->
                     Button(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         onClick = {
@@ -45,7 +45,7 @@ fun ChooseEntityScreen(user: User, navController: NavController) {
                         },
                         enabled = true
                     ) {
-                        Text(text = v.first)
+                        Text(text = v.entityName)
                     }
 
                 }
@@ -68,12 +68,3 @@ fun ChooseEntityScreen(user: User, navController: NavController) {
 
     }
 }
-
-
-@Preview
-@Composable
-fun ChooseEntityScreenPreview() {
-    user.entity.add(dataLoader.fitnessEntity)
-    ChooseEntityScreen(user = user, navController = rememberNavController())
-}
-
