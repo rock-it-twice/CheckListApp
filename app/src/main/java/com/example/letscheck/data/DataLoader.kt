@@ -53,7 +53,7 @@ class DataLoader(userDao: Dao) {
 
 
             // загрузка всего этого добра в БД
-            userDao.insertUser(user)
+            userDao.addUser(user)
             userDao.insertUserEntity(userEntity)
             userDao.insertMultipleCheckLists(checkLists)
             userDao.insertMultipleCheckBoxTexts(checkBoxes)

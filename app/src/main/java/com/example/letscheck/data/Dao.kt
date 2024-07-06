@@ -1,5 +1,6 @@
 package com.example.letscheck.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,21 +15,20 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface Dao {
 
-    @Insert( onConflict = OnConflictStrategy.REPLACE )
-    suspend fun insertUser(user: User)
-    @Insert( onConflict = OnConflictStrategy.REPLACE )
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
+    suspend fun addUser(user: User)
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     suspend fun insertUserEntity(userEntity: UserEntity)
-    @Insert( onConflict = OnConflictStrategy.REPLACE )
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     suspend fun insertCheckList(checkList: CheckList)
-    @Insert( onConflict = OnConflictStrategy.REPLACE )
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     suspend fun insertMultipleCheckLists(checkLists: List<CheckList>)
-    @Insert ( onConflict = OnConflictStrategy.REPLACE )
+    @Insert ( onConflict = OnConflictStrategy.IGNORE )
     suspend fun insertCheckBoxText(checkBoxText: CheckBoxText)
-    @Insert ( onConflict = OnConflictStrategy.REPLACE )
+    @Insert ( onConflict = OnConflictStrategy.IGNORE )
     suspend fun insertMultipleCheckBoxTexts(texts: List<CheckBoxText>)
 
-//    @Delete(User::class)
-//    suspend fun deleteUser(userId: Int)
+
 //    @Delete(UserEntity::class)
 //    suspend fun deleteUserEntity(userEntityId: Int)
 //    @Delete(CheckList::class)
@@ -45,13 +45,13 @@ interface Dao {
 
     // Получение списка всех пользователей
     @Query( "SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>
+    fun getAllUsers(): LiveData<List<User>>
     // Получение пользователя по id
-    @Query( "SELECT *  FROM users WHERE userId LIKE :userId" )
-    fun getUserById(userId: Int): Flow<User>
+    @Query( "SELECT * FROM users WHERE userId LIKE :userId LIMIT 1" )
+    fun getUserById(userId: Int): User?
     // Получение пользователя по имени
-    @Query( "SELECT *  FROM users WHERE user_name LIKE :userName" )
-    fun getUserByName(userName: String): Flow<User>
+    @Query( "SELECT * FROM users WHERE user_name LIKE :userName" )
+    fun getUserByName(userName: String): LiveData<User>
     // Получение всех списков пользователя
     @Query( "SELECT * FROM user_entities WHERE userId LIKE :userId" )
     fun getUserEntities(userId: Int): Flow<List<UserEntity>>
@@ -64,6 +64,9 @@ interface Dao {
 
     @Query ("SELECT * FROM check_box_text WHERE checkListId LIKE :checkListId")
     fun getCheckBoxTexts(checkListId: Int): Flow<List<CheckBoxText>>
+
+    @Query("DELETE FROM users WHERE userId = :userId")
+    fun deleteUser(userId: Int)
 
 
 //    @Query("SELECT user_name AS userName, " +

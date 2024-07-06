@@ -4,21 +4,31 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.letscheck.CheckListScreen
-import com.example.letscheck.ChooseEntityScreen
-import com.example.letscheck.data.Dao
+import com.example.letscheck.CheckListViewModel
+import com.example.letscheck.screens.CheckListScreen
+import com.example.letscheck.screens.ChooseEntityScreen
+import com.example.letscheck.screens.ChooseUserScreen
+import com.example.letscheck.screens.CreateUserScreen
 
 @Composable
-fun NavGraph(userDao: Dao, navController: NavHostController) {
+fun NavGraph(
+    navController: NavHostController, vm: CheckListViewModel
+) {
     NavHost(
         navController = navController,
-        startDestination = Screens.Home.route
+        startDestination = Screens.ChooseUserScreen.route
     ) {
         composable(route = Screens.Home.route){
-            ChooseEntityScreen(userDao = userDao, navController = navController)
+            ChooseEntityScreen(navController = navController)
         }
         composable(route = Screens.CheckListScreen.route){
-            CheckListScreen(userDao = userDao, currentEntity = 0, navController = navController)
+            CheckListScreen(navController = navController)
+        }
+        composable(route = Screens.CreateUserScreen.route){
+            CreateUserScreen(navController = navController, vm = vm)
+        }
+        composable(route = Screens.ChooseUserScreen.route){
+            ChooseUserScreen(navController = navController, vm = vm)
         }
 
     }

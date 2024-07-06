@@ -2,7 +2,6 @@ package com.example.letscheck.data.classes
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
@@ -14,5 +13,5 @@ data class User(
     @PrimaryKey(autoGenerate = true)
     val userId: Int = 0,
     @ColumnInfo("user_name")
-    val userName: String = "user"
+    val userName: String
 )
