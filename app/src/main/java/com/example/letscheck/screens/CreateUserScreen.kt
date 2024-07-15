@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.letscheck.CheckListViewModel
-import com.example.letscheck.data.classes.User
+import com.example.letscheck.data.classes.UserActivity
 import com.example.letscheck.screens.composables.Header
 import com.example.letscheck.ui.theme.Typography
 
 @Composable
 fun CreateUserScreen(navController: NavController, vm: CheckListViewModel = viewModel()) {
 
-    val userList by vm.users.observeAsState(initial = listOf())
+    val userList by vm.userActivities.observeAsState(initial = listOf())
 
     Surface(
         modifier = Modifier
@@ -58,14 +58,14 @@ fun CreateUserScreen(navController: NavController, vm: CheckListViewModel = view
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedTextField(
-                    value = vm.userName,
+                    value = vm.userActivityName,
                     modifier = Modifier
                         .padding(end = 20.dp)
                         .weight(0.75F, true),
                     onValueChange = { vm.changeName(it) },
                     placeholder = { Text(text = "Enter your name")})
                 Button(
-                    onClick = { vm.addUser() },
+                    onClick = { vm.addUserActivity() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta),
                     shape = RoundedCornerShape(2.dp),
                     modifier = Modifier
@@ -81,22 +81,22 @@ fun CreateUserScreen(navController: NavController, vm: CheckListViewModel = view
                 }
             }
             Spacer(modifier = Modifier.height(30.dp))
-            UserList(users = userList, delete = { vm.deleteUser(it) })
+            UserList(userActivities = userList, delete = { vm.deleteUser(it) })
         }
     }
 }
 
 @Composable
-fun UserList(users: List<User>, delete: (Int) -> Unit) {
+fun UserList(userActivities: List<UserActivity>, delete: (Int) -> Unit) {
     LazyColumn(Modifier.fillMaxWidth()) {
         item { UserTitleRow() }
-        items(users) { user -> UserRow(user, { delete(user.id) }) }
+        items(userActivities) { user -> UserRow(user, { delete(user.id) }) }
 
     }
 }
 
 @Composable
-fun UserRow(user: User, delete:(Int) -> Unit) {
+fun UserRow(userActivity: UserActivity, delete:(Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -104,15 +104,15 @@ fun UserRow(user: User, delete:(Int) -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = user.id.toString(),
+            text = userActivity.id.toString(),
             style = Typography.titleMedium
             )
         Spacer(modifier = Modifier.width(10.dp))
-        Text(text = user.userName,
+        Text(text = userActivity.activityName,
             style = Typography.titleMedium)
         Spacer(modifier = Modifier.width(10.dp))
         Text(text = "delete",
-            Modifier.clickable { delete(user.id) },
+            Modifier.clickable { delete(userActivity.id) },
             style = Typography.titleMedium,
             color = Color.Blue
         )

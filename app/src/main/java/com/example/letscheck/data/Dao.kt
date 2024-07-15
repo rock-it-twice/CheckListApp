@@ -10,15 +10,16 @@ import androidx.room.Update
 import com.example.letscheck.data.classes.CheckBoxTitle
 import com.example.letscheck.data.classes.CheckList
 import com.example.letscheck.data.classes.JointCheckList
-import com.example.letscheck.data.classes.User
+import com.example.letscheck.data.classes.JointUserActivity
+import com.example.letscheck.data.classes.UserActivity
 import com.example.letscheck.data.classes.UserEntity
 
 @Dao
 interface Dao {
 
-    //ВСТАВКА В БД
+    // ДОБАВЛЕНИЕ ДАННЫХ
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUser(user: User)
+    suspend fun addUserActivity(userActivity: UserActivity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUserEntity(userEntity: UserEntity)
@@ -29,9 +30,9 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCheckBoxTitle(checkBoxTitle: CheckBoxTitle)
 
-    //ОБНОВЛЕНИЕ
+    // ОБНОВЛЕНИЕ
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun updateUserActivity(userActivity: UserActivity)
 
     @Update
     suspend fun updateUserEntity(userEntity: UserEntity)
@@ -39,36 +40,40 @@ interface Dao {
     @Update
     suspend fun updateCheckList(checkList: CheckList)
 
+    @Update
+    suspend fun updateCheckBoxTitle(checkBoxTitle: CheckBoxTitle)
+
     // УДАЛЕНИЕ
-    @Query("DELETE FROM users WHERE id = :userId")
-    fun deleteUser(userId: Int)
+    @Query("DELETE FROM user_activities WHERE id = :activityId")
+    suspend fun deleteUserActivity(activityId: Int)
 
     @Query("DELETE FROM user_entities WHERE id = :entityId")
-    fun deleteEntity(entityId: Int)
+    suspend fun deleteEntity(entityId: Int)
 
     @Query("DELETE FROM check_lists WHERE id = :checkListId")
-    fun deleteCheckListTitle(checkListId: Int)
+    suspend fun deleteCheckListTitle(checkListId: Int)
 
     @Query("DELETE FROM check_box_title WHERE checkListId LIKE :str")
-    fun deleteCheckBox(str: String)
+    suspend fun deleteCheckBox(str: String)
 
+
+    // ЗАПРОСЫ К БД --------------------------------------------
 
     // Получение списка всех пользователей
-    @Query("SELECT * FROM users")
-    fun getAllUsers(): LiveData<List<User>>
+    @Query("SELECT * FROM user_activities")
+    fun getAllUserActivities(): LiveData<List<UserActivity>>
 
     // Получение пользователя по id
-    @Query("SELECT * FROM users WHERE id LIKE :userId LIMIT 1")
-    fun getUserById(userId: Int): User?
+    @Query("SELECT * FROM user_activities WHERE id LIKE :activityId LIMIT 1")
+    suspend fun getUserActivityById(activityId: Int): UserActivity?
 
     // Получение пользователя по имени
-    @Query("SELECT * FROM users WHERE user_name LIKE :userName LIMIT 1")
-    fun getUserByName(userName: String): User?
-
+    @Query("SELECT * FROM user_activities WHERE activity_name LIKE :activityName LIMIT 1")
+    suspend fun getUserActivityByName(activityName: String): UserActivity?
 
     // ЗАГОЛОВКИ
-    @Query("SELECT * FROM user_entities WHERE userId LIKE :userId")
-    fun getUserEntities(userId: Int): List<UserEntity>
+    @Query("SELECT * FROM user_entities WHERE activityId LIKE :activityId")
+    fun getUserEntities(activityId: Int): List<UserEntity>
 
     // Получение entity по ID
     @Query("SELECT * FROM user_entities WHERE id LIKE :entityId LIMIT 1")
@@ -77,9 +82,23 @@ interface Dao {
     // Получение entity по имени
     @Query(
         "SELECT * FROM user_entities WHERE " +
-                "entity_name LIKE :entityName AND userId LIKE :userId LIMIT 1"
+                "entity_name LIKE :entityName AND activityId LIKE :userId LIMIT 1"
     )
     fun getUserEntityByName(entityName: String, userId: Int): UserEntity?
+
+    // JointUserActivity (UserActivity + Entity)
+
+    @Transaction
+    @Query("SELECT * FROM user_activities")
+    fun getJointUserActivities(): LiveData<List<JointUserActivity>>
+
+    @Transaction
+    @Query("SELECT * FROM user_activities WHERE id LIKE :id LIMIT 1")
+    suspend fun getJointUserActivityById(id: Int): JointUserActivity?
+
+    @Transaction
+    @Query("SELECT * FROM user_activities WHERE activity_name LIKE :name LIMIT 1")
+    suspend fun getJointUserActivityByName(name: String): JointUserActivity?
 
 
     // ПОДЗАГОЛОВКИ
@@ -99,21 +118,22 @@ interface Dao {
     fun getCheckListByName(checkListName: String, entityId: Int): CheckList?
 
     @Transaction
+    @Query("SELECT * FROM user_activities WHERE id LIKE :id")
+    suspend fun getJointUser(id: Int): JointUserActivity?
+
+    @Transaction
     @Query("SELECT * FROM check_lists " +
             "WHERE check_lists.entityId LIKE :entityId")
-    fun getJointCheckList(entityId: Int): List<JointCheckList>
+    suspend fun getJointCheckList(entityId: Int): List<JointCheckList>
 
 
     // ЧЕКБОКСЫ
-    @Query("SELECT * FROM check_box_title")
-    fun getAllCheckBoxTitles(): LiveData<List<CheckBoxTitle>>
-
 
     @Query("SELECT * FROM check_box_title WHERE checkListId LIKE :checkListId")
-    fun getCheckBoxTitles(checkListId: Int): List<CheckBoxTitle>
+    suspend fun getCheckBoxTitles(checkListId: Int): List<CheckBoxTitle>
 
     @Query("SELECT * FROM check_box_title WHERE id LIKE :id LIMIT 1")
-    fun getCheckBoxTitleById(id: Int): CheckBoxTitle?
+    suspend fun getCheckBoxTitleById(id: Int): CheckBoxTitle?
 
 }
 

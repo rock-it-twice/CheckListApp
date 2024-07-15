@@ -5,13 +5,13 @@ import androidx.room.Relation
 
 
 // Объединенный класс
-data class JointUser(
-    @Embedded
+data class JointUserActivity(
+                        @Embedded
                         var userActivity: UserActivity?,
 
-    @Relation(
+                        @Relation(
                             parentColumn = "id",
-                            entityColumn = "userId"
+                            entityColumn = "activityId"
                         )
                         var entities: List<UserEntity>
 )

@@ -37,13 +37,13 @@ import com.example.letscheck.navigation.Screens
 import com.example.letscheck.ui.theme.Typography
 
 @Composable
-fun ChooseUserDropDownMenu(vm: CheckListViewModel, navController: NavController) {
+fun UserActivityDropDownMenu(vm: CheckListViewModel, navController: NavController) {
 
     var isExpanded by remember { mutableStateOf(false) }
     // отслеживание выбран ли чеклист
     var isEntityChosen by remember { mutableStateOf(vm.currentEntity != null) }
 
-    val users by vm.users.observeAsState(initial = listOf())
+    val users by vm.userActivities.observeAsState(initial = listOf())
     Box(
         modifier = Modifier.padding(horizontal = 5.dp)
     ) {
@@ -55,7 +55,7 @@ fun ChooseUserDropDownMenu(vm: CheckListViewModel, navController: NavController)
         )
         {
             Text(
-                text = if (vm.currentUserActivity != null) vm.currentUserActivity!!.userName else "Choose user",
+                text = if (vm.currentUserActivity != null) vm.currentUserActivity!!.activityName else "Choose user",
                 style = Typography.titleLarge
             )
             IconToggleButton(checked = isExpanded, onCheckedChange = { isExpanded = it }) {
@@ -96,14 +96,14 @@ fun ChooseUserDropDownMenu(vm: CheckListViewModel, navController: NavController)
             {
                 users.forEach {
                     Text(
-                        text = it.userName,
+                        text = it.activityName,
                         fontSize = 24.sp,
                         modifier = Modifier
                             .padding(vertical = 5.dp)
                             .clickable(onClick = {
                                 vm.currentEntity = null
-                                vm.getUserId(it.id)
-                                vm.getUserById()
+                                vm.getUserActivityId(it.id)
+                                vm.getUserActivityById()
                                 vm.getEntitiesByUserId()
                                 isExpanded = !isExpanded
                             }

@@ -1,9 +1,8 @@
 package com.example.letscheck.data
 
 import com.example.letscheck.ChecklistRepository
-import com.example.letscheck.data.classes.CheckBoxTitle
 import com.example.letscheck.data.classes.CheckList
-import com.example.letscheck.data.classes.User
+import com.example.letscheck.data.classes.UserActivity
 import com.example.letscheck.data.classes.UserEntity
 
 class DataLoader(val repository: ChecklistRepository) {
@@ -13,16 +12,16 @@ class DataLoader(val repository: ChecklistRepository) {
 
         println("DATA LOADING HAS STARTED")
         // создание пользователя (пока он не добавлен в базу, id = 0)
-        val userName = "Фитнес"
+        val activityName = "Фитнес"
         // загрузка пользователя в базу (если он уже есть, запись будет проигнорирована)
-        repository.addUser(User(userName = userName))
+        repository.addUserActivity(UserActivity(activityName = activityName))
         // получаем id пользователя из бд
-        val userId = repository.getUserByName(userName)!!.id
+        val userId = repository.getUserActivityByName(activityName)!!.id
 
         // создание имени первого заголовка
         val userEntityName = "Сумка для фитнеса"
         // загружаем entity в БД
-        repository.addUserEntity(UserEntity(entityName = userEntityName, userId = userId))
+        repository.addUserEntity(UserEntity(entityName = userEntityName, activityId = userId))
 
         // определение id списка
         val uEId = repository.getUserEntityByName(userEntityName, userId)!!.id

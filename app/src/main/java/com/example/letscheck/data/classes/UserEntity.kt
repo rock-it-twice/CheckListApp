@@ -8,16 +8,16 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "user_entities",
-    indices = [Index(value = ["userId", "entity_name"], unique = true)],
+    indices = [Index(value = ["activityId", "entity_name"], unique = true)],
     foreignKeys =
     [ForeignKey(
-        entity = User::class,
+        entity = UserActivity::class,
         parentColumns = ["id"],
-        childColumns = ["userId"] )]
+        childColumns = ["activityId"] )]
 )
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val userId: Int,
+    val activityId: Int,
     @ColumnInfo(name = "entity_name") var entityName: String = ""
 )

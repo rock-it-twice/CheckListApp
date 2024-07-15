@@ -7,12 +7,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "check_lists",
     indices = [Index(value = ["entityId", "checkListName"], unique = true)],
-    foreignKeys = [
-        ForeignKey(
+    foreignKeys = [ForeignKey(
         entity = UserEntity::class,
         parentColumns = ["id"],
-        childColumns = ["entityId"] )
-    ]
+        childColumns = ["entityId"]
+    )]
 )
 data class CheckList(
     @PrimaryKey(autoGenerate = true)

@@ -57,5 +57,5 @@ fun AnimatedEntitiesRow(isVisible: Boolean, vm: CheckListViewModel){
 // Функция проверяет 3 условия:
 // 1. Пользователь выбран; 2. Чеклисты существуют; 3. Cписок не выбран
 fun isEntityListVisible(vm: CheckListViewModel): Boolean{
-    return vm.currentUser != null && vm.entities.isNotEmpty() && vm.currentEntity == null
+    return vm.currentUserActivity != null && vm.entities.isNotEmpty() && vm.currentEntity == null
 }

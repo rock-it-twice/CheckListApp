@@ -5,7 +5,8 @@ import com.example.letscheck.data.Dao
 import com.example.letscheck.data.classes.CheckBoxTitle
 import com.example.letscheck.data.classes.CheckList
 import com.example.letscheck.data.classes.JointCheckList
-import com.example.letscheck.data.classes.User
+import com.example.letscheck.data.classes.JointUserActivity
+import com.example.letscheck.data.classes.UserActivity
 import com.example.letscheck.data.classes.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,51 +14,63 @@ import kotlinx.coroutines.withContext
 
 class ChecklistRepository(val userDao: Dao) {
 
-    val users = userDao.getAllUsers()
-    val checkBoxTitles = userDao.getAllCheckBoxTitles()
+    val userActivities = userDao.getAllUserActivities()
+    val jointUserActivities = userDao.getJointUserActivities()
 
     // INSERT INTO
-    suspend fun addUser(User: User) {
-        withContext(Dispatchers.IO) { userDao.addUser(User) }
+    suspend fun addUserActivity(UserActivity: UserActivity) {
+        withContext(Dispatchers.IO) { userDao.addUserActivity(UserActivity) }
     }
+
     suspend fun addUserEntity(userEntity: UserEntity) {
         withContext(Dispatchers.IO) { userDao.addUserEntity(userEntity) }
     }
+
     suspend fun addCheckList(checkList: CheckList) {
         withContext(Dispatchers.IO) { userDao.addCheckList(checkList) }
     }
-    suspend fun addCheckBoxTitle(checkBoxTitle: CheckBoxTitle) {
-        withContext(Dispatchers.IO) { userDao.addCheckBoxTitle(checkBoxTitle) }
-    }
-    suspend fun addCheckBoxTitles(checkListId: Int, list: List<String> ) {
-        withContext(Dispatchers.IO) { list.forEach{
-            val checkBoxTitle = CheckBoxTitle(checkListId = checkListId, str = it)
-            addCheckBoxTitle(checkBoxTitle)
-        }
+
+    suspend fun addCheckBoxTitle(checkListId: Int, text: String) {
+        withContext(Dispatchers.IO) {
+            userDao.addCheckBoxTitle(
+                CheckBoxTitle(checkListId = checkListId, text = text)
+            )
         }
     }
 
-
-    // USERS
-    suspend fun getUserById(id: Int): User? {
-        return withContext(Dispatchers.IO)
-        { return@withContext userDao.getUserById(id) }
+    suspend fun addCheckBoxTitles(checkListId: Int, list: List<String>) {
+        withContext(Dispatchers.IO) {
+            list.forEach {
+                addCheckBoxTitle(checkListId = checkListId, text = it)
+            }
+        }
     }
 
-    suspend fun getUserByName(name: String): User? {
+
+    // USER ACTIVITIES
+    suspend fun getUserActivityById(id: Int): UserActivity? {
         return withContext(Dispatchers.IO)
-        { return@withContext userDao.getUserByName(name) }
+        { return@withContext userDao.getUserActivityById(id) }
+    }
+
+    suspend fun getUserActivityByName(name: String): UserActivity? {
+        return withContext(Dispatchers.IO)
+        { return@withContext userDao.getUserActivityByName(name) }
+    }
+
+    suspend fun getJointUserActivities(): LiveData<List<JointUserActivity>> {
+        return withContext(Dispatchers.IO) { return@withContext userDao.getJointUserActivities() }
     }
 
     suspend fun deleteUser(id: Int) {
-        withContext(Dispatchers.IO) { userDao.deleteUser(id) }
+        withContext(Dispatchers.IO) { userDao.deleteUserActivity(id) }
     }
 
 
     // USER ENTITIES
-    suspend fun getUserEntitiesByUserId(userId: Int): List<UserEntity> {
+    suspend fun getUserEntitiesByUserId(activityId: Int): List<UserEntity> {
         return withContext(Dispatchers.IO)
-        { return@withContext userDao.getUserEntities(userId = userId) }
+        { return@withContext userDao.getUserEntities(activityId = activityId) }
     }
 
     suspend fun getUserEntityById(id: Int): UserEntity? {
@@ -86,6 +99,7 @@ class ChecklistRepository(val userDao: Dao) {
         return withContext(Dispatchers.IO)
         { return@withContext userDao.getCheckListById(id, entityId) }
     }
+
     suspend fun getJointCheckList(entityId: Int): List<JointCheckList> {
         return withContext(Dispatchers.IO)
         { return@withContext userDao.getJointCheckList(entityId) }
@@ -100,7 +114,7 @@ class ChecklistRepository(val userDao: Dao) {
 
     suspend fun getCheckBoxTitleById(id: Int): CheckBoxTitle? {
         return withContext(Dispatchers.IO)
-        {return@withContext userDao.getCheckBoxTitleById(id)}
+        { return@withContext userDao.getCheckBoxTitleById(id) }
     }
 
 }
