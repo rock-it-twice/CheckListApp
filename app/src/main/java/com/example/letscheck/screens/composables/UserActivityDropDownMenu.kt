@@ -55,7 +55,7 @@ fun ChooseUserDropDownMenu(vm: CheckListViewModel, navController: NavController)
         )
         {
             Text(
-                text = if (vm.currentUser != null) vm.currentUser!!.userName else "Choose user",
+                text = if (vm.currentUserActivity != null) vm.currentUserActivity!!.userName else "Choose user",
                 style = Typography.titleLarge
             )
             IconToggleButton(checked = isExpanded, onCheckedChange = { isExpanded = it }) {
