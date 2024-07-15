@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.letscheck.data.classes.CheckBoxText
+import com.example.letscheck.data.classes.CheckBoxTitle
 import com.example.letscheck.data.classes.CheckList
 import com.example.letscheck.data.classes.User
 import com.example.letscheck.data.classes.UserEntity
@@ -13,13 +13,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.security.Provider
 
 @Database(entities = [
         User::class,
         UserEntity::class,
         CheckList::class,
-        CheckBoxText::class], version = 1
+        CheckBoxTitle::class], version = 1
 )
 abstract class MainDb : RoomDatabase() {
 
@@ -34,13 +33,13 @@ abstract class MainDb : RoomDatabase() {
     }
 }
 
-class RoomInitializer(private val userDao: Dao): RoomDatabase.Callback() {
-    val scope = CoroutineScope(SupervisorJob())
-    override fun onOpen(db: SupportSQLiteDatabase) {
-        super.onOpen(db)
-        scope.launch(Dispatchers.IO) {
-            DataLoader(userDao)
-        }
-    }
-
-}
+//class RoomInitializer(private val userDao: Dao): RoomDatabase.Callback() {
+//    private val scope = CoroutineScope(SupervisorJob())
+//    override fun onOpen(db: SupportSQLiteDatabase) {
+//        super.onOpen(db)
+//        scope.launch(Dispatchers.IO) {
+//            DataLoader(userDao)
+//        }
+//    }
+//
+//}

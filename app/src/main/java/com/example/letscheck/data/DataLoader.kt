@@ -1,62 +1,69 @@
 package com.example.letscheck.data
 
-import com.example.letscheck.data.classes.CheckBoxText
+import com.example.letscheck.ChecklistRepository
+import com.example.letscheck.data.classes.CheckBoxTitle
 import com.example.letscheck.data.classes.CheckList
 import com.example.letscheck.data.classes.User
 import com.example.letscheck.data.classes.UserEntity
 
+class DataLoader(val repository: ChecklistRepository) {
 
-// Загрузка данных по-умолчанию
-class DataLoader(userDao: Dao) {
+    // Загрузка данных по умолчанию
+    suspend fun loadData() {
 
-    init {
-        suspend fun loadData(){
-            // создание пользователя
-            val user = User(userName = "firstUser")
-            // создание имени первого заголовка
-            val userEntity = UserEntity(userId = user.userId, entityName = "Bag for fitness")
-            // определение id списка
-            val uEId = userEntity.entityId
-            // создание имен подсписков
-            val checklist1 = CheckList(entityId = uEId, checkListName = "Нижнее белье")
-            val checklist2 = CheckList(entityId = uEId, checkListName = "Одежда")
-            val checklist3 = CheckList(entityId = uEId, checkListName = "Гигиена")
-            val checklist4 = CheckList(entityId = uEId, checkListName = "Аксессуары")
+        println("DATA LOADING HAS STARTED")
+        // создание пользователя (пока он не добавлен в базу, id = 0)
+        val userName = "Фитнес"
+        // загрузка пользователя в базу (если он уже есть, запись будет проигнорирована)
+        repository.addUser(User(userName = userName))
+        // получаем id пользователя из бд
+        val userId = repository.getUserByName(userName)!!.id
 
-            val checkLists = listOf(checklist1, checklist2, checklist3, checklist4)
+        // создание имени первого заголовка
+        val userEntityName = "Сумка для фитнеса"
+        // загружаем entity в БД
+        repository.addUserEntity(UserEntity(entityName = userEntityName, userId = userId))
 
-            // создание пустого списка названий чекбоксов
-            val checkBoxes: MutableList<CheckBoxText> = mutableListOf()
+        // определение id списка
+        val uEId = repository.getUserEntityByName(userEntityName, userId)!!.id
 
-            //
-            fun addToCheckBoxList(pair: Pair<Int, List<String>>){
-                val id = pair.first
-                val text = pair.second
-                text.forEach{
-                    checkBoxes.add(CheckBoxText(checkListId = id, str = it))
+        // создание имен подсписков
+        val checkListNames = listOf("Нижнее белье", "Одежда", "Гигиена", "Аксессуары")
+
+        // добавляем в БД и присваиваем id
+        checkListNames.forEach {
+            repository.addCheckList(CheckList(entityId = uEId, checkListName = it))
+        }
+        // возвращаем из БД
+        val checkLists = repository.getCheckListsByEntityId(uEId)
+
+        val titles = listOf(
+            listOf("Трусы", "Лиф", "Носки"),
+            listOf("Кроссовки", "Лосины", "Майка", "Топ"),
+            listOf("Сланцы", "Полотенце", "Гель для душа"),
+            listOf("Браслет", "Часы", "Наушники", "Вода")
+        )
+
+        checkLists.forEach {
+            val name = it.checkListName
+            when (name) {
+                "Нижнее белье" -> {
+                    repository.addCheckBoxTitles(it.id, titles[0])
+                }
+                "Одежда" -> {
+                    repository.addCheckBoxTitles(it.id, titles[1])
+                }
+                "Гигиена" -> {
+                    repository.addCheckBoxTitles(it.id, titles[2])
+                }
+                "Аксессуары" -> {
+                    repository.addCheckBoxTitles(it.id, titles[3])
                 }
             }
-
-            // заполняем список
-            addToCheckBoxList (
-                checklist1.checkListId to listOf("Трусы", "Лиф", "Носки")
-            )
-            addToCheckBoxList (
-                checklist2.checkListId to listOf("Кроссовки", "Лосины", "Майка", "Топ")
-            )
-            addToCheckBoxList (
-                    checklist3.checkListId to listOf("Сланцы", "Полотенце", "Гель для душа")
-            )
-            addToCheckBoxList (
-                    checklist4.checkListId to listOf("Браслет", "Часы", "Наушники", "Вода")
-            )
-
-
-            // загрузка всего этого добра в БД
-            userDao.addUser(user)
-            userDao.insertUserEntity(userEntity)
-            userDao.insertMultipleCheckLists(checkLists)
-            userDao.insertMultipleCheckBoxTexts(checkBoxes)
         }
+
+
+        println("DATA LOADING IS COMPLETED")
     }
 }
+

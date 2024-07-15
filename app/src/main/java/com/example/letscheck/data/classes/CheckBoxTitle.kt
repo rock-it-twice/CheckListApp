@@ -5,15 +5,19 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "check_box_text",
+@Entity(
+    tableName = "check_box_title",
     indices = [Index(value = ["checkListId", "str"], unique = true)],
-    foreignKeys = [ForeignKey(
+    foreignKeys = [
+        ForeignKey(
         entity = CheckList::class,
-        parentColumns = ["checkListId"],
-        childColumns = ["checkListId"] )]
+        parentColumns = ["id"],
+        childColumns = ["checkListId"] )
+    ]
 )
-data class CheckBoxText(
+data class CheckBoxTitle(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val checkListId: Int,
-    @PrimaryKey
     val str: String
 )

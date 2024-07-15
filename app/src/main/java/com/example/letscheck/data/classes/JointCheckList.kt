@@ -4,16 +4,13 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 
-// Объединенный класс
-class JointUser {
-
+data class JointCheckList (
     @Embedded
-    var user: User? = null
+    var checkList: CheckList?,
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "userId"
+        entityColumn = "checkListId"
     )
-    var entities: List<UserEntity> = listOf()
-
-}
+    var checkBoxTitles: List<CheckBoxTitle>
+)

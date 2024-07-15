@@ -12,12 +12,12 @@ import androidx.room.PrimaryKey
     foreignKeys =
     [ForeignKey(
         entity = User::class,
-        parentColumns = ["userId"],
+        parentColumns = ["id"],
         childColumns = ["userId"] )]
 )
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
-    val entityId: Int = 0,
+    val id: Int = 0,
     val userId: Int,
     @ColumnInfo(name = "entity_name") var entityName: String = ""
 )

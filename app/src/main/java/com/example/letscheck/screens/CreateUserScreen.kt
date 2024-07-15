@@ -49,7 +49,7 @@ fun CreateUserScreen(navController: NavController, vm: CheckListViewModel = view
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Header()
+            Header(vm)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -90,7 +90,7 @@ fun CreateUserScreen(navController: NavController, vm: CheckListViewModel = view
 fun UserList(users: List<User>, delete: (Int) -> Unit) {
     LazyColumn(Modifier.fillMaxWidth()) {
         item { UserTitleRow() }
-        items(users) { user -> UserRow(user, { delete(user.userId) }) }
+        items(users) { user -> UserRow(user, { delete(user.id) }) }
 
     }
 }
@@ -104,7 +104,7 @@ fun UserRow(user: User, delete:(Int) -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = user.userId.toString(),
+            text = user.id.toString(),
             style = Typography.titleMedium
             )
         Spacer(modifier = Modifier.width(10.dp))
@@ -112,7 +112,7 @@ fun UserRow(user: User, delete:(Int) -> Unit) {
             style = Typography.titleMedium)
         Spacer(modifier = Modifier.width(10.dp))
         Text(text = "delete",
-            Modifier.clickable { delete(user.userId) },
+            Modifier.clickable { delete(user.id) },
             style = Typography.titleMedium,
             color = Color.Blue
         )
