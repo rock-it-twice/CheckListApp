@@ -1,12 +1,12 @@
-package com.example.letscheck
+package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 
-class CheckListViewModelFactory(private val application: Application) : ViewModelProvider.Factory{
+class MainViewModelFactory(private val application: Application) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CheckListViewModel(application) as T
+        return MainViewModel(application) as T
     }
 }

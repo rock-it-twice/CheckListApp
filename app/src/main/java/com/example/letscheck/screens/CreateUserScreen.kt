@@ -29,13 +29,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.letscheck.CheckListViewModel
+import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.UserActivity
 import com.example.letscheck.screens.composables.Header
 import com.example.letscheck.ui.theme.Typography
 
 @Composable
-fun CreateUserScreen(navController: NavController, vm: CheckListViewModel = viewModel()) {
+fun CreateUserScreen(navController: NavController, vm: MainViewModel = viewModel()) {
 
     val userList by vm.userActivities.observeAsState(initial = listOf())
 

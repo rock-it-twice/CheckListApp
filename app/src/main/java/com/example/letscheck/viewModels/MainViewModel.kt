@@ -1,12 +1,14 @@
-package com.example.letscheck
+package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.example.letscheck.ChecklistRepository
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.DataLoader
 import com.example.letscheck.data.MainDb
@@ -18,9 +20,10 @@ import com.example.letscheck.data.classes.UserEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.Flow
 
 
-class CheckListViewModel(application: Application) : ViewModel() {
+class MainViewModel(application: Application) : ViewModel() {
 
     val vmScope: CoroutineScope
     val repository: ChecklistRepository
@@ -40,9 +43,11 @@ class CheckListViewModel(application: Application) : ViewModel() {
     var jointCheckLists: List<JointCheckList> by mutableStateOf(listOf())
     var checkListId: Int by mutableIntStateOf(0)
 
+    val checkBoxStateList: MutableList<MutableList<Boolean>> = mutableListOf()
     var checkBoxTitles: List<CheckBoxTitle> by mutableStateOf(listOf())
     var checkBoxTitle: CheckBoxTitle? by mutableStateOf(null)
     var checkBoxTitleId: Int by mutableIntStateOf(0)
+
 
     init {
         val database = MainDb.createDatabase(application)
@@ -135,7 +140,10 @@ class CheckListViewModel(application: Application) : ViewModel() {
             if (currentEntity != null) {
                 jointCheckLists = listOf()
                 currentEntity = null
-            } else currentUserActivity = null
+                checkBoxStateList.clear()
+            } else {
+                currentUserActivity = null
+            }
         }
     }
 

@@ -30,6 +30,7 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCheckBoxTitle(checkBoxTitle: CheckBoxTitle)
 
+
     // ОБНОВЛЕНИЕ
     @Update
     suspend fun updateUserActivity(userActivity: UserActivity)
@@ -42,6 +43,7 @@ interface Dao {
 
     @Update
     suspend fun updateCheckBoxTitle(checkBoxTitle: CheckBoxTitle)
+
 
     // УДАЛЕНИЕ
     @Query("DELETE FROM user_activities WHERE id = :activityId")

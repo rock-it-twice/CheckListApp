@@ -12,16 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.letscheck.CheckListViewModel
+import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.screens.composables.UserActivityDropDownMenu
 import com.example.letscheck.screens.composables.Header
-import com.example.letscheck.screens.composables.AnimatedEntitiesRow
+import com.example.letscheck.screens.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.composables.CurrentEntityColumn
 import com.example.letscheck.screens.composables.isEntityListVisible
 
 
 @Composable
-fun ChooseUserScreen(navController: NavController, vm: CheckListViewModel = viewModel()) {
+fun ChooseUserScreen(navController: NavController, vm: MainViewModel = viewModel()) {
 
     val modifier = Modifier
     var isEntityListVisible by remember { mutableStateOf(false) }
@@ -38,7 +38,7 @@ fun ChooseUserScreen(navController: NavController, vm: CheckListViewModel = view
         // Проверка, можно ли показывать строку со списком чеклистов
         isEntityListVisible = isEntityListVisible(vm)
         // Строка со списком чеклистов
-        AnimatedEntitiesRow(isVisible = isEntityListVisible, vm = vm)
+        AnimatedEntitiesGrid(isVisible = isEntityListVisible, vm = vm)
         CurrentEntityColumn(vm = vm)
 
     }

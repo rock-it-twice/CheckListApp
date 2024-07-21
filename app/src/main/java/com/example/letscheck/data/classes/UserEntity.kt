@@ -19,5 +19,9 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val activityId: Int,
-    @ColumnInfo(name = "entity_name") var entityName: String = ""
-)
+    @ColumnInfo(name = "entity_name")
+    var entityName: String = "",
+    var image: Int = 0
+){
+
+}

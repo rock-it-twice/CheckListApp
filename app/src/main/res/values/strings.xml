@@ -1,5 +1,17 @@
 <resources>
+
+    <!-- APP names -->
     <string name="app_name">LetsCheck</string>
+    <string name="app_name_full">Let\'s Check!</string>
+
     <!-- имена экранов -->
-    <string name="home">choose entity screen</string>
+    <string name="home">choose activity screen</string>
+    <string name="create_new">create new entity screen</string>
+    <!-- кнопки Drop down menu-->
+    <string name="activity_filter">сортировка по типу</string>
+    <string name="add_new_activity">+ создать новый</string>
+
+    <!-- другие кнопки -->
+    <string name="back">назад</string>
+
 </resources>
