@@ -1,10 +1,10 @@
 package com.example.letscheck.data
 
-import com.example.letscheck.ChecklistRepository
+import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.R
-import com.example.letscheck.data.classes.CheckList
-import com.example.letscheck.data.classes.UserActivity
-import com.example.letscheck.data.classes.UserEntity
+import com.example.letscheck.data.classes.input.CheckList
+import com.example.letscheck.data.classes.input.UserActivity
+import com.example.letscheck.data.classes.input.UserEntity
 
 class DataLoader(val repository: ChecklistRepository) {
 
@@ -22,11 +22,13 @@ class DataLoader(val repository: ChecklistRepository) {
         // создание имени первого заголовка
         val userEntityName = "Сумка для фитнеса"
         // загружаем entity в БД
-        repository.addUserEntity(UserEntity(
+        repository.addUserEntity(
+            UserEntity(
             entityName = userEntityName,
             activityId = userId,
             image = R.drawable.fitness_bag_1
-        ))
+        )
+        )
 
         // определение id списка
         val uEId = repository.getUserEntityByName(userEntityName, userId)!!.id

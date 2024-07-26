@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.composables
+package com.example.letscheck.screens.ChooseUserScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -54,7 +54,7 @@ fun Header(vm: MainViewModel) {
 @Composable
 fun CancelChoiceButton(vm: MainViewModel){
     var isGoBackButtonVisible by remember { mutableStateOf(false) }
-    isGoBackButtonVisible = vm.currentEntity != null || vm.currentUserActivity != null
+    isGoBackButtonVisible = vm.currentJointEntity != null || vm.currentJointUserActivity != null
     val buttonColors = ButtonDefaults.buttonColors(
         containerColor = SecondaryBackgroundColor,
         contentColor = MainTextColor)

@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.data.classes.UserActivity
-import com.example.letscheck.screens.composables.Header
+import com.example.letscheck.data.classes.input.UserActivity
+import com.example.letscheck.screens.ChooseUserScreen.composables.Header
 import com.example.letscheck.ui.theme.Typography
 
 @Composable
@@ -62,7 +62,7 @@ fun CreateUserScreen(navController: NavController, vm: MainViewModel = viewModel
                     modifier = Modifier
                         .padding(end = 20.dp)
                         .weight(0.75F, true),
-                    onValueChange = { vm.changeName(it) },
+                    onValueChange = { vm.changeActivityName(it) },
                     placeholder = { Text(text = "Enter your name")})
                 Button(
                     onClick = { vm.addUserActivity() },
@@ -71,7 +71,6 @@ fun CreateUserScreen(navController: NavController, vm: MainViewModel = viewModel
                     modifier = Modifier
                         .weight(0.25F, true)
                         .fillMaxHeight()
-
                 ) {
                     Text(
                         text = "+",

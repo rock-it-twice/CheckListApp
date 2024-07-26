@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.composables
+package com.example.letscheck.screens.ChooseUserScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -19,18 +19,22 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.data.classes.UserEntity
+import com.example.letscheck.data.classes.output.JointEntity
 
 @Composable
-fun AnimatedEntitiesGrid(isVisible: Boolean, vm: MainViewModel){
+fun AnimatedEntitiesGrid(vm: MainViewModel){
     AnimatedVisibility(
-        visible = isVisible,
+        visible = vm.isGridVisible(),
         enter =
         fadeIn(animationSpec =
         spring(stiffness = Spring.StiffnessLow)) + expandVertically { 100 },
@@ -38,40 +42,29 @@ fun AnimatedEntitiesGrid(isVisible: Boolean, vm: MainViewModel){
         fadeOut(animationSpec =
         spring(stiffness = Spring.StiffnessLow)) + shrinkVertically { 0 }
     ) {
-        LazyVerticalGrid(columns = GridCells.Adaptive(135.dp),
+        val entities by remember { mutableStateOf(vm.currentJointUserActivity!!.entities) }
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(135.dp),
             contentPadding = PaddingValues(10.dp),
-            content = { items(vm.entities) { EntityBox(vm = vm, entity = it) }
-            }
+            content = { items(entities) { EntityBox(vm = vm, jointEntity = it) } }
         )
     }
 }
 
 @Composable
-fun EntityBox(vm: MainViewModel, entity: UserEntity){
+fun EntityBox(vm: MainViewModel, jointEntity: JointEntity){
     Column {
         Box(modifier = Modifier
             .size(width = 135.dp, height = 240.dp)
             .clip(RoundedCornerShape(20.dp))
-            .clickable(
-                onClick = {
-                    vm.currentEntity = entity
-                    vm.entityId = entity.id
-                }),
-            contentAlignment = Alignment.Center){
-            if (entity.image != 0) {
+            .clickable(onClick = { vm.getJointEntity(jointEntity) }),
+            contentAlignment = Alignment.Center){ if (jointEntity.entity.image != 0) {
                 Image(
-                    painter = painterResource(id = entity.image),
+                    painter = painterResource(id = jointEntity.entity.image),
                     contentDescription = "icon"
                 )
             }
         }
-        Text(text = entity.entityName)
+        Text(text = jointEntity.entity.entityName)
     }
-
-}
-
-// Функция проверяет 3 условия:
-// 1. Пользователь выбран; 2. Чеклисты существуют; 3. Cписок не выбран
-fun isEntityListVisible(vm: MainViewModel): Boolean{
-    return vm.currentUserActivity != null && vm.entities.isNotEmpty() && vm.currentEntity == null
 }

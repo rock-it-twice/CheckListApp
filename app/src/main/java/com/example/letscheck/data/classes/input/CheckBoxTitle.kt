@@ -1,4 +1,4 @@
-package com.example.letscheck.data.classes
+package com.example.letscheck.data.classes.input
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

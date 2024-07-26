@@ -3,50 +3,41 @@ package com.example.letscheck.viewModels
 import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.letscheck.ChecklistRepository
+import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.DataLoader
 import com.example.letscheck.data.MainDb
-import com.example.letscheck.data.classes.CheckBoxTitle
-import com.example.letscheck.data.classes.JointCheckList
-import com.example.letscheck.data.classes.JointUserActivity
-import com.example.letscheck.data.classes.UserActivity
-import com.example.letscheck.data.classes.UserEntity
+import com.example.letscheck.data.classes.output.JointUserActivity
+import com.example.letscheck.data.classes.input.UserActivity
+import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.Flow
 
 
 class MainViewModel(application: Application) : ViewModel() {
 
     val vmScope: CoroutineScope
     val repository: ChecklistRepository
-    var userActivities: LiveData<List<UserActivity>>
+
+    val userActivities: LiveData<List<UserActivity>>
+    var currentJointUserActivity: JointUserActivity? by mutableStateOf(null)
+        private set
 
     var userActivityName: String by mutableStateOf("")
-    var userActivityId: Int by mutableIntStateOf(0)
-    var currentUserActivity: UserActivity? by mutableStateOf(null)
-    var jointUserActivity: JointUserActivity? by mutableStateOf(null)
 
-    var entities: List<UserEntity> by mutableStateOf(listOf())
+    var currentJointEntity: JointEntity? by mutableStateOf(null)
+        private set
+
     var entityName: String by mutableStateOf("")
     var entityId: Int by mutableIntStateOf(0)
-    var currentEntity: UserEntity? by mutableStateOf(null)
-
-
-    var jointCheckLists: List<JointCheckList> by mutableStateOf(listOf())
-    var checkListId: Int by mutableIntStateOf(0)
 
     val checkBoxStateList: MutableList<MutableList<Boolean>> = mutableListOf()
-    var checkBoxTitles: List<CheckBoxTitle> by mutableStateOf(listOf())
-    var checkBoxTitle: CheckBoxTitle? by mutableStateOf(null)
-    var checkBoxTitleId: Int by mutableIntStateOf(0)
+
 
 
     init {
@@ -71,80 +62,48 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun getUserActivityById() {
-        vmScope.launch(Dispatchers.IO) {
-            currentUserActivity = repository.getUserActivityById(userActivityId)
-        }
-    }
-
-    fun getUserActivityByName() {
-        vmScope.launch(Dispatchers.IO) {
-            currentUserActivity = repository.getUserActivityByName(userActivityName)
-        }
-    }
-
-    fun getUserActivityId(value: Int) {
-        userActivityId = value
-    }
-
     fun checkName(value: String): String {
         return if (value != "") value else "undefined user"
     }
 
-    fun changeName(value: String) {
-        userActivityName = value
+    fun getJointUserActivityById(id: Int) {
+        vmScope.launch(Dispatchers.IO) {
+            currentJointUserActivity = repository.getJointUserActivityById(id)
+        }
     }
 
-    fun changeUser(value: UserActivity?) {
-        currentUserActivity = value
+    fun getJointActivityByIdAndClearPrevious(id: Int) {
+        clearStepByStep()
+        getJointUserActivityById(id)
     }
+
+
+    fun changeActivityName(value: String) { userActivityName = value }
+
     //_________________________________________________________________________
 
     // ЗАГОЛОВКИ
-    fun getEntitiesByUserId() {
-        vmScope.launch(Dispatchers.IO) {
-            entities = repository.getUserEntitiesByUserId(userActivityId)
-        }
-    }
-    //_________________________________________________________________________
 
-    // ПОДЗАГОЛОВКИ
-    fun getJointCheckList() {
-        vmScope.launch(Dispatchers.IO) {
-            jointCheckLists = repository.getJointCheckList(entityId)
-        }
-    }
-    //_________________________________________________________________________
+    fun getJointEntity(entity: JointEntity) { currentJointEntity = entity }
+    private fun clearEntity() { currentJointEntity = null }
 
-    // ЧЕКБОКСЫ
-    fun getCheckBoxTitles() {
-        vmScope.launch(Dispatchers.IO) {
-            checkBoxTitles = repository.getCheckBoxTitles(checkListId)
-        }
-    }
 
-    fun getCheckBoxTitleById() {
-        vmScope.launch(Dispatchers.IO) {
-            checkBoxTitle = repository.getCheckBoxTitleById(checkBoxTitleId)
-        }
-    }
-
+    // ОПЕРАЦИИ УДАЛЕНИЯ
     fun deleteUser(id: Int) {
         vmScope.launch(Dispatchers.IO) { repository.deleteUser(id) }
     }
 
+    fun isGridVisible(): Boolean {
+        return  currentJointUserActivity != null && currentJointEntity == null
+    }
 
-    // Очистка заголовков
+    // Очистка переменных
     fun clearStepByStep() {
         vmScope.launch(Dispatchers.IO) {
-            if (currentEntity != null) {
-                jointCheckLists = listOf()
-                currentEntity = null
-                checkBoxStateList.clear()
-            } else {
-                currentUserActivity = null
+            when(true){
+                (currentJointEntity != null) -> { clearEntity() ; checkBoxStateList.clear() }
+                else                         -> { currentJointUserActivity = null }
             }
         }
     }
-
 }

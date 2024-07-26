@@ -7,12 +7,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.letscheck.data.classes.CheckBoxTitle
-import com.example.letscheck.data.classes.CheckList
-import com.example.letscheck.data.classes.JointCheckList
-import com.example.letscheck.data.classes.JointUserActivity
-import com.example.letscheck.data.classes.UserActivity
-import com.example.letscheck.data.classes.UserEntity
+import com.example.letscheck.data.classes.input.CheckBoxTitle
+import com.example.letscheck.data.classes.input.CheckList
+import com.example.letscheck.data.classes.output.JointCheckList
+import com.example.letscheck.data.classes.output.JointUserActivity
+import com.example.letscheck.data.classes.input.UserActivity
+import com.example.letscheck.data.classes.input.UserEntity
 
 @Dao
 interface Dao {
@@ -46,8 +46,8 @@ interface Dao {
 
 
     // УДАЛЕНИЕ
-    @Query("DELETE FROM user_activities WHERE id = :activityId")
-    suspend fun deleteUserActivity(activityId: Int)
+    @Query("DELETE FROM user_activities WHERE id = :id")
+    suspend fun deleteUserActivity(id: Int)
 
     @Query("DELETE FROM user_entities WHERE id = :entityId")
     suspend fun deleteEntity(entityId: Int)
@@ -55,8 +55,14 @@ interface Dao {
     @Query("DELETE FROM check_lists WHERE id = :checkListId")
     suspend fun deleteCheckListTitle(checkListId: Int)
 
-    @Query("DELETE FROM check_box_title WHERE checkListId LIKE :str")
-    suspend fun deleteCheckBox(str: String)
+    @Query("DELETE FROM check_box_title WHERE text LIKE :str")
+    suspend fun deleteCheckBoxByName(str: String)
+
+    @Query("DELETE FROM check_box_title WHERE id LIKE :id")
+    suspend fun deleteCheckBoxById(id: Int)
+
+    @Query("DELETE FROM check_box_title WHERE checkListId LIKE :checkListId")
+    suspend fun deleteCheckBoxesByCheckListId(checkListId: Int)
 
 
     // ЗАПРОСЫ К БД --------------------------------------------
@@ -88,14 +94,16 @@ interface Dao {
     )
     fun getUserEntityByName(entityName: String, userId: Int): UserEntity?
 
-    // JointUserActivity (UserActivity + Entity)
+
+
+    // JointUserActivity (JointUserActivity + JointEntities + JointChecklists)
 
     @Transaction
     @Query("SELECT * FROM user_activities")
     fun getJointUserActivities(): LiveData<List<JointUserActivity>>
 
     @Transaction
-    @Query("SELECT * FROM user_activities WHERE id LIKE :id LIMIT 1")
+    @Query("SELECT * FROM user_activities WHERE user_activities.id LIKE :id LIMIT 1")
     suspend fun getJointUserActivityById(id: Int): JointUserActivity?
 
     @Transaction

@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.screens.CheckListScreen
 import com.example.letscheck.screens.ChooseEntityScreen
-import com.example.letscheck.screens.ChooseUserScreen
+import com.example.letscheck.screens.ChooseUserScreen.ChooseUserScreen
 import com.example.letscheck.screens.CreateUserScreen
 
 @Composable
@@ -19,7 +19,7 @@ fun NavGraph(
         startDestination = Screens.ChooseUserScreen.route
     ) {
         composable(route = Screens.Home.route){
-            ChooseEntityScreen(navController = navController)
+            ChooseUserScreen(navController = navController)
         }
         composable(route = Screens.CheckListScreen.route){
             CheckListScreen(navController = navController)
