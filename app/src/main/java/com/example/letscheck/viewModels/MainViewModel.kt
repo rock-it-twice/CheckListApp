@@ -25,20 +25,15 @@ class MainViewModel(application: Application) : ViewModel() {
     val repository: ChecklistRepository
 
     val userActivities: LiveData<List<UserActivity>>
+    var userActivityName: String by mutableStateOf("")
     var currentJointUserActivity: JointUserActivity? by mutableStateOf(null)
         private set
-
-    var userActivityName: String by mutableStateOf("")
 
     var currentJointEntity: JointEntity? by mutableStateOf(null)
         private set
 
-    var entityName: String by mutableStateOf("")
-    var entityId: Int by mutableIntStateOf(0)
-
+    var checkListState by mutableStateOf( false )
     val checkBoxStateList: MutableList<MutableList<Boolean>> = mutableListOf()
-
-
 
     init {
         val database = MainDb.createDatabase(application)
@@ -82,10 +77,15 @@ class MainViewModel(application: Application) : ViewModel() {
 
     //_________________________________________________________________________
 
-    // ЗАГОЛОВКИ
+    // ENTITIES
 
-    fun getJointEntity(entity: JointEntity) { currentJointEntity = entity }
+    fun getJointEntity(entity: JointEntity) {
+        vmScope.launch(Dispatchers.IO) { currentJointEntity = entity }
+    }
+
     private fun clearEntity() { currentJointEntity = null }
+
+    //_________________________________________________________________________
 
 
     // ОПЕРАЦИИ УДАЛЕНИЯ

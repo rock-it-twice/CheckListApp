@@ -12,16 +12,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,21 +44,23 @@ import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun ActivityDropDownMenu(vm: MainViewModel,
-                         navController: NavController){
+fun ActivityDropDownMenu(vm: MainViewModel, navController: NavController){
 
     val activities by vm.userActivities.observeAsState(listOf())
     var isExpanded by remember { mutableStateOf(false) }
 
+
     Box {
-        ChooseActivityButton(vm = vm, isExpanded = isExpanded, onValueChange = {isExpanded = it})
+        ChooseActivityButton(vm = vm, isExpanded = isExpanded,  onValueChange = {isExpanded = it})
         DropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = !isExpanded },
             modifier = Modifier.background(SecondaryBackgroundColor)
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp).fillMaxSize()
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 5.dp)
+                    .fillMaxSize()
             ) {
                 activities.forEach{ activity ->
                     ClickableActivityRow(
@@ -80,7 +87,10 @@ fun ActivityDropDownMenu(vm: MainViewModel,
 }
 
 @Composable
-fun ChooseActivityButton(vm: MainViewModel, isExpanded: Boolean, onValueChange: (Boolean) -> Unit) {
+fun ChooseActivityButton(
+    vm: MainViewModel,
+    isExpanded: Boolean,
+    onValueChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier.clickable(onClick = { onValueChange(!isExpanded) }),
         horizontalArrangement = Arrangement.SpaceBetween,

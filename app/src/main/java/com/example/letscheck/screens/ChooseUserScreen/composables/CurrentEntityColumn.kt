@@ -20,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,21 +43,53 @@ import com.example.letscheck.ui.theme.Typography
 @Composable
 fun CurrentEntityColumn(vm: MainViewModel) {
     if (vm.currentJointEntity != null) {
-        // Вывод заголовка
-        Title(vm)
-        // Вывод чеклиста
-        CheckListColumn(checklists = vm.currentJointEntity!!.checkLists, vm = vm)
+        CheckListColumn(vm = vm)
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CheckListColumn(vm: MainViewModel) {
+    val checklists = vm.currentJointEntity!!.checkLists
+    // Заполняем во viewModel checkBoxStateList данными
+    checklists.forEach {
+        val subList: MutableList<Boolean> = mutableStateListOf()
+        (0..<it.checkBoxTitles.size).forEach { _ -> subList.add(false) }
+        vm.checkBoxStateList.add(subList)
+    }
+    LazyColumn(modifier = Modifier.padding(start = 10.dp)) {
+        item { Title(vm = vm) }
+        checklists.forEachIndexed { index, jointCheckList ->
+
+            // Подзаголовок
+            stickyHeader {
+                Subtitle(jointCheckList = jointCheckList, stateList = vm.checkBoxStateList[index])
+            }
+            item { Spacer(Modifier.height(20.dp)) }
+            // Чекбоксы
+            itemsIndexed(jointCheckList.checkBoxTitles) { i, title ->
+                CheckBoxRow(checkBoxTitle = title,
+                    isChecked = vm.checkBoxStateList[index][i],
+                    onCheckedChange = { vm.checkBoxStateList[index][i] = it }
+                )
+            }
+
+        }
+    }
+}
 
 @Composable
 fun Title(vm: MainViewModel) {
+
+    val isEverythingChecked: Boolean = vm.checkBoxStateList.flatten().all { it }
+    val color = if (isEverythingChecked) MainCheckedColor else MainTextColor
+
     Text(
         modifier = Modifier
-            .padding(bottom = 30.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(bottom = 20.dp),
         fontSize = 32.sp,
+        color = color,
         fontWeight = FontWeight.SemiBold,
         text = vm.currentJointEntity!!.entity.entityName,
     )
@@ -120,35 +154,3 @@ fun CheckBoxRow(
         )
     }
 }
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun CheckListColumn(vm: MainViewModel, checklists: List<JointCheckList>) {
-    // Заполняем во viewModel checkBoxStateList данными
-    checklists.forEach {
-        val subList: MutableList<Boolean> = mutableStateListOf()
-        (0..<it.checkBoxTitles.size).forEach { _ -> subList.add(false) }
-        vm.checkBoxStateList.add(subList)
-    }
-    LazyColumn {
-        checklists.forEachIndexed { index, jointCheckList ->
-
-            // Подзаголовок
-            stickyHeader {
-                Subtitle(jointCheckList = jointCheckList, stateList = vm.checkBoxStateList[index])
-            }
-            item { Spacer(Modifier.height(20.dp)) }
-            // Чекбоксы
-            itemsIndexed(jointCheckList.checkBoxTitles) { i, title ->
-                CheckBoxRow(checkBoxTitle = title,
-                    isChecked = vm.checkBoxStateList[index][i],
-                    onCheckedChange = { vm.checkBoxStateList[index][i] = it }
-                )
-            }
-
-        }
-    }
-}
-
-
-
