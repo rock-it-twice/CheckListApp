@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.AddNewScreen
+package com.example.letscheck.screens.addNewScreen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController

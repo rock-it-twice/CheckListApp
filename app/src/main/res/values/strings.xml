@@ -7,12 +7,12 @@
     <!-- имена экранов -->
     <string name="home">choose activity screen</string>
     <string name="create">create new screen</string>
-    <!-- Drop down menu-->
+    <!-- Modal menu-->
     <string name="activity_filter">сортировка по типу</string>
     <string name="add_new_activity">добавить</string>
     <string name="add_new_activity_type">введите название</string>
     <string name="add_button">+</string>
-
+    <string name="undefined_activity">undefined activity</string>
     <!-- entities list -->
     <string name="add_new_entity">создать список</string>
 

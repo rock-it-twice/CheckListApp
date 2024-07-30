@@ -5,8 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.example.letscheck.R
 import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.DataLoader
@@ -58,7 +60,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     fun checkName(value: String): String {
-        return if (value != "") value else "undefined user"
+        return if (value != "") value else "undefined activity"
     }
 
     fun getJointUserActivityById(id: Int) {

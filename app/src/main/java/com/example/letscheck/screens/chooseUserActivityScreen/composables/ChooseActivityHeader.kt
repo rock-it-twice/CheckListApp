@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.ChooseUserScreen.composables
+package com.example.letscheck.screens.chooseUserActivityScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable

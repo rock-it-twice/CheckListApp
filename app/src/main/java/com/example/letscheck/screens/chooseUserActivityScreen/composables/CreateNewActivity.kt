@@ -1,14 +1,10 @@
-package com.example.letscheck.screens.ChooseUserScreen.composables
+package com.example.letscheck.screens.chooseUserActivityScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,15 +16,16 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.SecondaryTextColor
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -43,21 +40,33 @@ fun CreateNewActivity( vm: MainViewModel, visible: Boolean, onValueChange: (Bool
         ) {
             OutlinedTextField(
                 value = vm.userActivityName,
-                modifier = Modifier.padding(end = 20.dp).weight(0.75F, true),
+                modifier = Modifier
+                    .padding(end = 20.dp)
+                    .weight(0.75F, true),
                 onValueChange = { vm.changeActivityName(it) },
                 placeholder = {
-                    Text(text = stringResource(id = R.string.add_new_activity_type))
+                    Text(
+                        text = stringResource(id = R.string.add_new_activity_type),
+                        color = SecondaryTextColor
+                    )
                 },
-                colors = OutlinedTextFieldDefaults.colors(MainTextColor)
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedTextColor = SecondaryTextColor,
+                    focusedTextColor = MainTextColor,
+                    unfocusedBorderColor = SecondaryTextColor,
+                    focusedBorderColor = SecondaryTextColor
+                )
             )
             Button(
                 onClick = {
                     vm.addUserActivity()
                     onValueChange(!visible)
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan),
+                colors = ButtonDefaults.buttonColors(containerColor = SecondaryTextColor),
                 shape = RoundedCornerShape(2.dp),
-                modifier = Modifier.weight(0.25F, true).fillMaxHeight()
+                modifier = Modifier
+                    .weight(0.25F, true)
+                    .fillMaxHeight()
             ) {
                 Icon(
                     Icons.Default.Add,

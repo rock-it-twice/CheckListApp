@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.ChooseUserScreen.composables
+package com.example.letscheck.screens.chooseUserActivityScreen.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

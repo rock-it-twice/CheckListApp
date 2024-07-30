@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.ChooseUserScreen
+package com.example.letscheck.screens.chooseUserActivityScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,19 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.letscheck.screens.ChooseUserScreen.composables.ActivityModalMenu
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.ActivityModalMenu
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.screens.ChooseUserScreen.composables.ChooseActivityHeader
-import com.example.letscheck.screens.ChooseUserScreen.composables.AnimatedEntitiesGrid
-import com.example.letscheck.screens.ChooseUserScreen.composables.CurrentEntityColumn
-import com.example.letscheck.screens.ChooseUserScreen.composables.MenuButton
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.ChooseActivityHeader
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.AnimatedEntitiesGrid
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.CurrentEntityColumn
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.MenuButton
 
 
 @Composable
-fun ChooseUserScreen(navController: NavController, vm: MainViewModel = viewModel()) {
+fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel = viewModel()) {
 
     val modifier = Modifier
-    val activities by vm.userActivities.observeAsState(listOf())
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var isVisible: Boolean by remember { mutableStateOf(false) }

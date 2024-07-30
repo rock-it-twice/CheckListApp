@@ -31,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.input.UserActivity
-import com.example.letscheck.screens.ChooseUserScreen.composables.Header
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.ChooseActivityHeader
 import com.example.letscheck.ui.theme.Typography
 
 @Composable
@@ -49,7 +49,7 @@ fun CreateUserScreen(navController: NavController, vm: MainViewModel = viewModel
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Header(vm)
+            ChooseActivityHeader(vm)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
