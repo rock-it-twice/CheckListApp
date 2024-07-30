@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -99,9 +100,9 @@ fun ActivityRow(
             text = activity.activityName,
             fontSize = 24.sp,
             color = SecondaryTextColor,
-            modifier = Modifier
+            modifier = Modifier                
                 .fillMaxWidth()
-                .padding(vertical = 5.dp)
+                .padding(vertical = 10.dp)
                 .clickable(onClick = {
                     vm.getJointActivityByIdAndClearPrevious(activity.id)
                     scope.launch { drawerState.apply { close() } }

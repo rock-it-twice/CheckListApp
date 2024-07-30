@@ -3,6 +3,7 @@ package com.example.letscheck.screens.ChooseUserScreen.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -27,11 +28,12 @@ import kotlinx.coroutines.launch
 fun MenuButton(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerState) {
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .clickable(onClick = {
                 scope.launch { drawerState.apply { if (isClosed) open() else close() } }
             })
             .padding(vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     )
     {
@@ -44,7 +46,9 @@ fun MenuButton(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerStat
 
         IconToggleButton(
             checked = drawerState.isClosed,
-            onCheckedChange = {}
+            onCheckedChange = {
+                scope.launch { drawerState.apply { if (isClosed) open() else close() } }
+            }
         ) {
             if (drawerState.isClosed) {
                 Icon(

@@ -17,10 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.letscheck.screens.ChooseUserScreen.composables.ActivityDropDownMenu
 import com.example.letscheck.screens.ChooseUserScreen.composables.ActivityModalMenu
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.screens.ChooseUserScreen.composables.Header
+import com.example.letscheck.screens.ChooseUserScreen.composables.ChooseActivityHeader
 import com.example.letscheck.screens.ChooseUserScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.ChooseUserScreen.composables.CurrentEntityColumn
 import com.example.letscheck.screens.ChooseUserScreen.composables.MenuButton
@@ -42,10 +41,10 @@ fun ChooseUserScreen(navController: NavController, vm: MainViewModel = viewModel
             .padding(bottom = 30.dp)
     ) {
         // Логотип
-        Header(vm = vm)
+        ChooseActivityHeader(vm = vm)
         // Выбор Activity
         MenuButton(vm = vm, scope = scope, drawerState = drawerState)
-        // Выбор Пользователя
+        // Боковое меню выбора
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -57,11 +56,10 @@ fun ChooseUserScreen(navController: NavController, vm: MainViewModel = viewModel
                     onValueChange = { isVisible = it })
                             },
             content = {
-                // Строка со списком названий чеклистов
+                // Сетка со списком чеклистов
                 AnimatedEntitiesGrid(vm = vm, navController = navController)
                 // Отображение выбранного чеклиста
                 CurrentEntityColumn(vm = vm)
             })
-//        ActivityDropDownMenu(vm = vm, navController = navController)
     }
 }

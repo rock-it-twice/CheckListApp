@@ -34,7 +34,7 @@ import com.example.letscheck.ui.theme.MainTextColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 
 @Composable
-fun Header(vm: MainViewModel) {
+fun ChooseActivityHeader(vm: MainViewModel) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 20.dp, bottom = 10.dp),
