@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MenuButton(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerState) {
+fun Menu(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerState) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -4,31 +4,21 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.screens.CheckListScreen
 import com.example.letscheck.screens.chooseUserActivityScreen.ChooseUserActivityScreen
-import com.example.letscheck.screens.CreateUserScreen
+import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
+import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun NavGraph(
-    navController: NavHostController, vm: MainViewModel
-) {
+fun NavGraph( vm: MainViewModel, navController: NavHostController ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.ChooseUserScreen.route
+        startDestination = Routes.Home.route
     ) {
-        composable(route = Screens.Home.route){
-            ChooseUserActivityScreen(navController = navController)
+        composable(route = Routes.Home.route){
+            ChooseUserActivityScreen(vm = vm, navController = navController)
         }
-        composable(route = Screens.CheckListScreen.route){
-            CheckListScreen(navController = navController)
+        composable(route = Routes.AddNewEntityScreen.route){
+            AddNewEntityScreen(vm = vm, navController = navController)
         }
-        composable(route = Screens.CreateUserScreen.route){
-            CreateUserScreen(navController = navController, vm = vm)
-        }
-        composable(route = Screens.ChooseUserScreen.route){
-            ChooseUserActivityScreen(navController = navController, vm = vm)
-        }
-
     }
 }

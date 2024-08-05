@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import com.example.letscheck.R
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
+import com.example.letscheck.navigation.Routes
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainTextColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
@@ -92,7 +93,9 @@ fun AddNewEntity(navController: NavController) {
             modifier = Modifier
                 .size(width = 135.dp, height = 240.dp)
                 .clip(RoundedCornerShape(20.dp))
-                .clickable(onClick = { /* ToDo переход к созданию нового списка */ })
+                .clickable(onClick = {
+                    navController.navigate(route = Routes.AddNewEntityScreen.route)
+                })
                 .background(color = SecondaryBackgroundColor),
             contentAlignment = Alignment.Center
         ) {

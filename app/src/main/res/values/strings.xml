@@ -5,7 +5,7 @@
     <string name="app_name_full">Let\'s Check!</string>
 
     <!-- имена экранов -->
-    <string name="home">choose activity screen</string>
+    <string name="home">choose_UserActivity</string>
     <string name="create">create new screen</string>
     <!-- Modal menu-->
     <string name="activity_filter">сортировка по типу</string>
@@ -15,8 +15,11 @@
     <string name="undefined_activity">undefined activity</string>
     <!-- entities list -->
     <string name="add_new_entity">создать список</string>
-
     <!-- другие кнопки -->
     <string name="back">назад</string>
+
+
+    <!-- Add New entity screen -->
+    <string name="add_new_subtitle">Новый раздел</string>
 
 </resources>

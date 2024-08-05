@@ -13,8 +13,11 @@ import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.DataLoader
 import com.example.letscheck.data.MainDb
+import com.example.letscheck.data.classes.input.CheckBoxTitle
+import com.example.letscheck.data.classes.input.CheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.input.UserActivity
+import com.example.letscheck.data.classes.input.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,10 +34,18 @@ class MainViewModel(application: Application) : ViewModel() {
     var currentJointUserActivity: JointUserActivity? by mutableStateOf(null)
         private set
 
+    var newEntity: UserEntity? by mutableStateOf(null)
+        private set
+
+    var newCheckList: CheckList? by mutableStateOf(null)
+        private set
+    var newCheckLists: List<CheckList> by mutableStateOf(listOf())
+        private set
+
+    var newCheckBoxTitleList: List<List<CheckBoxTitle>> by mutableStateOf(listOf())
     var currentJointEntity: JointEntity? by mutableStateOf(null)
         private set
 
-    var checkListState by mutableStateOf( false )
     val checkBoxStateList: MutableList<MutableList<Boolean>> = mutableListOf()
 
     init {
@@ -84,10 +95,39 @@ class MainViewModel(application: Application) : ViewModel() {
     fun getJointEntity(entity: JointEntity) {
         vmScope.launch(Dispatchers.IO) { currentJointEntity = entity }
     }
-
     private fun clearEntity() { currentJointEntity = null }
 
+    fun createNewEntity(activityId: Int, name: String) {
+        vmScope.launch(Dispatchers.IO) {
+            newEntity = UserEntity(activityId = activityId, entityName = name) }
+    }
+
     //_________________________________________________________________________
+
+    // CheckLists
+
+    fun addNewEmptyCheckList(entityId: Int) {
+        vmScope.launch(Dispatchers.IO) {
+            val checkLists: MutableList<CheckList> = newCheckLists.toMutableList()
+            checkLists.add(CheckList(entityId = entityId))
+            newCheckLists = checkLists
+        }
+    }
+
+    fun addNewCheckList(entityId: Int, name: String) {
+        vmScope.launch(Dispatchers.IO) {
+            val checkLists: MutableList<CheckList> = newCheckLists.toMutableList()
+            checkLists.add(CheckList(entityId = entityId, checkListName = name))
+            newCheckLists = checkLists
+        }
+    }
+    fun deleteNewCheckList(newCheckList: CheckList) {
+        vmScope.launch(Dispatchers.IO) {
+            val checkLists: MutableList<CheckList> = newCheckLists.toMutableList()
+            checkLists.remove(newCheckList)
+            newCheckLists = checkLists
+        }
+    }
 
 
     // ОПЕРАЦИИ УДАЛЕНИЯ
@@ -99,13 +139,27 @@ class MainViewModel(application: Application) : ViewModel() {
         return  currentJointUserActivity != null && currentJointEntity == null
     }
 
-    // Очистка переменных
+    // Очистка констант
     fun clearStepByStep() {
         vmScope.launch(Dispatchers.IO) {
             when(true){
                 (currentJointEntity != null) -> { clearEntity() ; checkBoxStateList.clear() }
                 else                         -> { currentJointUserActivity = null }
             }
+        }
+    }
+
+    // Проверка, пустые ли константы для создания нового списка
+    fun isAddNewEntityScreenClean(): Boolean{
+        return (newEntity == null && newCheckList == null
+                && newCheckLists.isEmpty() && newCheckBoxTitleList.isEmpty())
+    }
+    fun clearAddNewEntityScreen(){
+        vmScope.launch(Dispatchers.IO) {
+            newEntity = null
+            newCheckList = null
+            newCheckLists = listOf()
+            newCheckBoxTitleList = listOf()
         }
     }
 }

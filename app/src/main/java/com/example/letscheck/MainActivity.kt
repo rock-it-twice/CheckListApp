@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.letscheck.navigation.NavGraph
 import com.example.letscheck.screens.chooseUserActivityScreen.ChooseUserActivityScreen
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainTextColor
@@ -51,7 +52,8 @@ fun App(vm: MainViewModel = viewModel()) {
         color = MainBackgroundColor,
         contentColor = MainTextColor
     ) {
-        ChooseUserActivityScreen(navController, vm)
+        NavGraph( vm = vm, navController = navController )
+        // ChooseUserActivityScreen(navController)
     }
 }
 

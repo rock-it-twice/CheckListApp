@@ -18,6 +18,5 @@ data class CheckList(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val entityId: Int,
-    val checkListName: String,
-    val weight: Int = 0
+    var checkListName: String = ""
     )

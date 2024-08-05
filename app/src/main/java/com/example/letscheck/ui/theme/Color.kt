@@ -1,5 +1,8 @@
 package com.example.letscheck.ui.theme
 
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -19,3 +22,15 @@ val MainLineColor = Color(0xFF78AAC8)
 val SecondaryBackgroundColor = Color(0xFF233773)
 val SecondaryTextColor = Color(0xFF00BCD4)
 
+val onMainButtonColors = ButtonColors(
+                                      containerColor = SecondaryBackgroundColor,
+                                      contentColor = MainTextColor,
+                                      disabledContainerColor = Color.DarkGray,
+                                      disabledContentColor = MainBackgroundColor
+                                     )
+val onMainIconButtonColors = IconButtonColors(
+                                              containerColor = SecondaryBackgroundColor,
+                                              contentColor = MainTextColor,
+                                              disabledContainerColor = Color.DarkGray,
+                                              disabledContentColor = MainBackgroundColor
+                                             )

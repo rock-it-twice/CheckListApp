@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen.composables
+package com.example.letscheck.screens.common_composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -27,14 +27,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.R
+import com.example.letscheck.navigation.Routes
 import com.example.letscheck.ui.theme.MainGradientColors
 import com.example.letscheck.ui.theme.MainTextColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 
 @Composable
-fun ChooseActivityHeader(vm: MainViewModel) {
+fun Header(navController: NavController, vm: MainViewModel) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 20.dp, bottom = 10.dp),
@@ -46,7 +48,11 @@ fun ChooseActivityHeader(vm: MainViewModel) {
             fontWeight = FontWeight.SemiBold,
             style = TextStyle(Brush.linearGradient(colors = MainGradientColors))
             )
-        CancelChoiceButton(vm = vm)
+        when(navController.currentDestination?.route){
+            Routes.Home.route ->   { CancelChoiceButton(vm = vm) }
+            else -> {}
+        }
+
     }
 }
 

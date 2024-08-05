@@ -8,25 +8,23 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.ActivityModalMenu
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.screens.chooseUserActivityScreen.composables.ChooseActivityHeader
+import com.example.letscheck.screens.common_composables.Header
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.CurrentEntityColumn
-import com.example.letscheck.screens.chooseUserActivityScreen.composables.MenuButton
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.Menu
 
 
 @Composable
-fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel = viewModel()) {
+fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel) {
 
     val modifier = Modifier
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -40,9 +38,9 @@ fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel = v
             .padding(bottom = 30.dp)
     ) {
         // Логотип
-        ChooseActivityHeader(vm = vm)
+        Header(navController = navController, vm = vm)
         // Выбор Activity
-        MenuButton(vm = vm, scope = scope, drawerState = drawerState)
+        Menu(vm = vm, scope = scope, drawerState = drawerState)
         // Боковое меню выбора
         ModalNavigationDrawer(
             drawerState = drawerState,

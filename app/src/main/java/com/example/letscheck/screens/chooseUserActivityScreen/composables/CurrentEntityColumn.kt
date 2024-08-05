@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.input.CheckBoxTitle
 import com.example.letscheck.data.classes.output.JointCheckList
+import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.HeaderTypography
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainCheckedColor
@@ -86,7 +87,7 @@ fun Title(vm: MainViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 20.dp),
-        fontSize = 32.sp,
+        style = EntityTypography.titleLarge,
         color = color,
         fontWeight = FontWeight.SemiBold,
         text = vm.currentJointEntity!!.entity.entityName,
@@ -111,7 +112,7 @@ fun Subtitle(jointCheckList: JointCheckList, stateList: List<Boolean>) {
         Row {
             Text(
                 modifier = Modifier.padding(vertical = 10.dp),
-                style = HeaderTypography.titleLarge,
+                style = EntityTypography.titleMedium,
                 color = color,
                 text = jointCheckList.checkList.checkListName
             )
@@ -147,7 +148,7 @@ fun CheckBoxRow(
         )
         Text(
             color = color,
-            style = Typography.bodyMedium,
+            style = EntityTypography.titleSmall,
             text = checkBoxTitle.text
         )
     }
