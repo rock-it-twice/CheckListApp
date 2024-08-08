@@ -1,4 +1,4 @@
-package com.example.letscheck.data.classes.input
+package com.example.letscheck.data.classes.main
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "check_lists",
-    indices = [Index(value = ["entityId", "checkListName"], unique = true)],
+    indices = [Index(value = ["entityId", "id"], unique = true)],
     foreignKeys = [ForeignKey(
         entity = UserEntity::class,
         parentColumns = ["id"],
@@ -16,7 +16,10 @@ import androidx.room.PrimaryKey
 
 data class CheckList(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Int = cnt,
     val entityId: Int,
     var checkListName: String = ""
-    )
+    ){
+    init { cnt ++ }
+    companion object { private var cnt = 0 }
+}

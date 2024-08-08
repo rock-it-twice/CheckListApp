@@ -1,4 +1,4 @@
-package com.example.letscheck.data.classes.input
+package com.example.letscheck.data.classes.main
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

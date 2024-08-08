@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.letscheck.data.classes.input.CheckBoxTitle
-import com.example.letscheck.data.classes.input.CheckList
-import com.example.letscheck.data.classes.input.UserActivity
-import com.example.letscheck.data.classes.input.UserEntity
+import com.example.letscheck.data.classes.main.CheckBoxTitle
+import com.example.letscheck.data.classes.main.CheckList
+import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.UserEntity
 
 @Database(entities = [
         UserActivity::class,

@@ -2,12 +2,12 @@ package com.example.letscheck.repositories
 
 import androidx.lifecycle.LiveData
 import com.example.letscheck.data.Dao
-import com.example.letscheck.data.classes.input.CheckBoxTitle
-import com.example.letscheck.data.classes.input.CheckList
+import com.example.letscheck.data.classes.main.CheckBoxTitle
+import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
-import com.example.letscheck.data.classes.input.UserActivity
-import com.example.letscheck.data.classes.input.UserEntity
+import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

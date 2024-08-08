@@ -31,8 +31,6 @@ import com.example.letscheck.viewModels.MainViewModel
 @Composable
 fun NewEntityRow(vm: MainViewModel){
 
-    val activityId = vm.currentJointUserActivity!!.userActivity.id
-
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = MainBackgroundColor,
         disabledTextColor = MainTextColor,
@@ -41,8 +39,12 @@ fun NewEntityRow(vm: MainViewModel){
         unfocusedContainerColor = MainBackgroundColor,
         unfocusedTextColor = MainTextColor
     )
-    var isEnabled by rememberSaveable { mutableStateOf(false) }
-    var newName by rememberSaveable { mutableStateOf( vm.newEntity?.entityName ?: "") }
+    vm.renameNewEntity("Новый список")
+    var isEnabled by rememberSaveable { mutableStateOf(
+        vm.newEntity!!.entity.entityName != ""
+    ) }
+    var newName by rememberSaveable { mutableStateOf( vm.newEntity!!.entity.entityName ) }
+
     Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween) {
 
@@ -52,13 +54,14 @@ fun NewEntityRow(vm: MainViewModel){
             modifier = Modifier,
             enabled = !isEnabled,
             textStyle = EntityTypography.titleMedium,
-            placeholder = { if (vm.newEntity == null) Text(text = "Придумайте имя списка") },
-            colors = textFieldColors
+            colors = textFieldColors,
+            placeholder = {
+                if (vm.newEntity!!.entity.entityName == "") Text(text = "Имя списка") },
+
         )
 
         CreateOrEditEntityButton(
             vm = vm,
-            activityId = activityId,
             newName = newName,
             isEnabled = isEnabled,
             onValueChange = { isEnabled = it} )
@@ -68,15 +71,15 @@ fun NewEntityRow(vm: MainViewModel){
 }
 
 @Composable
-fun CreateOrEditEntityButton(vm: MainViewModel,
-                       activityId: Int,
+fun CreateOrEditEntityButton(
+                       vm: MainViewModel,
                        newName: String,
                        isEnabled: Boolean,
                        onValueChange: (Boolean) -> Unit){
     if (!isEnabled){
         IconButton(
             onClick = {
-                vm.createNewEntity(activityId = activityId, name = newName)
+                vm.renameNewEntity( newName )
                 onValueChange(!isEnabled)
             },
             enabled = !isEnabled,

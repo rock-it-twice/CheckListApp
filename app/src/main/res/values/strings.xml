@@ -18,8 +18,10 @@
     <!-- другие кнопки -->
     <string name="back">назад</string>
 
-
     <!-- Add New entity screen -->
     <string name="add_new_subtitle">Новый раздел</string>
+    <string name="accept">Принять</string>
+    <string name="edit">Изменить</string>
+    <string name="delete">Удалить</string>
 
 </resources>

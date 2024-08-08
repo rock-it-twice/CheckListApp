@@ -2,8 +2,8 @@ package com.example.letscheck.data.classes.output
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.letscheck.data.classes.input.CheckBoxTitle
-import com.example.letscheck.data.classes.input.CheckList
+import com.example.letscheck.data.classes.main.CheckBoxTitle
+import com.example.letscheck.data.classes.main.CheckList
 
 
 // Объединенный класс
@@ -13,6 +13,6 @@ data class JointCheckList(
     val checkList: CheckList,
 
     @Relation(parentColumn = "id", entityColumn = "checkListId")
-    val checkBoxTitles: List<CheckBoxTitle>
+    val checkBoxTitles: MutableList<CheckBoxTitle>
 
 )

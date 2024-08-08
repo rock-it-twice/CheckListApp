@@ -27,16 +27,13 @@ import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.data.classes.input.CheckBoxTitle
+import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.HeaderTypography
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainCheckedColor
 import com.example.letscheck.ui.theme.MainTextColor
-import com.example.letscheck.ui.theme.Typography
 
 
 @Composable

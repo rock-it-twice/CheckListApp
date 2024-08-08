@@ -2,8 +2,8 @@ package com.example.letscheck.data.classes.output
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.letscheck.data.classes.input.CheckList
-import com.example.letscheck.data.classes.input.UserEntity
+import com.example.letscheck.data.classes.main.CheckList
+import com.example.letscheck.data.classes.main.UserEntity
 
 
 // Объединенный класс

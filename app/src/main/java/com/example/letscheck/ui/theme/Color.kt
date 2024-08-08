@@ -19,14 +19,16 @@ val MainTextColor = Color(0xFFE1E1E1)
 val MainCheckedColor = Color(0xFF50E632)
 val MainLineColor = Color(0xFF78AAC8)
 
-val SecondaryBackgroundColor = Color(0xFF233773)
+val SecondaryBackgroundColor = Color(0xFF1C2D5E)
 val SecondaryTextColor = Color(0xFF00BCD4)
+
+val ThirdBackgroundColor = Color(0xFF111E3C)
 
 val onMainButtonColors = ButtonColors(
                                       containerColor = SecondaryBackgroundColor,
                                       contentColor = MainTextColor,
-                                      disabledContainerColor = Color.DarkGray,
-                                      disabledContentColor = MainBackgroundColor
+                                      disabledContainerColor = MainBackgroundColor,
+                                      disabledContentColor = MainTextColor
                                      )
 val onMainIconButtonColors = IconButtonColors(
                                               containerColor = SecondaryBackgroundColor,

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.data.classes.input.UserActivity
+import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.screens.common_composables.Header
 import com.example.letscheck.ui.theme.Typography
 

@@ -2,9 +2,9 @@ package com.example.letscheck.data
 
 import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.R
-import com.example.letscheck.data.classes.input.CheckList
-import com.example.letscheck.data.classes.input.UserActivity
-import com.example.letscheck.data.classes.input.UserEntity
+import com.example.letscheck.data.classes.main.CheckList
+import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.UserEntity
 
 class DataLoader(val repository: ChecklistRepository) {
 

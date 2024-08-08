@@ -1,4 +1,4 @@
-package com.example.letscheck.data.classes.input
+package com.example.letscheck.data.classes.main
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -19,6 +19,6 @@ data class CheckBoxTitle(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val checkListId: Int,
-    val text: String,
+    var text: String,
     var description: String = ""
 )
