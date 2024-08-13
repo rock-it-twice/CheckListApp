@@ -6,6 +6,7 @@ import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.data.classes.main.UserEntity
 
+// не актуально________________________
 class DataLoader(val repository: ChecklistRepository) {
 
     // Загрузка данных по умолчанию

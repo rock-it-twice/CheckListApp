@@ -32,8 +32,8 @@ import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.MainBackgroundColor
-import com.example.letscheck.ui.theme.MainCheckedColor
-import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.MainGreenColor
+import com.example.letscheck.ui.theme.MainWhiteColor
 
 
 @Composable
@@ -78,7 +78,7 @@ fun CheckListColumn(vm: MainViewModel) {
 fun Title(vm: MainViewModel) {
 
     val isEverythingChecked: Boolean = vm.checkBoxStateList.flatten().all { it }
-    val color = if (isEverythingChecked) MainCheckedColor else MainTextColor
+    val color = if (isEverythingChecked) MainGreenColor else MainWhiteColor
 
     Text(
         modifier = Modifier
@@ -96,9 +96,9 @@ fun Subtitle(jointCheckList: JointCheckList, stateList: List<Boolean>) {
 
     val color =
         when {
-            stateList.all { it } -> MainCheckedColor
-            stateList.none { it } -> MainTextColor
-            else -> MainTextColor
+            stateList.all { it } -> MainGreenColor
+            stateList.none { it } -> MainWhiteColor
+            else -> MainWhiteColor
         }
 
     Column(
@@ -125,7 +125,7 @@ fun CheckBoxRow(
     onCheckedChange: (Boolean) -> Unit
 ) {
 
-    val color: Color = if (isChecked) MainCheckedColor else MainTextColor
+    val color: Color = if (isChecked) MainGreenColor else MainWhiteColor
 
     Row(
         modifier = Modifier
@@ -139,8 +139,8 @@ fun CheckBoxRow(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = CheckboxDefaults.colors(
-                checkedColor = MainCheckedColor,
-                uncheckedColor = MainTextColor
+                checkedColor = MainGreenColor,
+                uncheckedColor = MainWhiteColor
             )
         )
         Text(

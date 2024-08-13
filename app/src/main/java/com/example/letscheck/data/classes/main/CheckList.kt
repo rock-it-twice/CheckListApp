@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "check_lists",
-    indices = [Index(value = ["entityId", "id"], unique = true)],
+    indices = [Index(value = ["entityId", "id", "checkListName"], unique = true)],
     foreignKeys = [ForeignKey(
         entity = UserEntity::class,
         parentColumns = ["id"],

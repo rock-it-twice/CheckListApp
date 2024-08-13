@@ -32,7 +32,7 @@ import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.R
 import com.example.letscheck.navigation.Routes
 import com.example.letscheck.ui.theme.MainGradientColors
-import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 
 @Composable
@@ -63,7 +63,7 @@ fun CancelChoiceButton(vm: MainViewModel){
     isGoBackButtonVisible = vm.currentJointEntity != null || vm.currentJointUserActivity != null
     val buttonColors = ButtonDefaults.buttonColors(
         containerColor = SecondaryBackgroundColor,
-        contentColor = MainTextColor)
+        contentColor = MainWhiteColor)
     AnimatedVisibility(visible = isGoBackButtonVisible) {
         Row(modifier = Modifier.clickable(onClick = { vm.clearStepByStep() }),
             verticalAlignment = Alignment.CenterVertically) {

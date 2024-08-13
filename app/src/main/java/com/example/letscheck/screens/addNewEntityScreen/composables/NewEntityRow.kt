@@ -8,21 +8,18 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.MainBackgroundColor
-import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 import com.example.letscheck.ui.theme.onMainIconButtonColors
 import com.example.letscheck.viewModels.MainViewModel
@@ -33,11 +30,11 @@ fun NewEntityRow(vm: MainViewModel){
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = MainBackgroundColor,
-        disabledTextColor = MainTextColor,
-        focusedTextColor = MainTextColor,
+        disabledTextColor = MainWhiteColor,
+        focusedTextColor = MainWhiteColor,
         focusedContainerColor = SecondaryBackgroundColor,
         unfocusedContainerColor = MainBackgroundColor,
-        unfocusedTextColor = MainTextColor
+        unfocusedTextColor = MainWhiteColor
     )
     vm.renameNewEntity("Новый список")
     var isEnabled by rememberSaveable { mutableStateOf(
@@ -60,7 +57,7 @@ fun NewEntityRow(vm: MainViewModel){
 
         )
 
-        CreateOrEditEntityButton(
+        AcceptOrEditEntityButton(
             vm = vm,
             newName = newName,
             isEnabled = isEnabled,
@@ -71,7 +68,7 @@ fun NewEntityRow(vm: MainViewModel){
 }
 
 @Composable
-fun CreateOrEditEntityButton(
+fun AcceptOrEditEntityButton(
                        vm: MainViewModel,
                        newName: String,
                        isEnabled: Boolean,

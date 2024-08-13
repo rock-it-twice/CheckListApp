@@ -7,7 +7,7 @@ import com.example.letscheck.data.classes.main.UserEntity
 data class NewEntity(
     val entity: UserEntity,
     val checkLists: MutableList<CheckList> = mutableListOf(),
-    val checkBoxTitles: MutableList<MutableList<CheckBoxTitle>> = mutableListOf()
+    val checkBoxTitles: MutableList<List<CheckBoxTitle>> = mutableListOf()
 ) {
 
     fun renameEntity(str: String){
@@ -16,7 +16,7 @@ data class NewEntity(
 
     fun addCheckList() {
         checkLists.add(CheckList(entityId = entity.id))
-        checkBoxTitles.add(mutableListOf())
+        checkBoxTitles.add(listOf())
     }
     
     fun renameCheckList(index: Int, str: String) {
@@ -31,24 +31,31 @@ data class NewEntity(
         checkBoxTitles.removeAt(index)
     }
     fun deleteCheckList(checkList: CheckList) {
+        val index: Int = checkLists.indexOf(checkList)
         checkLists.remove(checkList)
-        checkBoxTitles.map {
-            it.removeIf { checkBoxTitle -> checkList.id == checkBoxTitle.checkListId }
-        }
+        checkBoxTitles.removeAt(index)
     }
 
     fun addCheckBoxTitle(index: Int, str: String) {
         val checkListId = checkLists[index].id
-        checkBoxTitles[index].add(CheckBoxTitle(checkListId = checkListId, text = str))
+        val mutableList = checkBoxTitles[index].toMutableList()
+        mutableList.add(CheckBoxTitle(checkListId= checkListId, text = str))
+        checkBoxTitles[index] = mutableList.toList()
     }
     
     fun renameCheckBoxTitle(index: Int, checkBoxId: Int, str: String) {
         val checkListId = checkLists[index].id
         checkBoxTitles[index].find { it.id == checkBoxId }!!.text = str
     }
+    fun renameCheckBoxTitle(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
+        val checkListId = checkLists[index].id
+        checkBoxTitles[index].find { it == checkBoxTitle }!!.text = str
+    }
 
     fun deleteCheckBoxTitle(index: Int, checkBoxTitle: CheckBoxTitle ) {
-        checkBoxTitles[index].remove(checkBoxTitle)
+        val mutableList = checkBoxTitles[index].toMutableList()
+        mutableList.remove(checkBoxTitle)
+        checkBoxTitles[index] = mutableList.toList()
     }
 
 }

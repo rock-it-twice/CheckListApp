@@ -15,9 +15,8 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.letscheck.navigation.NavGraph
-import com.example.letscheck.screens.chooseUserActivityScreen.ChooseUserActivityScreen
 import com.example.letscheck.ui.theme.MainBackgroundColor
-import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.viewModels.factories.MainViewModelFactory
 
@@ -50,10 +49,9 @@ fun App(vm: MainViewModel = viewModel()) {
         modifier.fillMaxSize(),
         shape = RectangleShape,
         color = MainBackgroundColor,
-        contentColor = MainTextColor
+        contentColor = MainWhiteColor
     ) {
         NavGraph( vm = vm, navController = navController )
-        // ChooseUserActivityScreen(navController)
     }
 }
 

@@ -36,7 +36,7 @@ import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.navigation.Routes
 import com.example.letscheck.ui.theme.MainBackgroundColor
-import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 
 @Composable
@@ -102,7 +102,7 @@ fun AddNewEntity(navController: NavController) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "ADD",
-                tint = MainTextColor
+                tint = MainWhiteColor
             )
         }
         Text(

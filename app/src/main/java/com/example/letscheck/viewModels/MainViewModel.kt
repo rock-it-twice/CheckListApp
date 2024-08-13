@@ -2,13 +2,10 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.DataLoader
@@ -22,9 +19,6 @@ import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 
@@ -45,6 +39,8 @@ class MainViewModel(application: Application) : ViewModel() {
     var newChecklists: List<CheckList> by mutableStateOf(listOf())
         private set
 
+    var newCheckBoxes: List<List<CheckBoxTitle>> by mutableStateOf(listOf())
+
     var currentJointEntity: JointEntity? by mutableStateOf(null)
         private set
 
@@ -56,14 +52,6 @@ class MainViewModel(application: Application) : ViewModel() {
         repository = ChecklistRepository(userDao)
         userActivities = repository.userActivities
         vmScope = CoroutineScope(Dispatchers.Main)
-        populateData()
-    }
-
-    // Загрузка начальных данных
-    private fun populateData() {
-        vmScope.launch(Dispatchers.IO) {
-            DataLoader(repository).loadData()
-        }
     }
 
     fun addUserActivity() {
@@ -120,6 +108,7 @@ class MainViewModel(application: Application) : ViewModel() {
         vmScope.launch (Dispatchers.Main) {
             newEntity!!.addCheckList()
             newChecklists = newEntity!!.checkLists.toList()
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
         }
     }
 
@@ -149,16 +138,29 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun addNewCheckBox(index: Int, str: String) {
-        vmScope.launch(Dispatchers.Main) { newEntity!!.addCheckBoxTitle(index, str) }
+    // New CheckBoxTitles
+
+    fun addNewCheckBox(index: Int) {
+        vmScope.launch(Dispatchers.Main) {
+            newEntity!!.addCheckBoxTitle(index, "")
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
+        }
     }
 
     fun renameNewCheckBoxTitle(index: Int, checkBoxId: Int, str: String) {
-        vmScope.launch(Dispatchers.Main) { newEntity!!.renameCheckBoxTitle(index, checkBoxId, str) }
+        vmScope.launch(Dispatchers.Main) {
+            newEntity!!.renameCheckBoxTitle(index, checkBoxId, str)
+            newChecklists = newEntity!!.checkLists.toList()
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
+        }
     }
 
     fun deleteNewCheckBox(index: Int, checkBoxTitle: CheckBoxTitle) {
-        vmScope.launch(Dispatchers.Main) { newEntity!!.deleteCheckBoxTitle(index, checkBoxTitle) }
+        vmScope.launch(Dispatchers.Main) {
+            newEntity!!.deleteCheckBoxTitle(index, checkBoxTitle)
+            newChecklists = newEntity!!.checkLists.toList()
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
+        }
     }
 
 
@@ -183,8 +185,6 @@ class MainViewModel(application: Application) : ViewModel() {
             }
         }
     }
-
-
 
     fun checkNewEntityRelations(): Boolean{
         return try {

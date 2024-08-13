@@ -4,10 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.data.classes.main.UserEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 @Database(entities = [
         UserActivity::class,
@@ -23,18 +28,8 @@ abstract class MainDb : RoomDatabase() {
         fun createDatabase(context: Context): MainDb{
             return Room
                 .databaseBuilder(context, MainDb::class.java, "Main_database")
+                .createFromAsset("database/Main_database.db")
                 .build()
         }
     }
 }
-
-//class RoomInitializer(private val userDao: Dao): RoomDatabase.Callback() {
-//    private val scope = CoroutineScope(SupervisorJob())
-//    override fun onOpen(db: SupportSQLiteDatabase) {
-//        super.onOpen(db)
-//        scope.launch(Dispatchers.IO) {
-//            DataLoader(userDao)
-//        }
-//    }
-//
-//}

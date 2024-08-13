@@ -16,15 +16,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.ui.theme.MainTextColor
+import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.ui.theme.SecondaryTextColor
 import com.example.letscheck.viewModels.MainViewModel
 
@@ -52,7 +50,7 @@ fun CreateNewActivity( vm: MainViewModel, visible: Boolean, onValueChange: (Bool
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedTextColor = SecondaryTextColor,
-                    focusedTextColor = MainTextColor,
+                    focusedTextColor = MainWhiteColor,
                     unfocusedBorderColor = SecondaryTextColor,
                     focusedBorderColor = SecondaryTextColor
                 )
