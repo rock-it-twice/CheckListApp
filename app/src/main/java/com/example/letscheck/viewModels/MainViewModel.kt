@@ -2,6 +2,7 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
@@ -28,20 +29,21 @@ class MainViewModel(application: Application) : ViewModel() {
     val repository: ChecklistRepository
 
     val userActivities: LiveData<List<UserActivity>>
-    var userActivityName: String by mutableStateOf("")
-    var currentJointUserActivity: JointUserActivity? by mutableStateOf(null)
+    var userActivityName: String by mutableStateOf( "" )
+    var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
 
     // Пробуем изменить подход
     var newEntity: NewEntity? by mutableStateOf( null )
         private set
 
-    var newChecklists: List<CheckList> by mutableStateOf(listOf())
+    var newChecklists: List<CheckList> by mutableStateOf( listOf() )
         private set
 
-    var newCheckBoxes: List<List<CheckBoxTitle>> by mutableStateOf(listOf())
+    var newCheckBoxes: List<List<CheckBoxTitle>> by mutableStateOf( listOf() )
+        private set
 
-    var currentJointEntity: JointEntity? by mutableStateOf(null)
+    var currentJointEntity: JointEntity? by mutableStateOf( null )
         private set
 
     val checkBoxStateList: MutableList<MutableList<Boolean>> = mutableListOf()
@@ -90,12 +92,11 @@ class MainViewModel(application: Application) : ViewModel() {
 
     // New entity
 
-    fun createNewEntity() {
+    fun createNewEntity(str: String = "") {
         newEntity = NewEntity(
-            entity = UserEntity(activityId = currentJointUserActivity!!.userActivity.id)
+            entity = UserEntity(activityId = currentJointUserActivity!!.userActivity.id,
+                                entityName = str)
         )
-        println("new entity is: $newEntity")
-
     }
 
     fun renameNewEntity(str: String) {
@@ -104,9 +105,9 @@ class MainViewModel(application: Application) : ViewModel() {
 
     // New checklists
 
-    fun addNewCheckList() {
+    fun addNewCheckList(str: String = "") {
         vmScope.launch (Dispatchers.Main) {
-            newEntity!!.addCheckList()
+            newEntity!!.addCheckList(str)
             newChecklists = newEntity!!.checkLists.toList()
             newCheckBoxes = newEntity!!.checkBoxTitles.toList()
         }
@@ -125,40 +126,48 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun deleteNewCheckList(index: Int) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.deleteCheckList(index)
-            newChecklists = newEntity!!.checkLists.toList()
-        }
-    }
     fun deleteNewCheckList(checkList: CheckList) {
         vmScope.launch(Dispatchers.Main) {
             newEntity!!.deleteCheckList(checkList)
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
             newChecklists = newEntity!!.checkLists.toList()
         }
     }
 
     // New CheckBoxTitles
 
-    fun addNewCheckBox(index: Int) {
+    fun addNewCheckBox(index: Int, str: String = "") {
         vmScope.launch(Dispatchers.Main) {
-            newEntity!!.addCheckBoxTitle(index, "")
+            newEntity!!.addCheckBoxTitle(index, str)
             newCheckBoxes = newEntity!!.checkBoxTitles.toList()
         }
     }
 
-    fun renameNewCheckBoxTitle(index: Int, checkBoxId: Int, str: String) {
+    fun renameNewCheckBoxTitle(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
         vmScope.launch(Dispatchers.Main) {
-            newEntity!!.renameCheckBoxTitle(index, checkBoxId, str)
-            newChecklists = newEntity!!.checkLists.toList()
+            newEntity!!.renameCheckBoxTitle(index, checkBoxTitle, str)
             newCheckBoxes = newEntity!!.checkBoxTitles.toList()
         }
     }
 
-    fun deleteNewCheckBox(index: Int, checkBoxTitle: CheckBoxTitle) {
+    fun renameNewCheckBoxTitle(checkBoxTitle: CheckBoxTitle, str: String) {
         vmScope.launch(Dispatchers.Main) {
-            newEntity!!.deleteCheckBoxTitle(index, checkBoxTitle)
-            newChecklists = newEntity!!.checkLists.toList()
+            newEntity!!.renameCheckBoxTitle(checkBoxTitle = checkBoxTitle, str)
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
+        }
+    }
+
+    fun deleteNewCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
+        vmScope.launch(Dispatchers.Main) {
+            newEntity!!.deleteCheckBoxTitle(listIndex, checkBoxTitle)
+            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
+        }
+    }
+
+
+    fun deleteNewCheckBoxByIndex(listIndex: Int, index: Int) {
+        vmScope.launch(Dispatchers.Main) {
+            newEntity!!.deleteCheckBoxTitleByIndex(listIndex, index)
             newCheckBoxes = newEntity!!.checkBoxTitles.toList()
         }
     }
@@ -176,7 +185,7 @@ class MainViewModel(application: Application) : ViewModel() {
         return  currentJointUserActivity != null && currentJointEntity == null
     }
 
-    // Очистка констант
+    // Очистка переменных
     fun clearStepByStep() {
         vmScope.launch(Dispatchers.Default) {
             when(true){
@@ -191,7 +200,5 @@ class MainViewModel(application: Application) : ViewModel() {
             currentJointUserActivity!!.userActivity.id != newEntity!!.entity.activityId
         } catch (e: NullPointerException) { true }
     }
-
-
 
 }

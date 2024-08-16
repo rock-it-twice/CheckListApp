@@ -25,4 +25,8 @@
     <string name="edit">Изменить</string>
     <string name="delete">Удалить</string>
 
+    <string name="new_entity_name">Новый список</string>
+    <string name="new_subtitle_name">Новый подзаголовок</string>
+    <string name="new_checkbox_name">Новый чекбокс</string>
+
 </resources>

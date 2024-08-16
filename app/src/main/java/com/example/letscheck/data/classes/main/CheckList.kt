@@ -20,6 +20,8 @@ data class CheckList(
     val entityId: Int,
     var checkListName: String = ""
     ){
+
     init { cnt ++ }
     companion object { private var cnt = 0 }
+
 }

@@ -9,7 +9,7 @@ import com.example.letscheck.ui.theme.Typography
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun CurrentActivity(vm: MainViewModel){
+fun CurrentActivityName(vm: MainViewModel){
     val currentActivity = vm.currentJointUserActivity!!.userActivity
     Text(
         modifier = Modifier.padding(vertical = 21.dp),

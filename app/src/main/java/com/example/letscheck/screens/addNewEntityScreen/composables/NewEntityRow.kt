@@ -1,8 +1,12 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
@@ -16,7 +20,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainWhiteColor
@@ -42,8 +48,11 @@ fun NewEntityRow(vm: MainViewModel){
     ) }
     var newName by rememberSaveable { mutableStateOf( vm.newEntity!!.entity.entityName ) }
 
-    Row(modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically) {
 
         TextField(
             value = newName,
@@ -57,11 +66,8 @@ fun NewEntityRow(vm: MainViewModel){
 
         )
 
-        AcceptOrEditEntityButton(
-            vm = vm,
-            newName = newName,
-            isEnabled = isEnabled,
-            onValueChange = { isEnabled = it} )
+        AcceptOrEditEntityButton( vm = vm, newName = newName,
+            isEnabled = isEnabled, onValueChange = { isEnabled = it} )
 
     }
 
@@ -73,20 +79,33 @@ fun AcceptOrEditEntityButton(
                        newName: String,
                        isEnabled: Boolean,
                        onValueChange: (Boolean) -> Unit){
-    if (!isEnabled){
-        IconButton(
-            onClick = {
-                vm.renameNewEntity( newName )
-                onValueChange(!isEnabled)
-            },
-            enabled = !isEnabled,
-            colors = onMainIconButtonColors
-        ) {  Icon(imageVector = Icons.Default.Done, contentDescription = "create") }
-    } else {
-        IconButton(
-            onClick = { onValueChange(!isEnabled) },
-            enabled = isEnabled,
-            colors = onMainIconButtonColors
-        ) { Icon(imageVector = Icons.Default.Edit, contentDescription = "edit") }
+    Row {
+        AnimatedVisibility(visible = !isEnabled ) {
+            IconButton(
+                onClick = {
+                    vm.renameNewEntity( newName )
+                    onValueChange(!isEnabled)
+                },
+                enabled = !isEnabled,
+                modifier = Modifier.size(width = 50.dp, height = 25.dp),
+                colors = onMainIconButtonColors
+            ) {  Icon(
+                imageVector = Icons.Default.Done,
+                modifier = Modifier.size(15.dp),
+                contentDescription = "create") }
+
+        }
+        AnimatedVisibility(visible = isEnabled) {
+            IconButton(
+                onClick = { onValueChange(!isEnabled) },
+                enabled = isEnabled,
+                modifier = Modifier.size(width = 50.dp, height = 25.dp),
+                colors = onMainIconButtonColors
+            ) { Icon(
+                imageVector = Icons.Default.Edit,
+                modifier = Modifier.size(15.dp),
+                contentDescription = "edit")
+            }
+        }
     }
 }
