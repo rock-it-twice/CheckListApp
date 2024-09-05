@@ -1,6 +1,7 @@
 package com.example.letscheck.viewModels
 
 import android.app.Application
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,8 +34,11 @@ class MainViewModel(application: Application) : ViewModel() {
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
 
-    // Пробуем изменить подход
+    // New Entity creation
     var newEntity: NewEntity? by mutableStateOf( null )
+        private set
+
+    var currentImageUri: Uri? by mutableStateOf(null)
         private set
 
     var newChecklists: List<CheckList> by mutableStateOf( listOf() )
@@ -97,10 +101,18 @@ class MainViewModel(application: Application) : ViewModel() {
             entity = UserEntity(activityId = currentJointUserActivity!!.userActivity.id,
                                 entityName = str)
         )
+        clearNewCheckLists()
+        clearNewCheckBoxes()
     }
 
     fun renameNewEntity(str: String) {
         vmScope.launch(Dispatchers.Main) { newEntity!!.renameEntity(str) }
+    }
+
+    // new image
+
+    fun addNewUri(uri: Uri?){
+        vmScope.launch(Dispatchers.Main) { currentImageUri = uri }
     }
 
     // New checklists
@@ -134,6 +146,10 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
+    fun clearNewCheckLists(){
+        newChecklists = listOf()
+    }
+
     // New CheckBoxTitles
 
     fun addNewCheckBox(index: Int, str: String = "") {
@@ -164,6 +180,9 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
+    fun clearNewCheckBoxes(){
+        newCheckBoxes = listOf()
+    }
 
     fun deleteNewCheckBoxByIndex(listIndex: Int, index: Int) {
         vmScope.launch(Dispatchers.Main) {
@@ -197,7 +216,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun checkNewEntityRelations(): Boolean{
         return try {
-            currentJointUserActivity!!.userActivity.id != newEntity!!.entity.activityId
+            ( currentJointUserActivity!!.userActivity.id != newEntity!!.entity.activityId )
         } catch (e: NullPointerException) { true }
     }
 

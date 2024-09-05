@@ -22,7 +22,7 @@ fun AddNewChecklistButton(vm: MainViewModel){
     Button(
         onClick = { vm.addNewCheckList("$newName $size") },
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = onMainButtonColors
     ) { Text( text = stringResource(id = R.string.add_new_subtitle) ) }
 

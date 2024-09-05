@@ -18,6 +18,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,11 +43,11 @@ fun NewEntityRow(vm: MainViewModel){
         unfocusedContainerColor = MainBackgroundColor,
         unfocusedTextColor = MainWhiteColor
     )
-    vm.renameNewEntity("Новый список")
+
     var isEnabled by rememberSaveable { mutableStateOf(
         vm.newEntity!!.entity.entityName != ""
     ) }
-    var newName by rememberSaveable { mutableStateOf( vm.newEntity!!.entity.entityName ) }
+    var newName by remember { mutableStateOf( vm.newEntity!!.entity.entityName ) }
 
     Row(modifier = Modifier
         .fillMaxWidth()

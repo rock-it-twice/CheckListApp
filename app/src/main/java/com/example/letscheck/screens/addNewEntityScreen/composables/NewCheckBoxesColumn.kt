@@ -47,7 +47,7 @@ fun NewCheckBoxesColumn(vm: MainViewModel, listIndex: Int){
         vm.newCheckBoxes[listIndex].forEachIndexed { index, checkBoxTitle ->
 
             var newName: String by remember { mutableStateOf(checkBoxTitle.text) }
-            var isEnabled: Boolean by rememberSaveable { mutableStateOf(checkBoxTitle.text != "") }
+            var isEnabled: Boolean by remember { mutableStateOf(checkBoxTitle.text != "") }
             var isChecked: Boolean by remember { mutableStateOf(false) }
 
             val textFieldColors = TextFieldDefaults.colors (
@@ -91,8 +91,9 @@ fun NewCheckBoxesColumn(vm: MainViewModel, listIndex: Int){
 
                 VerticalDivider(modifier = Modifier.width(5.dp))
 
-                AcceptRenameDeleteButton(vm = vm, newName = newName, listIndex = listIndex,
-                    checkBoxTitle = checkBoxTitle, isEnabled = isEnabled, onValueChange = { isEnabled = it })
+                AcceptRenameDeleteButton(vm = vm, newName = newName,
+                    listIndex = listIndex, checkBoxTitle = checkBoxTitle,
+                    isEnabled = isEnabled, onValueChange = { isEnabled = it })
             }
         }
     }

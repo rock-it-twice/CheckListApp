@@ -30,7 +30,11 @@ import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun NewCheckBoxRow(vm: MainViewModel, modifier: Modifier, listIndex: Int, checkBoxTitle: CheckBoxTitle) {
+fun NewCheckBoxRow(vm: MainViewModel,
+                   modifier: Modifier,
+                   listIndex: Int,
+                   checkBoxTitle: CheckBoxTitle
+) {
 
     var newName: String by remember { mutableStateOf(checkBoxTitle.text) }
     var isEnabled: Boolean by rememberSaveable { mutableStateOf(checkBoxTitle.text != "") }
@@ -68,7 +72,9 @@ fun NewCheckBoxRow(vm: MainViewModel, modifier: Modifier, listIndex: Int, checkB
         VerticalDivider(modifier = Modifier.width(5.dp))
 
         TextField(
-            modifier = Modifier.weight(1F),
+            modifier = Modifier
+                .weight(1F)
+                .clickable{ isChecked = !isChecked },
             value = newName,
             onValueChange = { newName = it },
             enabled = !isEnabled,

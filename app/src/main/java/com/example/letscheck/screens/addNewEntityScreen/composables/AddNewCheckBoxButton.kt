@@ -1,6 +1,7 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -23,8 +24,8 @@ fun AddNewCheckBoxButton(vm: MainViewModel, index: Int) {
 
     Button(
         onClick = { vm.addNewCheckBox(index, "$newName $size") },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(4.dp),
+        modifier = Modifier.fillMaxWidth().height(35.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = onMainAddCheckboxButtonColors
     ) {
         VerticalDivider(thickness = 10.dp, color = Color.Transparent)

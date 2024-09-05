@@ -23,6 +23,4 @@ data class UserEntity(
     var entityName: String = "",
     var image: Int = 0,
     val weight: Int = 0
-){
-
-}
+)

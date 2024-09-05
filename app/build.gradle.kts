@@ -114,7 +114,7 @@ dependencies {
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
 
-    // AsyncImages
+    // Coil for images
     implementation("io.coil-kt:coil-compose:2.6.0")
 
 

@@ -12,6 +12,7 @@ import com.example.letscheck.R
 import com.example.letscheck.screens.addNewEntityScreen.composables.CurrentActivityName
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListLazyColumn
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewEntityRow
+import com.example.letscheck.screens.addNewEntityScreen.composables.PhotoPicker
 import com.example.letscheck.screens.common_composables.Header
 import com.example.letscheck.viewModels.MainViewModel
 
@@ -20,8 +21,8 @@ fun AddNewEntityScreen(navController: NavController, vm: MainViewModel) {
 
     val newName = stringResource(id = R.string.new_entity_name)
     // Проверяем, принадлежит ли новый список текущему разделу (UserActivity),
-    // на случай, если экран открывается не в первый раз
-    if (vm.checkNewEntityRelations()) vm.createNewEntity(newName)
+    // на случай, если экран создания открывается не в первый раз.
+    if ( vm.checkNewEntityRelations() ) vm.createNewEntity(newName)
 
     Column(
         modifier = Modifier
@@ -31,6 +32,7 @@ fun AddNewEntityScreen(navController: NavController, vm: MainViewModel) {
     ) {
         Header(navController = navController, vm = vm)
         CurrentActivityName(vm = vm)
+        PhotoPicker(vm.currentImageUri) { vm.addNewUri(uri = it) }
         NewEntityRow(vm = vm)
         NewCheckListLazyColumn(vm = vm)
         }
