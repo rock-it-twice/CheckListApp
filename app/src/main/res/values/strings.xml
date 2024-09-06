@@ -20,7 +20,7 @@
 
     <!-- Add New entity screen -->
     <string name="add_new_subtitle">Новый подзаголовок</string>
-    <string name="add_new_checkbox">Новый чекбокс</string>
+    <string name="add_new_checkbox">Добавить чекбокс</string>
     <string name="accept">Принять</string>
     <string name="edit">Изменить</string>
     <string name="delete">Удалить</string>

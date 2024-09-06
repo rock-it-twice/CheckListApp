@@ -19,10 +19,9 @@ import com.example.letscheck.viewModels.MainViewModel
 @Composable
 fun AddNewEntityScreen(navController: NavController, vm: MainViewModel) {
 
-    val newName = stringResource(id = R.string.new_entity_name)
     // Проверяем, принадлежит ли новый список текущему разделу (UserActivity),
     // на случай, если экран создания открывается не в первый раз.
-    if ( vm.checkNewEntityRelations() ) vm.createNewEntity(newName)
+    if ( vm.checkNewEntityRelations() ) vm.createNewEntity("")
 
     Column(
         modifier = Modifier
@@ -32,7 +31,7 @@ fun AddNewEntityScreen(navController: NavController, vm: MainViewModel) {
     ) {
         Header(navController = navController, vm = vm)
         CurrentActivityName(vm = vm)
-        PhotoPicker(vm.currentImageUri) { vm.addNewUri(uri = it) }
+        PhotoPicker(vm.currentImageUri) { vm.addNewCurrentImageUri(uri = it) }
         NewEntityRow(vm = vm)
         NewCheckListLazyColumn(vm = vm)
         }

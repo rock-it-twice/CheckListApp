@@ -3,14 +3,12 @@ package com.example.letscheck.viewModels
 import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.data.Dao
-import com.example.letscheck.data.DataLoader
 import com.example.letscheck.data.MainDb
 import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
@@ -101,6 +99,7 @@ class MainViewModel(application: Application) : ViewModel() {
             entity = UserEntity(activityId = currentJointUserActivity!!.userActivity.id,
                                 entityName = str)
         )
+        addNewCurrentImageUri(null)
         clearNewCheckLists()
         clearNewCheckBoxes()
     }
@@ -111,7 +110,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     // new image
 
-    fun addNewUri(uri: Uri?){
+    fun addNewCurrentImageUri(uri: Uri?){
         vmScope.launch(Dispatchers.Main) { currentImageUri = uri }
     }
 
@@ -146,7 +145,7 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun clearNewCheckLists(){
+    private fun clearNewCheckLists(){
         newChecklists = listOf()
     }
 

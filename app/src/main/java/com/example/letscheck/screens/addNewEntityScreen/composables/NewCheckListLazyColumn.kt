@@ -28,7 +28,6 @@ fun NewCheckListLazyColumn(vm: MainViewModel) {
                         modifier = modifier.animateItemPlacement(),
                         checkList = checkList
                     )
-
                 }
 
                 items(

@@ -22,7 +22,7 @@ val MainGreenColor = Color(0xFF46A537)
 val MainLineColor = Color(0xFF78AAC8)
 
 val SecondaryBackgroundColor = Color(0xFF1C2D5E)
-val SecondaryTextColor = Color(0xFF00BCD4)
+val SecondaryTextColor = Color(0xFF70A4AB)
 
 val TertiaryBackgroundColor = Color(0xFF111E3C)
 

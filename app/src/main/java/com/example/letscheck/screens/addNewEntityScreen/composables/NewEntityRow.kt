@@ -23,7 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.letscheck.R
 import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainWhiteColor
@@ -63,8 +65,10 @@ fun NewEntityRow(vm: MainViewModel){
             textStyle = EntityTypography.titleMedium,
             colors = textFieldColors,
             placeholder = {
-                if (vm.newEntity!!.entity.entityName == "") Text(text = "Имя списка") },
-
+                            if (vm.newEntity!!.entity.entityName == "") {
+                                Text(stringResource(R.string.new_entity_name))
+                            }
+                          }
         )
 
         AcceptOrEditEntityButton( vm = vm, newName = newName,

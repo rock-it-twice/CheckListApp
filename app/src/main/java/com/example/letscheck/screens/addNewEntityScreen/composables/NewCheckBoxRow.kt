@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
@@ -21,7 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.MainGreenColor
@@ -79,7 +82,8 @@ fun NewCheckBoxRow(vm: MainViewModel,
             onValueChange = { newName = it },
             enabled = !isEnabled,
             textStyle = EntityTypography.labelMedium,
-            colors = textFieldColors
+            colors = textFieldColors,
+            placeholder = { Text(stringResource(R.string.new_checkbox_name)) }
         )
 
         VerticalDivider(modifier = Modifier.width(5.dp))
