@@ -1,6 +1,7 @@
 package com.example.letscheck.viewModels
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +21,7 @@ import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 class MainViewModel(application: Application) : ViewModel() {
@@ -36,7 +38,11 @@ class MainViewModel(application: Application) : ViewModel() {
     var newEntity: NewEntity? by mutableStateOf( null )
         private set
 
+    // New Entity image
     var currentImageUri: Uri? by mutableStateOf(null)
+        private set
+
+    var currentImageName: String? by mutableStateOf(null)
         private set
 
     var newChecklists: List<CheckList> by mutableStateOf( listOf() )
@@ -111,7 +117,23 @@ class MainViewModel(application: Application) : ViewModel() {
     // new image
 
     fun addNewCurrentImageUri(uri: Uri?){
-        vmScope.launch(Dispatchers.Main) { currentImageUri = uri }
+        vmScope.launch(Dispatchers.Main) {
+            currentImageUri = uri
+            if (uri != null) { currentImageName = uri.path?.let { File(it).name } }
+            println("IMAGE NAME = $currentImageName")
+        }
+    }
+
+
+    fun saveImageToInternalStorage(context: Context){
+        vmScope.launch(Dispatchers.IO) {
+            val inputStream = context.contentResolver.openInputStream(currentImageUri!!)
+            val outputStream = context.openFileOutput(currentImageName, Context.MODE_PRIVATE)
+
+            inputStream?.use { input ->
+                outputStream.use { output -> input.copyTo(output) }
+            }
+        }
     }
 
     // New checklists

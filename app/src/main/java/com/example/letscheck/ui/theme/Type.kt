@@ -62,7 +62,7 @@ val EntityTypography = Typography(
     ),
     titleSmall = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontSize = 20.sp,
         lineHeight = 26.sp,
         letterSpacing = 0.5.sp
     ),
