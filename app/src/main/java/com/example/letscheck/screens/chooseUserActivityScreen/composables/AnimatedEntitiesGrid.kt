@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -27,10 +28,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.letscheck.R
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
@@ -38,6 +42,7 @@ import com.example.letscheck.navigation.Routes
 import com.example.letscheck.ui.theme.MainBackgroundColor
 import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
+
 
 @Composable
 fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
@@ -72,12 +77,19 @@ fun EntityBox(vm: MainViewModel, jointEntity: JointEntity){
             .size(width = 135.dp, height = 240.dp)
             .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = { vm.getJointEntity(jointEntity) }),
-            contentAlignment = Alignment.Center){ if (jointEntity.entity.image != 0) {
-                Image(
-                    painter = painterResource(id = jointEntity.entity.image),
-                    contentDescription = "icon"
-                )
+            contentAlignment = Alignment.Center
+        ){
+            if (jointEntity.entity.image != "") {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(20.dp)),
+                model = jointEntity.entity.image.toUri(),
+                contentDescription = "Image",
+                contentScale = ContentScale.Crop
+            )
             }
+
         }
         Text(
             modifier = Modifier.padding(top = 5.dp, bottom = 20.dp),

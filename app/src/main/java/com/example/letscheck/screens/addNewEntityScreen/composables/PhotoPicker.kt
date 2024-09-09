@@ -1,5 +1,9 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
+import android.app.Application
+import android.content.ContentResolver
+import android.content.Context
+import android.content.res.Resources
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -12,10 +16,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,14 +50,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
+import com.example.letscheck.R
 import com.example.letscheck.ui.theme.EntityTypography
 import com.example.letscheck.ui.theme.MainWhiteColor
 import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 import com.example.letscheck.ui.theme.TertiaryBackgroundColor
+import java.io.InputStream
 
 
 @Composable
@@ -195,4 +206,20 @@ fun PhotoPickerPreview() {
 fun ExpandButtonPreview() {
     var isExpanded: Boolean by remember { mutableStateOf(false) }
     ExpandButton(isExpanded = isExpanded) { isExpanded = it}
+}
+
+@Preview
+@Composable
+fun PhotoBoxPreview() {
+    val res = LocalContext.current.applicationContext.resources
+    val image = R.drawable.fitness_bag_1
+    val uriBuilder = Uri.Builder()
+        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+        .authority(res.getResourcePackageName(image))
+        .appendPath(res.getResourceTypeName(image))
+        .appendPath(res.getResourceEntryName(image))
+        .build()
+    Column(modifier = Modifier.fillMaxSize()) {
+    Box{ PhotoBox(uriBuilder) }
+    }
 }

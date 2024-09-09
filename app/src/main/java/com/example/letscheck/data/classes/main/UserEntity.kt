@@ -21,6 +21,6 @@ data class UserEntity(
     val activityId: Int,
     @ColumnInfo(name = "entity_name")
     var entityName: String = "",
-    var image: Int = 0,
+    var image: String = "",
     val weight: Int = 0
 )

@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.repositories.ChecklistRepository
@@ -122,6 +123,11 @@ class MainViewModel(application: Application) : ViewModel() {
             if (uri != null) { currentImageName = uri.path?.let { File(it).name } }
             println("IMAGE NAME = $currentImageName")
         }
+    }
+
+    fun getImageByName(name: String): Uri{
+        val ppp = "/0/Pictures/.thumbnails/1000000033.jpg"
+        return ppp.toUri()
     }
 
 
