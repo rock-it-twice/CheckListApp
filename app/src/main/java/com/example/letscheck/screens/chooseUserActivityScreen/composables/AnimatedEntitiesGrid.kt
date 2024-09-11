@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,9 +40,6 @@ import com.example.letscheck.R
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.navigation.Routes
-import com.example.letscheck.ui.theme.MainBackgroundColor
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
 
 
 @Composable
@@ -57,7 +55,7 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
     ) {
         val entities = vm.currentJointUserActivity?.entities ?: listOf()
         LazyVerticalGrid(
-            modifier = Modifier.background(MainBackgroundColor),
+            modifier = Modifier,
             columns = GridCells.Adaptive(135.dp),
             contentPadding = PaddingValues(horizontal = 10.dp),
             content = {
@@ -105,16 +103,16 @@ fun AddNewEntity(navController: NavController) {
             modifier = Modifier
                 .size(width = 135.dp, height = 240.dp)
                 .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.primary)
                 .clickable(onClick = {
                     navController.navigate(route = Routes.AddNewEntityScreen.route)
-                })
-                .background(color = SecondaryBackgroundColor),
+                }),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "ADD",
-                tint = MainWhiteColor
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
         Text(

@@ -10,6 +10,9 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
-import com.example.letscheck.ui.theme.onMainIconButtonColors
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -38,17 +40,24 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
                 onClick = { onValueChange(!isEnabled) },
                 enabled = isEnabled,
-                colors = onMainIconButtonColors
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             ) { Icon(
                 imageVector = Icons.Default.Edit,
                 modifier = Modifier.size(15.dp),
-                contentDescription = "edit") }
+                contentDescription = "edit",
+                tint = MaterialTheme.colorScheme.onPrimary
+            ) }
         }
         // принять изменения либо удалить
         AnimatedVisibility(visible = !isEnabled) {
             Row {
                 IconButton(
                     modifier = Modifier.size(width = 50.dp, height = 25.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
                     onClick = {
                         when(true){
                             (checkList != null) ->
@@ -59,15 +68,21 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                         }
                         onValueChange(!isEnabled)
                     },
-                    enabled = !isEnabled,
-                    colors = onMainIconButtonColors
+                    enabled = !isEnabled
                 ) { Icon(
                     imageVector = Icons.Default.Done,
                     modifier = Modifier.size(15.dp),
-                    contentDescription = "accept") }
+                    contentDescription = "accept",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                    )
+
+                }
                 VerticalDivider(modifier = Modifier.size(10.dp), color = Color.Transparent)
                 IconButton(
                     modifier = Modifier.size(width = 50.dp, height = 25.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
                     onClick = {
                         when(true){
                             (checkList != null) ->
@@ -78,12 +93,14 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                             else -> {}
                             }
                         onValueChange(!isEnabled)
-                              },
-                    colors = onMainIconButtonColors
-                ) { Icon(
+                              }
+                ) { Icon (
                     imageVector = Icons.Default.Delete,
                     modifier = Modifier.size(15.dp),
-                    contentDescription = "delete") }
+                    contentDescription = "delete",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
     }

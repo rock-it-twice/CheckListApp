@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.ui.theme.Typography
 import com.example.letscheck.viewModels.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +37,6 @@ fun Menu(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerState) {
     )
     {
         Text(
-            style = Typography.titleLarge,
             text = if (vm.currentJointUserActivity != null) {
                 vm.currentJointUserActivity!!.userActivity.activityName
             } else stringResource(id = R.string.activity_filter)

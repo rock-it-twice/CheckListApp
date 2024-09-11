@@ -39,6 +39,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,10 +59,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.letscheck.R
-import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
-import com.example.letscheck.ui.theme.TertiaryBackgroundColor
 import java.io.InputStream
 
 
@@ -88,7 +85,6 @@ fun PhotoPicker(selectedImageUri: Uri?, onUriChange: (Uri?) -> Unit) {
             Box(
                 modifier = Modifier
                     .clip( RoundedCornerShape(20.dp) )
-                    .background(color = TertiaryBackgroundColor)
                     .clickable(onClick = {
                         onUriChange(null)
                         imagePickerLauncher.launch(
@@ -134,14 +130,12 @@ fun EmptyBox(selectedImageUri: Uri?) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "pick an image",
-                    tint = MainWhiteColor
+
                 )
                 HorizontalDivider(modifier = Modifier.width(10.dp), color = Color.Transparent)
                 Text(
                     text = "выберите изображение",
                     textAlign = TextAlign.Center,
-                    color = MainWhiteColor,
-                    style = EntityTypography.labelMedium
                 )
             }
         }
@@ -164,7 +158,9 @@ fun ExpandButton(
     isExpanded: Boolean,
     onValueChange: (Boolean) -> Unit){
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 10.dp),
         contentAlignment = if (isExpanded) Alignment.CenterEnd else Alignment.TopEnd
     ) {
         Crossfade(
@@ -177,8 +173,8 @@ fun ExpandButton(
                 onClick = { onValueChange(!isExpanded) },
                 modifier = Modifier.size(60.dp).padding(10.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MainWhiteColor,
-                    contentColor = SecondaryBackgroundColor
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 when(targetState){

@@ -5,7 +5,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.letscheck.ui.theme.Typography
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
@@ -14,6 +13,6 @@ fun CurrentActivityName(vm: MainViewModel){
     Text(
         modifier = Modifier.padding(vertical = 21.dp),
         text = currentActivity.activityName,
-        style = Typography.titleLarge
+
     )
 }

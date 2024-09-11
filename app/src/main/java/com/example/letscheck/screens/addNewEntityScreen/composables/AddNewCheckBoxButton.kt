@@ -28,10 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.MainGreenColor
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.onMainAddCheckboxButtonColors
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -51,9 +47,7 @@ fun AddNewCheckBoxButton(vm: MainViewModel, index: Int) {
             colors = ButtonDefaults.textButtonColors()
         ) {
             Text(
-                text = stringResource(id = R.string.add_new_checkbox),
-                color = MainWhiteColor,
-                style = EntityTypography.bodyMedium
+                text = stringResource(id = R.string.add_new_checkbox)
             )
         }
 

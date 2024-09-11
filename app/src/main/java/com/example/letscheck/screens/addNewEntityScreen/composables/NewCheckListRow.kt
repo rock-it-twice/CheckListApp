@@ -23,9 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckList
-import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
+
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -38,11 +36,8 @@ fun NewCheckListRow(vm: MainViewModel,
     Column {
         val textFieldColors = TextFieldDefaults.colors(
             disabledContainerColor = Color.Transparent,
-            disabledTextColor = MainWhiteColor,
-            focusedTextColor = MainWhiteColor,
-            focusedContainerColor = SecondaryBackgroundColor,
             unfocusedContainerColor = Color.Transparent,
-            unfocusedTextColor = MainWhiteColor
+
         )
         var isEnabled by rememberSaveable { mutableStateOf( checkList.checkListName != "" ) }
         var newName: String by remember { mutableStateOf( checkList.checkListName ) }
@@ -60,7 +55,6 @@ fun NewCheckListRow(vm: MainViewModel,
                     .fillMaxWidth(),
                 enabled = !isEnabled,
                 onValueChange = { newName = it },
-                textStyle = EntityTypography.titleSmall,
                 colors = textFieldColors,
                 placeholder = { Text(stringResource(R.string.new_subtitle_name)) }
             )

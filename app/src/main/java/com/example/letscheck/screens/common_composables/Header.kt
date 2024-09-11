@@ -13,6 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,18 +23,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.R
 import com.example.letscheck.navigation.Routes
-import com.example.letscheck.ui.theme.MainGradientColors
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
+
 
 @Composable
 fun Header(navController: NavController, vm: MainViewModel) {
@@ -46,7 +47,7 @@ fun Header(navController: NavController, vm: MainViewModel) {
         Text(text = "Let's check!",
             fontSize = 42.sp,
             fontWeight = FontWeight.SemiBold,
-            style = TextStyle(Brush.linearGradient(colors = MainGradientColors))
+            style = TextStyle(Brush.linearGradient(colors = listOf(Color.Cyan, Color.Magenta)))
             )
         when(navController.currentDestination?.route){
             Routes.Home.route ->   { CancelChoiceButton(vm = vm) }
@@ -59,18 +60,24 @@ fun Header(navController: NavController, vm: MainViewModel) {
 
 @Composable
 fun CancelChoiceButton(vm: MainViewModel){
+
     var isGoBackButtonVisible by remember { mutableStateOf(false) }
-    isGoBackButtonVisible = vm.currentJointEntity != null || vm.currentJointUserActivity != null
-    val buttonColors = ButtonDefaults.buttonColors(
-        containerColor = SecondaryBackgroundColor,
-        contentColor = MainWhiteColor)
-    AnimatedVisibility(visible = isGoBackButtonVisible) {
+    isGoBackButtonVisible = ( vm.currentJointEntity != null || vm.currentJointUserActivity != null )
+//    val buttonColors = ButtonDefaults.buttonColors(
+//        containerColor = SecondaryBackgroundColor,
+//        contentColor = MainWhiteColor)
+
+    AnimatedVisibility(
+        visible = isGoBackButtonVisible
+    ) {
         Row(modifier = Modifier.clickable(onClick = { vm.clearStepByStep() }),
             verticalAlignment = Alignment.CenterVertically) {
             Button(
                 shape = RoundedCornerShape(10.dp),
-                colors = buttonColors,
-                onClick = { vm.clearStepByStep() }
+                onClick = { vm.clearStepByStep() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             ) {
                 Icon(imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                     contentDescription = "go back")
@@ -82,3 +89,11 @@ fun CancelChoiceButton(vm: MainViewModel){
         }
     }
 }
+
+//@Preview
+//@Composable
+//fun GoBackButtonPreview(){
+//    CancelChoiceButton(){
+//
+//    }
+//}

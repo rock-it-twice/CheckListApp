@@ -22,8 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryTextColor
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -45,14 +43,10 @@ fun CreateNewActivity( vm: MainViewModel, visible: Boolean, onValueChange: (Bool
                 placeholder = {
                     Text(
                         text = stringResource(id = R.string.add_new_activity_type),
-                        color = SecondaryTextColor
+
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedTextColor = SecondaryTextColor,
-                    focusedTextColor = MainWhiteColor,
-                    unfocusedBorderColor = SecondaryTextColor,
-                    focusedBorderColor = SecondaryTextColor
                 )
             )
             Button(
@@ -60,7 +54,6 @@ fun CreateNewActivity( vm: MainViewModel, visible: Boolean, onValueChange: (Bool
                     vm.addUserActivity()
                     onValueChange(!visible)
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = SecondaryTextColor),
                 shape = RoundedCornerShape(2.dp),
                 modifier = Modifier
                     .weight(0.25F, true)

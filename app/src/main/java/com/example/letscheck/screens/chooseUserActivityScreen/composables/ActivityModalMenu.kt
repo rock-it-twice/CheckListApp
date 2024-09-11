@@ -27,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.UserActivity
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
-import com.example.letscheck.ui.theme.SecondaryTextColor
 import com.example.letscheck.viewModels.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,7 +46,6 @@ fun ActivityModalMenu(
 
     ModalDrawerSheet(
         modifier = Modifier,
-        drawerContainerColor = SecondaryBackgroundColor,
         windowInsets = WindowInsets(0.dp)
     ) {
         Column(
@@ -65,7 +62,7 @@ fun ActivityModalMenu(
                 )
             }
             HorizontalDivider(
-                modifier = Modifier.padding(vertical = 5.dp),color = Color.Cyan)
+                modifier = Modifier.padding(vertical = 5.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,18 +73,16 @@ fun ActivityModalMenu(
                 Text(
                     text = stringResource(id = R.string.add_new_activity),
                     fontSize = 24.sp,
-                    color = SecondaryTextColor
+
                 )
                 when(!isVisible){
                     true -> Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = "show",
-                        tint = SecondaryTextColor
                     )
                     false -> Icon(
                         imageVector = Icons.Default.KeyboardArrowUp,
                         contentDescription = "hide",
-                        tint = SecondaryTextColor
                     )
                 }
             }
@@ -110,7 +105,6 @@ fun ActivityRow(
         Text(
             text = activity.activityName,
             fontSize = 24.sp,
-            color = SecondaryTextColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)

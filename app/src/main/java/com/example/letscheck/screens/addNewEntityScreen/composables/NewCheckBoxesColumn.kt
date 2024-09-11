@@ -32,11 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.data.classes.main.CheckBoxTitle
-import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.MainGreenColor
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
-import com.example.letscheck.ui.theme.onMainIconButtonColors
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -52,11 +47,7 @@ fun NewCheckBoxesColumn(vm: MainViewModel, listIndex: Int){
 
             val textFieldColors = TextFieldDefaults.colors (
                 disabledContainerColor = Color.Transparent,
-                disabledTextColor = MainWhiteColor,
-                focusedTextColor = MainWhiteColor,
-                focusedContainerColor = SecondaryBackgroundColor,
                 unfocusedContainerColor = Color.Transparent,
-                unfocusedTextColor = MainWhiteColor
             )
 
             Row(modifier = Modifier
@@ -73,8 +64,6 @@ fun NewCheckBoxesColumn(vm: MainViewModel, listIndex: Int){
                     checked = isChecked,
                     onCheckedChange = { isChecked = !isChecked },
                     colors = CheckboxDefaults.colors(
-                        uncheckedColor = MainWhiteColor,
-                        checkedColor = MainGreenColor
                     )
                 )
 
@@ -85,7 +74,6 @@ fun NewCheckBoxesColumn(vm: MainViewModel, listIndex: Int){
                     value = newName,
                     onValueChange = { newName = it },
                     enabled = !isEnabled,
-                    textStyle = EntityTypography.labelMedium,
                     colors = textFieldColors
                 )
 

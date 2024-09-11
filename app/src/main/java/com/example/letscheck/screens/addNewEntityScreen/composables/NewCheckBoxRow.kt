@@ -26,10 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckBoxTitle
-import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.MainGreenColor
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
+
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
@@ -45,11 +42,7 @@ fun NewCheckBoxRow(vm: MainViewModel,
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
-        disabledTextColor = MainWhiteColor,
-        focusedTextColor = MainWhiteColor,
-        focusedContainerColor = SecondaryBackgroundColor,
         unfocusedContainerColor = Color.Transparent,
-        unfocusedTextColor = MainWhiteColor
     )
 
     Row(
@@ -67,8 +60,6 @@ fun NewCheckBoxRow(vm: MainViewModel,
             checked = isChecked,
             onCheckedChange = { isChecked = !isChecked },
             colors = CheckboxDefaults.colors(
-                uncheckedColor = MainWhiteColor,
-                checkedColor = MainGreenColor
             )
         )
 
@@ -81,7 +72,6 @@ fun NewCheckBoxRow(vm: MainViewModel,
             value = newName,
             onValueChange = { newName = it },
             enabled = !isEnabled,
-            textStyle = EntityTypography.labelMedium,
             colors = textFieldColors,
             placeholder = { Text(stringResource(R.string.new_checkbox_name)) }
         )

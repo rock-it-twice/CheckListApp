@@ -12,6 +12,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -26,25 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.ui.theme.EntityTypography
-import com.example.letscheck.ui.theme.MainBackgroundColor
-import com.example.letscheck.ui.theme.MainWhiteColor
-import com.example.letscheck.ui.theme.SecondaryBackgroundColor
-import com.example.letscheck.ui.theme.onMainIconButtonColors
+
 import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
 fun NewEntityRow(vm: MainViewModel){
-
-    val textFieldColors = TextFieldDefaults.colors(
-        disabledContainerColor = MainBackgroundColor,
-        disabledTextColor = MainWhiteColor,
-        focusedTextColor = MainWhiteColor,
-        focusedContainerColor = SecondaryBackgroundColor,
-        unfocusedContainerColor = MainBackgroundColor,
-        unfocusedTextColor = MainWhiteColor
-    )
 
     var isEnabled by rememberSaveable { mutableStateOf(
         vm.newEntity!!.entity.entityName != ""
@@ -60,10 +49,8 @@ fun NewEntityRow(vm: MainViewModel){
         TextField(
             value = newName,
             onValueChange = { newName = it },
-            modifier = Modifier,
+            modifier = Modifier.padding(vertical = 10.dp),
             enabled = !isEnabled,
-            textStyle = EntityTypography.titleMedium,
-            colors = textFieldColors,
             placeholder = {
                             if (vm.newEntity!!.entity.entityName == "") {
                                 Text(stringResource(R.string.new_entity_name))
@@ -93,11 +80,17 @@ fun AcceptOrEditEntityButton(
                 },
                 enabled = !isEnabled,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
-                colors = onMainIconButtonColors
-            ) {  Icon(
-                imageVector = Icons.Default.Done,
-                modifier = Modifier.size(15.dp),
-                contentDescription = "create") }
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+                ) {
+                Icon(
+                    imageVector = Icons.Default.Done,
+                    modifier = Modifier.size(15.dp),
+                    contentDescription = "create"
+                )
+            }
 
         }
         AnimatedVisibility(visible = isEnabled) {
@@ -105,11 +98,16 @@ fun AcceptOrEditEntityButton(
                 onClick = { onValueChange(!isEnabled) },
                 enabled = isEnabled,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
-                colors = onMainIconButtonColors
-            ) { Icon(
-                imageVector = Icons.Default.Edit,
-                modifier = Modifier.size(15.dp),
-                contentDescription = "edit")
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    modifier = Modifier.size(15.dp),
+                    contentDescription = "edit"
+                )
             }
         }
     }
