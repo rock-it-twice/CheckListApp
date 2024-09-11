@@ -13,6 +13,5 @@ fun CurrentActivityName(vm: MainViewModel){
     Text(
         modifier = Modifier.padding(vertical = 21.dp),
         text = currentActivity.activityName,
-
     )
 }

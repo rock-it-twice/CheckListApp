@@ -30,6 +30,12 @@ class ChecklistRepository(val userDao: Dao) {
         withContext(Dispatchers.IO) { userDao.addCheckList(checkList) }
     }
 
+    suspend fun addCheckLists(checkLists: List<CheckList>) {
+        withContext(Dispatchers.IO) {
+            checkLists.forEach { userDao.addCheckList(it) }
+        }
+    }
+
     suspend fun addCheckBoxTitle(checkListId: Int, text: String) {
         withContext(Dispatchers.IO) {
             userDao.addCheckBoxTitle(
@@ -43,6 +49,18 @@ class ChecklistRepository(val userDao: Dao) {
             list.forEach {
                 addCheckBoxTitle(checkListId = checkListId, text = it)
             }
+        }
+    }
+
+    suspend fun addCheckBoxTitle(checkBoxTitle: CheckBoxTitle){
+        withContext(Dispatchers.IO) {
+            userDao.addCheckBoxTitle(checkBoxTitle)
+        }
+    }
+
+    suspend fun addCheckBoxTitles(list: List<CheckBoxTitle>) {
+        withContext(Dispatchers.IO) {
+            list.forEach { addCheckBoxTitle(it) }
         }
     }
 
@@ -93,6 +111,10 @@ class ChecklistRepository(val userDao: Dao) {
             userDao.deleteEntity(id)
             userDao.deleteCheckBoxesByCheckListId(id)
         }
+    }
+
+    suspend fun getLastEntityId(): Int {
+        return withContext(Dispatchers.IO) { return@withContext userDao.getLastEntityId() ?: 0 }
     }
 
 

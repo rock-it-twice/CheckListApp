@@ -1,11 +1,14 @@
 package com.example.letscheck.viewModels
 
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Context
+import android.content.ContextWrapper
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -22,10 +25,12 @@ import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.internal.wait
 import java.io.File
 
 
-class MainViewModel(application: Application) : ViewModel() {
+class MainViewModel(private val application: Application) : ViewModel() {
 
     val vmScope: CoroutineScope
     val repository: ChecklistRepository
@@ -100,13 +105,25 @@ class MainViewModel(application: Application) : ViewModel() {
 
 
     // New entity
-
     fun createNewEntity(str: String = "") {
-        newEntity = NewEntity(
-            entity = UserEntity(activityId = currentJointUserActivity!!.userActivity.id,
-                                entityName = str)
-        )
+
+                newEntity = NewEntity(
+                    entity = UserEntity(
+                        activityId = currentJointUserActivity!!.userActivity.id,
+                        entityName = str
+                    )
+                )
+                addNewCurrentImageUri(null)
+                currentImageName = null
+                clearNewCheckLists()
+                clearNewCheckBoxes()
+
+    }
+
+    fun clearAddNewEntityScreenData(){
+        newEntity = null
         addNewCurrentImageUri(null)
+        currentImageName = null
         clearNewCheckLists()
         clearNewCheckBoxes()
     }
@@ -116,29 +133,40 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     // new image
-
     fun addNewCurrentImageUri(uri: Uri?){
         vmScope.launch(Dispatchers.Main) {
             currentImageUri = uri
             if (uri != null) { currentImageName = uri.path?.let { File(it).name } }
-            println("IMAGE NAME = $currentImageName")
         }
     }
 
-    fun getImageByName(name: String): Uri{
-        val ppp = "/0/Pictures/.thumbnails/1000000033.jpg"
-        return ppp.toUri()
+    // Сохранение выбранного изображения во внутреннем хранилище
+    fun saveImageToInternalStorage(){
+        if (currentImageUri != null) {
+            vmScope.launch(Dispatchers.IO) {
+                val inputStream = application.contentResolver.openInputStream(currentImageUri!!)
+                val outputStream =
+                    application.openFileOutput(currentImageName, Context.MODE_PRIVATE)
+
+                inputStream?.use { input ->
+                    outputStream.use { output -> input.copyTo(output) }
+                }
+            }
+        }
     }
 
-
-    fun saveImageToInternalStorage(context: Context){
+    fun getNewImageUriFromInternalStorage(){
         vmScope.launch(Dispatchers.IO) {
-            val inputStream = context.contentResolver.openInputStream(currentImageUri!!)
-            val outputStream = context.openFileOutput(currentImageName, Context.MODE_PRIVATE)
-
-            inputStream?.use { input ->
-                outputStream.use { output -> input.copyTo(output) }
+            if (currentImageName != null) {
+                val directory = application.applicationContext.filesDir.path
+                currentImageUri = "$directory/$currentImageName".toUri()
             }
+        }
+    }
+
+    fun assignImageToNewEntity(){
+        vmScope.launch(Dispatchers.IO) {
+            newEntity!!.entity.image = currentImageUri.toString()
         }
     }
 
@@ -215,6 +243,14 @@ class MainViewModel(application: Application) : ViewModel() {
         vmScope.launch(Dispatchers.Main) {
             newEntity!!.deleteCheckBoxTitleByIndex(listIndex, index)
             newCheckBoxes = newEntity!!.checkBoxTitles.toList()
+        }
+    }
+
+    fun saveNewEntityToDataBase() {
+        vmScope.launch(Dispatchers.IO) {
+            repository.addUserEntity(newEntity!!.entity)
+            newEntity!!.checkLists.forEach{ repository.addCheckList(it) }
+            newEntity!!.checkBoxTitles.forEach{ repository.addCheckBoxTitles(it) }
         }
     }
 

@@ -41,13 +41,13 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                 onClick = { onValueChange(!isEnabled) },
                 enabled = isEnabled,
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) { Icon(
                 imageVector = Icons.Default.Edit,
                 modifier = Modifier.size(15.dp),
-                contentDescription = "edit",
-                tint = MaterialTheme.colorScheme.onPrimary
+                contentDescription = "edit"
             ) }
         }
         // принять изменения либо удалить
@@ -56,7 +56,8 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                 IconButton(
                     modifier = Modifier.size(width = 50.dp, height = 25.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     onClick = {
                         when(true){
@@ -72,8 +73,7 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                 ) { Icon(
                     imageVector = Icons.Default.Done,
                     modifier = Modifier.size(15.dp),
-                    contentDescription = "accept",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    contentDescription = "accept"
                     )
 
                 }
@@ -81,7 +81,8 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                 IconButton(
                     modifier = Modifier.size(width = 50.dp, height = 25.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     onClick = {
                         when(true){
@@ -97,8 +98,7 @@ fun AcceptRenameDeleteButton( vm: MainViewModel,
                 ) { Icon (
                     imageVector = Icons.Default.Delete,
                     modifier = Modifier.size(15.dp),
-                    contentDescription = "delete",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    contentDescription = "delete"
                     )
                 }
             }

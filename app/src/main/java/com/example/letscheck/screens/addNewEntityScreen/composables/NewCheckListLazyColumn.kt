@@ -5,11 +5,12 @@ import androidx.compose.foundation.lazy.items
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun NewCheckListLazyColumn(vm: MainViewModel) {
+fun NewCheckListLazyColumn(vm: MainViewModel, navController: NavController) {
 
     val modifier = Modifier
 
@@ -44,6 +45,7 @@ fun NewCheckListLazyColumn(vm: MainViewModel) {
                 item{ AddNewCheckBoxButton(vm = vm, index = listIndex) }
             }
             item { AddNewChecklistButton(vm = vm) }
+            item { SaveResultToDataBaseButton(vm = vm, navController = navController) }
         }
 
     }

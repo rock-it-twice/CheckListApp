@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -59,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.letscheck.R
+import com.example.letscheck.viewModels.MainViewModel
 import java.io.InputStream
 
 
@@ -93,6 +95,7 @@ fun PhotoPicker(selectedImageUri: Uri?, onUriChange: (Uri?) -> Unit) {
                             )
                         )
                         onUriChange(selectedImageUri)
+
                     }
                     )
                     .animateContentSize()
@@ -111,6 +114,7 @@ fun PhotoPicker(selectedImageUri: Uri?, onUriChange: (Uri?) -> Unit) {
             }
 
         }
+
     }
 }
 
@@ -130,7 +134,6 @@ fun EmptyBox(selectedImageUri: Uri?) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "pick an image",
-
                 )
                 HorizontalDivider(modifier = Modifier.width(10.dp), color = Color.Transparent)
                 Text(
@@ -159,8 +162,7 @@ fun ExpandButton(
     onValueChange: (Boolean) -> Unit){
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 10.dp),
+            .fillMaxSize(),
         contentAlignment = if (isExpanded) Alignment.CenterEnd else Alignment.TopEnd
     ) {
         Crossfade(
@@ -191,11 +193,11 @@ fun ExpandButton(
 
 // Preview section
 
-@Preview
-@Composable
-fun PhotoPickerPreview() {
-    PhotoPicker(null) {}
-}
+//@Preview
+//@Composable
+//fun PhotoPickerPreview() {
+//    PhotoPicker(null) {}
+//}
 
 @Preview
 @Composable

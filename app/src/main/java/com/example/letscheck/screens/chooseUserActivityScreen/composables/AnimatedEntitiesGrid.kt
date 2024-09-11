@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +41,8 @@ import com.example.letscheck.R
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.navigation.Routes
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
 
 @Composable
@@ -98,6 +101,7 @@ fun EntityBox(vm: MainViewModel, jointEntity: JointEntity){
 
 @Composable
 fun AddNewEntity(navController: NavController) {
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
@@ -105,7 +109,7 @@ fun AddNewEntity(navController: NavController) {
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.primary)
                 .clickable(onClick = {
-                    navController.navigate(route = Routes.AddNewEntityScreen.route)
+                        navController.navigate(route = Routes.AddNewEntityScreen.route)
                 }),
             contentAlignment = Alignment.Center
         ) {

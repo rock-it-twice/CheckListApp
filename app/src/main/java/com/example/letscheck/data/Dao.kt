@@ -13,6 +13,7 @@ import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.data.classes.main.UserEntity
+import com.example.letscheck.data.classes.output.JointEntity
 
 @Dao
 interface Dao {
