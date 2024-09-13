@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.ActivityModalMenu
 import com.example.letscheck.viewModels.MainViewModel
-import com.example.letscheck.screens.common_composables.Header
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.Header
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.CurrentEntityColumn
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.Menu
@@ -38,7 +38,7 @@ fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel) {
             .padding(bottom = 30.dp)
     ) {
         // Логотип
-        Header(navController = navController, vm = vm)
+        Header(navController = navController, mainVM = vm)
         // Выбор Activity
         Menu(vm = vm, scope = scope, drawerState = drawerState)
         // Боковое меню выбора

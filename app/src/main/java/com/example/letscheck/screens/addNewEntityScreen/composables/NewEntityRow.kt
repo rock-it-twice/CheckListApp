@@ -26,12 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun NewEntityRow(vm: MainViewModel){
+fun NewEntityRow(vm: AddNewEntityViewModel){
 
     var isEnabled by rememberSaveable {
         mutableStateOf( (vm.newEntity?.entity?.entityName ?: "") != "" ) }
@@ -64,7 +65,7 @@ fun NewEntityRow(vm: MainViewModel){
 
 @Composable
 fun AcceptOrEditEntityButton(
-                       vm: MainViewModel,
+                       vm: AddNewEntityViewModel,
                        newName: String,
                        isEnabled: Boolean,
                        onValueChange: (Boolean) -> Unit){

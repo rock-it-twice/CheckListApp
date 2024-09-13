@@ -26,11 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckBoxTitle
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun NewCheckBoxRow(vm: MainViewModel,
+fun NewCheckBoxRow(vm: AddNewEntityViewModel,
                    modifier: Modifier,
                    listIndex: Int,
                    checkBoxTitle: CheckBoxTitle

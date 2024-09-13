@@ -19,13 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.navigation.Routes
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
 
 @Composable
-fun SaveResultToDataBaseButton(vm: MainViewModel, navController: NavController){
+fun SaveResultToDataBaseButton(vm: AddNewEntityViewModel, navController: NavController){
     val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -37,11 +38,8 @@ fun SaveResultToDataBaseButton(vm: MainViewModel, navController: NavController){
             onClick = {
                 scope.launch {
                     vm.saveImageToInternalStorage()
-                    delay(200)
                     vm.getNewImageUriFromInternalStorage()
-                    delay(200)
                     vm.assignImageToNewEntity()
-                    delay(200)
                     vm.saveNewEntityToDataBase()
                     delay(2000)
                     vm.clearAddNewEntityScreenData()

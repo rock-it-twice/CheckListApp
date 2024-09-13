@@ -20,12 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 
 
 
 @Composable
-fun AcceptRenameDeleteButton( vm: MainViewModel,
+fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
                               newName: String,
                               listIndex: Int,
                               checkList: CheckList? = null,

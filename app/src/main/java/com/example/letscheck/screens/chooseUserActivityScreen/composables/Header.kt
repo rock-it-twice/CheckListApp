@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.common_composables
+package com.example.letscheck.screens.chooseUserActivityScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -37,7 +36,7 @@ import com.example.letscheck.navigation.Routes
 
 
 @Composable
-fun Header(navController: NavController, vm: MainViewModel) {
+fun Header(navController: NavController, mainVM: MainViewModel) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 20.dp, bottom = 10.dp),
@@ -50,7 +49,7 @@ fun Header(navController: NavController, vm: MainViewModel) {
             style = TextStyle(Brush.linearGradient(colors = listOf(Color.Cyan, Color.Magenta)))
             )
         when(navController.currentDestination?.route){
-            Routes.Home.route ->   { CancelChoiceButton(vm = vm) }
+            Routes.Home.route ->   { CancelChoiceButton(vm = mainVM) }
             else -> {}
         }
 

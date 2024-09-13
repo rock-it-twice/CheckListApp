@@ -32,11 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.data.classes.main.CheckBoxTitle
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun NewCheckBoxesColumn(vm: MainViewModel, listIndex: Int){
+fun NewCheckBoxesColumn(vm: AddNewEntityViewModel, listIndex: Int){
 
     Column(modifier = Modifier.padding(start = 5.dp)) {
         vm.newCheckBoxes[listIndex].forEachIndexed { index, checkBoxTitle ->

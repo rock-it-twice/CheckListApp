@@ -23,12 +23,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckList
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun NewCheckListRow(vm: MainViewModel,
+fun NewCheckListRow(vm: AddNewEntityViewModel,
                     modifier: Modifier,
                     index: Int,
                     checkList: CheckList) {

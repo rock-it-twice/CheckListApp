@@ -10,12 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
+import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun AddNewChecklistButton(vm: MainViewModel){
+fun AddNewChecklistButton(vm: AddNewEntityViewModel){
 
     Button(
         onClick = { vm.addNewCheckList("") },
