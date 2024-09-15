@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
 data class CheckBoxTitle(
     @PrimaryKey(autoGenerate = true)
     val id: Int = cnt,
-    val checkListId: Int,
+    var checkListId: Int,
     var text: String,
     var description: String = ""
 ) {

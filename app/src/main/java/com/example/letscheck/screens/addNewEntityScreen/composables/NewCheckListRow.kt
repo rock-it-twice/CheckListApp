@@ -25,8 +25,6 @@ import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
-import com.example.letscheck.viewModels.MainViewModel
-
 
 @Composable
 fun NewCheckListRow(vm: AddNewEntityViewModel,

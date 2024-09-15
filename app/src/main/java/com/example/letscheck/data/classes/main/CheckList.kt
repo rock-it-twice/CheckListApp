@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
 data class CheckList(
     @PrimaryKey(autoGenerate = true)
     val id: Int = cnt,
-    val entityId: Int,
+    var entityId: Int,
     var checkListName: String = ""
     ){
 

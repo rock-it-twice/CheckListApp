@@ -4,9 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
@@ -31,8 +33,7 @@ class AddNewEntityViewModel(
     var currentImageUri: Uri? by mutableStateOf(null)
         private set
 
-    var currentImageName: String? by mutableStateOf(null)
-        private set
+    private var currentImageName: String? by mutableStateOf(null)
 
     var newChecklists: List<CheckList> by mutableStateOf( listOf() )
         private set
@@ -43,24 +44,15 @@ class AddNewEntityViewModel(
 
     // New entity
     fun createNewEntity(activityId: Int, str: String = "") {
-
-        newEntity = NewEntity(
-            entity = UserEntity(
-                activityId = activityId,
-                entityName = str
-            )
-        )
+        newEntity = NewEntity( entity = UserEntity( activityId = activityId, entityName = str ) )
         addNewCurrentImageUri(null)
-        currentImageName = null
         clearNewCheckLists()
         clearNewCheckBoxes()
-
     }
 
     fun clearAddNewEntityScreenData(){
         newEntity = null
         addNewCurrentImageUri(null)
-        currentImageName = null
         clearNewCheckLists()
         clearNewCheckBoxes()
     }
@@ -73,7 +65,14 @@ class AddNewEntityViewModel(
     fun addNewCurrentImageUri(uri: Uri?){
         vmScope.launch(Dispatchers.Main) {
             currentImageUri = uri
-            if (uri != null) { currentImageName = uri.path?.let { File(it).name } }
+            when{
+                (currentImageUri == null) -> {
+                            currentImageName = null
+                }
+                (currentImageUri != null) -> {
+                            currentImageName = currentImageUri!!.path?.let { File(it).name }
+                }
+            }
         }
     }
 
@@ -91,7 +90,7 @@ class AddNewEntityViewModel(
             }
         }
     }
-
+    // Получение нового uri после сохранения в internal storage
     fun getNewImageUriFromInternalStorage(){
         vmScope.launch(Dispatchers.IO) {
             if (currentImageName != null) {
@@ -101,6 +100,7 @@ class AddNewEntityViewModel(
         }
     }
 
+    // Запись uri в класс
     fun assignImageToNewEntity(){
         vmScope.launch(Dispatchers.IO) {
             newEntity!!.entity.image = currentImageUri.toString()
@@ -158,13 +158,6 @@ class AddNewEntityViewModel(
         }
     }
 
-    fun renameNewCheckBoxTitle(checkBoxTitle: CheckBoxTitle, str: String) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.renameCheckBoxTitle(checkBoxTitle = checkBoxTitle, str)
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-        }
-    }
-
     fun deleteNewCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
         vmScope.launch(Dispatchers.Main) {
             newEntity!!.deleteCheckBoxTitle(listIndex, checkBoxTitle)
@@ -172,23 +165,19 @@ class AddNewEntityViewModel(
         }
     }
 
-    fun clearNewCheckBoxes(){
+    private fun clearNewCheckBoxes(){
         newCheckBoxes = listOf()
     }
 
-    fun deleteNewCheckBoxByIndex(listIndex: Int, index: Int) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.deleteCheckBoxTitleByIndex(listIndex, index)
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-        }
-    }
-
     fun saveNewEntityToDataBase() {
-        vmScope.launch(Dispatchers.IO) {
-            repository.addUserEntity(newEntity!!.entity)
-            newEntity!!.checkLists.forEach{ repository.addCheckList(it) }
-            newEntity!!.checkBoxTitles.forEach{ repository.addCheckBoxTitles(it) }
+        println("---------------------------------------------------")
+        println(newEntity!!.entity)
+        newEntity!!.checkLists.forEachIndexed{ i, it ->
+            println(it)
+            println(newEntity!!.checkBoxTitles[i])
         }
+        println("---------------------------------------------------")
+        vmScope.launch(Dispatchers.IO) { repository.addAll(entity = newEntity!!) }
     }
 
     fun checkNewEntityRelations(currentActivityId: Int): Boolean{

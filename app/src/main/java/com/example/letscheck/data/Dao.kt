@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointCheckList
@@ -23,14 +24,39 @@ interface Dao {
     suspend fun addUserActivity(userActivity: UserActivity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUserEntity(userEntity: UserEntity)
+    suspend fun addUserEntity(userEntity: UserEntity): Int {
+        return getLastEntityId()
+    }
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addCheckList(checkList: CheckList)
+    suspend fun addCheckList(checkList: CheckList): Int {
+        return getLastCheckListId()
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addCheckLists(list: List<CheckList>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCheckBoxTitle(checkBoxTitle: CheckBoxTitle)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addCheckBoxTitles(list: List<CheckBoxTitle>)
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addAll(entity: NewEntity){
+        val entityId = addUserEntity(entity.entity)
+        entity.checkLists.forEachIndexed{ i, checkList ->
+
+            checkList.entityId = entityId
+            val checkListId = addCheckList(checkList)
+
+            entity.checkBoxTitles[i].forEach{
+                it.checkListId = checkListId
+                addCheckBoxTitle(it)
+            }
+        }
+    }
 
     // ОБНОВЛЕНИЕ
     @Update
@@ -96,7 +122,13 @@ interface Dao {
     fun getUserEntityByName(entityName: String, userId: Int): UserEntity?
 
     @Query("SELECT id FROM user_entities ORDER BY id DESC LIMIT 1")
-    fun getLastEntityId(): Int?
+    fun getLastEntityId(): Int
+
+    @Query("Select id FROM check_lists ORDER BY id DESC LIMIT 1")
+    fun getLastCheckListId(): Int
+
+    @Query("Select id FROM check_box_title ORDER BY id DESC LIMIT 1")
+    fun getLastCheckBoxTitleId(): Int
 
 
 

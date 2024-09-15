@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,6 +21,7 @@ import com.example.letscheck.data.Dao
 import com.example.letscheck.data.MainDb
 import com.example.letscheck.navigation.NavGraph
 import com.example.letscheck.repositories.ChecklistRepository
+import com.example.letscheck.screens.common_composables.Header
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.viewModels.factory.AddNewEntityViewModelFactory
@@ -39,42 +41,22 @@ class MainActivity : ComponentActivity() {
             val repository = ChecklistRepository(userDao)
             val vmScope = CoroutineScope(Dispatchers.Main)
 
-            val mainViewModelOwner = LocalViewModelStoreOwner.current
-            mainViewModelOwner?.let {
+            val owner = LocalViewModelStoreOwner.current
+            owner?.let {
+                val appContext = LocalContext.current.applicationContext as Application
                 val mainVM: MainViewModel =
                     viewModel(
-                        it,
-                        "MainViewModel",
-                        MainViewModelFactory(
-                            vmScope,
-                            repository,
-                            LocalContext.current.applicationContext as Application)
+                        it, "MainViewModel",
+                        MainViewModelFactory( vmScope, repository, appContext)
                     )
                 val addNewVM: AddNewEntityViewModel =
                     viewModel(
                         it,
                         "AddNewEntityViewModel",
-                        AddNewEntityViewModelFactory(
-                            vmScope,
-                            repository,
-                            LocalContext.current.applicationContext as Application)
+                        AddNewEntityViewModelFactory( vmScope, repository, appContext)
                     )
                 App(mainVM = mainVM, addNewVM = addNewVM)
             }
-//            val addNewEntityViewModelOwner = LocalViewModelStoreOwner.current
-//            addNewEntityViewModelOwner?.let {
-//                val addNewVM: AddNewEntityViewModel =
-//                    viewModel(
-//                        it,
-//                        "AddNewEntityViewModel",
-//                        AddNewEntityViewModelFactory(
-//                            vmScope,
-//                            repository,
-//                            LocalContext.current.applicationContext as Application)
-//                    )
-//                App(addNewVM)
-//            }
-
         }
     }
 }
@@ -90,7 +72,7 @@ fun App(mainVM: MainViewModel = viewModel(), addNewVM: AddNewEntityViewModel = v
             color = MaterialTheme.colorScheme.background,
             shape = RectangleShape
         ) {
-            NavGraph( mainVM = mainVM, addNewVM = addNewVM, navController = navController )
+            NavGraph(mainVM = mainVM, addNewVM = addNewVM, navController = navController)
         }
     }
 }

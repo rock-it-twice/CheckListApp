@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen.composables
+package com.example.letscheck.screens.common_composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -39,7 +39,7 @@ import com.example.letscheck.navigation.Routes
 fun Header(navController: NavController, mainVM: MainViewModel) {
     Row(modifier = Modifier
         .fillMaxWidth()
-        .padding(top = 20.dp, bottom = 10.dp),
+        .padding(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
         ) {
@@ -49,7 +49,7 @@ fun Header(navController: NavController, mainVM: MainViewModel) {
             style = TextStyle(Brush.linearGradient(colors = listOf(Color.Cyan, Color.Magenta)))
             )
         when(navController.currentDestination?.route){
-            Routes.Home.route ->   { CancelChoiceButton(vm = mainVM) }
+            Routes.Home.route -> { CancelChoiceButton(vm = mainVM) }
             else -> {}
         }
 
@@ -62,9 +62,6 @@ fun CancelChoiceButton(vm: MainViewModel){
 
     var isGoBackButtonVisible by remember { mutableStateOf(false) }
     isGoBackButtonVisible = ( vm.currentJointEntity != null || vm.currentJointUserActivity != null )
-//    val buttonColors = ButtonDefaults.buttonColors(
-//        containerColor = SecondaryBackgroundColor,
-//        contentColor = MainWhiteColor)
 
     AnimatedVisibility(
         visible = isGoBackButtonVisible
@@ -78,8 +75,10 @@ fun CancelChoiceButton(vm: MainViewModel){
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Icon(imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = "go back")
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    contentDescription = "go back"
+                )
                 Text(
                     text = stringResource(id = R.string.back),
                     fontSize = 18.sp
@@ -88,11 +87,3 @@ fun CancelChoiceButton(vm: MainViewModel){
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun GoBackButtonPreview(){
-//    CancelChoiceButton(){
-//
-//    }
-//}

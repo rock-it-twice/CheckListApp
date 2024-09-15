@@ -9,11 +9,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.letscheck.screens.chooseUserActivityScreen.ChooseUserActivityScreen
 import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
+import com.example.letscheck.screens.common_composables.Header
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun NavGraph( mainVM: MainViewModel, addNewVM: AddNewEntityViewModel, navController: NavHostController ) {
+fun NavGraph( mainVM: MainViewModel,
+              addNewVM: AddNewEntityViewModel,
+              navController: NavHostController ) {
     NavHost(
         navController = navController,
         startDestination = Routes.Home.route

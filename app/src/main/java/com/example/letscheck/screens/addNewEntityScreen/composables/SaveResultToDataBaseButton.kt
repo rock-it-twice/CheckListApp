@@ -42,10 +42,9 @@ fun SaveResultToDataBaseButton(vm: AddNewEntityViewModel, navController: NavCont
                     vm.assignImageToNewEntity()
                     vm.saveNewEntityToDataBase()
                     delay(2000)
-                    vm.clearAddNewEntityScreenData()
-                    delay(200)
                     // Переход на главную
                     navController.navigate( Routes.Home.route )
+                    vm.clearAddNewEntityScreenData()
                 }
 
             },

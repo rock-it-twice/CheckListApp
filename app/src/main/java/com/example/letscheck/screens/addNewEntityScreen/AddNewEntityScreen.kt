@@ -4,9 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.letscheck.screens.addNewEntityScreen.composables.Header
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListLazyColumn
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewEntityRow
 import com.example.letscheck.screens.addNewEntityScreen.composables.PhotoPicker
@@ -19,7 +24,7 @@ fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, 
     // на случай, если экран создания открывается не в первый раз.
 
     if (vm.checkNewEntityRelations(activityId))
-        vm.createNewEntity(activityId = activityId,"")
+        vm.createNewEntity( activityId = activityId, str = "" )
 
     Column(
         modifier = Modifier
@@ -27,7 +32,7 @@ fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, 
             .padding(all = 10.dp)
             .padding(bottom = 50.dp)
     ) {
-//        Header(navController = navController, vm = vm)
+        Header(navController, vm)
 //        CurrentActivityName(vm = vm)
         PhotoPicker(vm.currentImageUri) { vm.addNewCurrentImageUri(uri = it) }
         NewEntityRow(vm = vm)

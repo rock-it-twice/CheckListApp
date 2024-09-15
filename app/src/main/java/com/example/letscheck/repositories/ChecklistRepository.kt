@@ -2,6 +2,7 @@ package com.example.letscheck.repositories
 
 import androidx.lifecycle.LiveData
 import com.example.letscheck.data.Dao
+import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointCheckList
@@ -15,7 +16,6 @@ import kotlinx.coroutines.withContext
 class ChecklistRepository(val userDao: Dao) {
 
     val userActivities = userDao.getAllUserActivities()
-    val jointUserActivities = userDao.getJointUserActivities()
 
     // INSERT INTO
     suspend fun addUserActivity(UserActivity: UserActivity) {
@@ -64,6 +64,8 @@ class ChecklistRepository(val userDao: Dao) {
         }
     }
 
+    suspend fun addAll(entity: NewEntity) = withContext(Dispatchers.IO) { userDao.addAll(entity) }
+
 
     // USER ACTIVITIES
     suspend fun getUserActivityById(id: Int): UserActivity? {
@@ -85,7 +87,7 @@ class ChecklistRepository(val userDao: Dao) {
         { return@withContext userDao.getJointUserActivityById(id) }
     }
 
-    suspend fun deleteUser(id: Int) {
+    suspend fun deleteUserActivity(id: Int) {
         withContext(Dispatchers.IO) { userDao.deleteUserActivity(id) }
     }
 
@@ -111,10 +113,6 @@ class ChecklistRepository(val userDao: Dao) {
             userDao.deleteEntity(id)
             userDao.deleteCheckBoxesByCheckListId(id)
         }
-    }
-
-    suspend fun getLastEntityId(): Int {
-        return withContext(Dispatchers.IO) { return@withContext userDao.getLastEntityId() ?: 0 }
     }
 
 
