@@ -42,7 +42,7 @@ data class NewEntity(
         checkBoxTitles[index] = mutableList.toList()
     }
     
-    fun renameCheckBoxTitle(index: Int, checkBoxId: Int, str: String) {
+    fun renameCheckBoxTitle(index: Int, checkBoxId: Long, str: String) {
         checkBoxTitles[index].find { it.id == checkBoxId }!!.text = str
     }
 

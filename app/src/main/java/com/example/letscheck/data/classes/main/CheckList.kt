@@ -6,22 +6,23 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "check_lists",
-    indices = [Index(value = ["entityId", "id", "checkListName"], unique = true)],
+    indices = [Index(value = ["entityId", "id"], unique = true)],
     foreignKeys = [ForeignKey(
         entity = UserEntity::class,
         parentColumns = ["id"],
-        childColumns = ["entityId"]
+        childColumns = ["entityId"],
+        onDelete = ForeignKey.CASCADE
     )]
 )
 
 data class CheckList(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = cnt,
-    var entityId: Int,
+    val id: Long = cnt,
+    var entityId: Long,
     var checkListName: String = ""
     ){
 
     init { cnt ++ }
-    companion object { private var cnt = 0 }
+    companion object { private var cnt = 0L }
 
 }

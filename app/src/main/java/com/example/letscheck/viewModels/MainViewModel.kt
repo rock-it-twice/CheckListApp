@@ -2,6 +2,7 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
@@ -9,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import com.example.letscheck.repositories.ChecklistRepository
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
-import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,9 @@ open class MainViewModel( private val vmScope: CoroutineScope,
                           private val application: Application ) : ViewModel() {
 
     val userActivities: LiveData<List<UserActivity>> = repository.userActivities
+
     var userActivityName: String by mutableStateOf( "" )
+
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
 
@@ -41,13 +43,13 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         return if (value != "") value else "undefined activity"
     }
 
-    private fun getJointUserActivityById(id: Int) {
+    private fun getJointUserActivityById(id: Long) {
         vmScope.launch(Dispatchers.IO) {
             currentJointUserActivity = repository.getJointUserActivityById(id)
         }
     }
 
-    fun getJointActivityByIdAndClearPrevious(id: Int) {
+    fun getJointActivityByIdAndClearPrevious(id: Long) {
         clearStepByStep()
         getJointUserActivityById(id)
     }
@@ -63,7 +65,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         vmScope.launch(Dispatchers.Main) { currentJointEntity = entity }
     }
 
-    fun deleteEntity(id: Int) {
+    fun deleteEntityById(id: Long) {
         vmScope.launch(Dispatchers.IO) {
             repository.deleteUserEntityById(id)
         }
@@ -75,7 +77,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
 
     // ОПЕРАЦИИ УДАЛЕНИЯ
-    fun deleteUserActivity(id: Int) {
+    fun deleteUserActivity(id: Long) {
         vmScope.launch(Dispatchers.IO) { repository.deleteUserActivity(id) }
     }
 

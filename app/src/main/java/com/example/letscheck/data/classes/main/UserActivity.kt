@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "user_activities",
-    indices = [Index(value = ["activity_name"], unique = true)]
+    indices = [Index(value = ["id"], unique = true)]
     )
 data class UserActivity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     @ColumnInfo("activity_name")
     val activityName: String
 )

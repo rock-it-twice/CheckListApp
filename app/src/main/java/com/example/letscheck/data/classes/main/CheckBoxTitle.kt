@@ -12,18 +12,20 @@ import androidx.room.PrimaryKey
         ForeignKey(
         entity = CheckList::class,
         parentColumns = ["id"],
-        childColumns = ["checkListId"] )
+        childColumns = ["checkListId"],
+        onDelete = ForeignKey.CASCADE
+        )
     ]
 )
 data class CheckBoxTitle(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = cnt,
-    var checkListId: Int,
+    val id: Long = cnt,
+    var checkListId: Long,
     var text: String,
     var description: String = ""
 ) {
 
     init { cnt++ }
-    companion object{ var cnt = 0 }
+    companion object{ var cnt = 0L }
 
 }

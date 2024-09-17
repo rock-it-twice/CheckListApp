@@ -18,7 +18,7 @@ import com.example.letscheck.screens.addNewEntityScreen.composables.PhotoPicker
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 @Composable
-fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, activityId: Int) {
+fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, activityId: Long) {
 
     // Проверяем, принадлежит ли новый список текущему разделу (UserActivity),
     // на случай, если экран создания открывается не в первый раз.

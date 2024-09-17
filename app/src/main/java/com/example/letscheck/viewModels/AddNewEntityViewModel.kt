@@ -4,16 +4,15 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.UserEntity
+import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.repositories.ChecklistRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +23,9 @@ class AddNewEntityViewModel(
     private val vmScope: CoroutineScope,
     private val repository: ChecklistRepository,
     private val application: Application): ViewModel() {
+
+
+    var newJointEntity: JointEntity? by mutableStateOf(null)
 
     // New Entity creation
     var newEntity: NewEntity? by mutableStateOf( null )
@@ -43,8 +45,19 @@ class AddNewEntityViewModel(
 
 
     // New entity
-    fun createNewEntity(activityId: Int, str: String = "") {
-        newEntity = NewEntity( entity = UserEntity( activityId = activityId, entityName = str ) )
+    fun createNewEntity(activityId: Long, str: String = "") {
+        newEntity = NewEntity(
+            entity = UserEntity( activityId = activityId, entityName = str ) )
+        addNewCurrentImageUri(null)
+        clearNewCheckLists()
+        clearNewCheckBoxes()
+    }
+
+    fun createNewJointEntity(activityId: Long, str: String = "") {
+        newJointEntity = JointEntity(
+            entity = UserEntity(activityId = activityId, entityName = str),
+            checkLists = listOf()
+        )
         addNewCurrentImageUri(null)
         clearNewCheckLists()
         clearNewCheckBoxes()
@@ -170,17 +183,10 @@ class AddNewEntityViewModel(
     }
 
     fun saveNewEntityToDataBase() {
-        println("---------------------------------------------------")
-        println(newEntity!!.entity)
-        newEntity!!.checkLists.forEachIndexed{ i, it ->
-            println(it)
-            println(newEntity!!.checkBoxTitles[i])
-        }
-        println("---------------------------------------------------")
         vmScope.launch(Dispatchers.IO) { repository.addAll(entity = newEntity!!) }
     }
 
-    fun checkNewEntityRelations(currentActivityId: Int): Boolean{
+    fun checkNewEntityRelations(currentActivityId: Long): Boolean{
         return try {
             ( currentActivityId != newEntity!!.entity.activityId )
         } catch (e: NullPointerException) { true }

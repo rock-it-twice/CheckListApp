@@ -40,9 +40,7 @@ import com.example.letscheck.data.classes.output.JointCheckList
 
 @Composable
 fun CurrentEntityColumn(vm: MainViewModel) {
-    if (vm.currentJointEntity != null) {
-        CheckListColumn(vm = vm)
-    }
+    if (vm.currentJointEntity != null) { CheckListColumn(vm = vm) }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

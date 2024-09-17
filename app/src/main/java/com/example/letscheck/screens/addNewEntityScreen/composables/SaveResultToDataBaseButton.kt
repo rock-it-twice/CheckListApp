@@ -3,14 +3,12 @@ package com.example.letscheck.screens.addNewEntityScreen.composables
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -18,12 +16,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import com.example.letscheck.navigation.Routes
 import com.example.letscheck.viewModels.AddNewEntityViewModel
-import com.example.letscheck.viewModels.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
+
 
 @Composable
 fun SaveResultToDataBaseButton(vm: AddNewEntityViewModel, navController: NavController){
@@ -41,7 +39,7 @@ fun SaveResultToDataBaseButton(vm: AddNewEntityViewModel, navController: NavCont
                     vm.getNewImageUriFromInternalStorage()
                     vm.assignImageToNewEntity()
                     vm.saveNewEntityToDataBase()
-                    delay(2000)
+                    delay(1000)
                     // Переход на главную
                     navController.navigate( Routes.Home.route )
                     vm.clearAddNewEntityScreenData()
