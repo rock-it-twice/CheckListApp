@@ -29,9 +29,11 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,6 +59,7 @@ import com.example.letscheck.navigation.Routes
 @Composable
 fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
 
+    vm.getJointUserActivityById()
     val cellSize: DpSize = DpSize(135.dp, 240.dp)
     val entities = ( vm.currentJointUserActivity?.entities ?: listOf() )
 
@@ -93,9 +96,7 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
 fun EntityBox(vm: MainViewModel,
               gridSize: DpSize, jointEntity: JointEntity
 ){
-
-    val activityId = jointEntity.entity.activityId
-    val entityId = jointEntity.entity.id
+    val entityId by remember { mutableLongStateOf(jointEntity.entity.id) }
     var isExpanded: Boolean by remember { mutableStateOf(false) }
 
     Column(
@@ -111,7 +112,7 @@ fun EntityBox(vm: MainViewModel,
             ),
             contentAlignment = Alignment.Center
         ){
-            DropDownContextMenu( vm, isExpanded, gridSize, activityId, entityId)  { isExpanded = it }
+            DropDownContextMenu( vm, isExpanded, gridSize, entityId)  { isExpanded = it }
 
             if (jointEntity.entity.image != "") {
             AsyncImage(
@@ -124,6 +125,8 @@ fun EntityBox(vm: MainViewModel,
                 contentDescription = "Image",
                 contentScale = ContentScale.Crop
             )
+            } else {
+                Surface(){ Modifier.fillMaxSize() }
             }
 
         }
@@ -165,7 +168,6 @@ fun AddNewEntity(navController: NavController, size: DpSize) {
 fun DropDownContextMenu(vm: MainViewModel,
                         isExpanded: Boolean,
                         size: DpSize,
-                        activityId: Long,
                         entityId: Long,
                         onValueChange: (Boolean) -> Unit
 ){
@@ -190,7 +192,7 @@ fun DropDownContextMenu(vm: MainViewModel,
             text         = { Text(stringResource(R.string.delete)) },
             onClick      = {
                 vm.deleteEntityById(entityId)
-                vm.getJointActivityByIdAndClearPrevious(activityId)
+                vm.getJointUserActivityById()
                 onValueChange(!isExpanded)
                           },
             leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }

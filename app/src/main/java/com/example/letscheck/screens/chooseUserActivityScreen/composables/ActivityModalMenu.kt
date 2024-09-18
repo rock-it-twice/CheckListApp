@@ -94,7 +94,6 @@ fun ActivityModalMenu(
     }
 }
 
-
 @Composable
 fun ActivityRow(
     vm: MainViewModel, scope: CoroutineScope,
@@ -108,7 +107,8 @@ fun ActivityRow(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
                 .clickable(onClick = {
-                    vm.getJointActivityByIdAndClearPrevious(activity.id)
+                    vm.getActivityId(activity.id)
+                    vm.getJointUserActivityById()
                     scope.launch { drawerState.apply { close() } }
                 })
         )

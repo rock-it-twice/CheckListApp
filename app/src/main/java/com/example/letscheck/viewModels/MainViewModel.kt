@@ -25,6 +25,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     var userActivityName: String by mutableStateOf( "" )
 
     var currentActivityId: Long by mutableLongStateOf(0)
+        private set
 
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
@@ -45,15 +46,12 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         return if (value != "") value else "undefined activity"
     }
 
-    private fun getJointUserActivityById(id: Long) {
-        vmScope.launch(Dispatchers.IO) {
-            currentJointUserActivity = repository.getJointUserActivityById(id)
-        }
-    }
+    fun getActivityId(id:Long) { currentActivityId = id }
 
-    fun getJointActivityByIdAndClearPrevious(id: Long) {
-        clearStepByStep()
-        getJointUserActivityById(id)
+    fun getJointUserActivityById() {
+        vmScope.launch(Dispatchers.IO) {
+            currentJointUserActivity = repository.getJointUserActivityById(currentActivityId)
+        }
     }
 
     fun changeActivityName(value: String) { userActivityName = value }
@@ -91,7 +89,9 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         vmScope.launch(Dispatchers.Default) {
             when(true){
                 (currentJointEntity != null) -> { clearEntity() ; checkBoxStateList.clear() }
-                else                         -> { currentJointUserActivity = null }
+                else                         -> { currentActivityId = 0
+                                                  currentJointUserActivity = null
+                                                }
             }
         }
     }
