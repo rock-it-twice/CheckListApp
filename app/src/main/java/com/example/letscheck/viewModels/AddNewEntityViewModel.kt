@@ -13,7 +13,7 @@ import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
-import com.example.letscheck.repositories.ChecklistRepository
+import com.example.letscheck.repository.ChecklistRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -116,7 +116,7 @@ class AddNewEntityViewModel(
     // Запись uri в класс
     fun assignImageToNewEntity(){
         vmScope.launch(Dispatchers.IO) {
-            newEntity!!.entity.image = currentImageUri.toString()
+            newEntity!!.entity.image = currentImageUri?.toString() ?: ""
         }
     }
 
@@ -174,6 +174,7 @@ class AddNewEntityViewModel(
     fun deleteNewCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
         vmScope.launch(Dispatchers.Main) {
             newEntity!!.deleteCheckBoxTitle(listIndex, checkBoxTitle)
+            clearNewCheckBoxes()
             newCheckBoxes = newEntity!!.checkBoxTitles.toList()
         }
     }
@@ -183,7 +184,7 @@ class AddNewEntityViewModel(
     }
 
     fun saveNewEntityToDataBase() {
-        vmScope.launch(Dispatchers.IO) { repository.addAll(entity = newEntity!!) }
+        vmScope.launch(Dispatchers.IO) { repository.addEntityWithChecklists(entity = newEntity!!) }
     }
 
     fun checkNewEntityRelations(currentActivityId: Long): Boolean{

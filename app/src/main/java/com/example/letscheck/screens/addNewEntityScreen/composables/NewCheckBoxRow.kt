@@ -15,6 +15,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,7 +29,6 @@ import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
-import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
 fun NewCheckBoxRow(vm: AddNewEntityViewModel,
@@ -36,7 +36,6 @@ fun NewCheckBoxRow(vm: AddNewEntityViewModel,
                    listIndex: Int,
                    checkBoxTitle: CheckBoxTitle
 ) {
-
     var newName: String by remember { mutableStateOf(checkBoxTitle.text) }
     var isEnabled: Boolean by rememberSaveable { mutableStateOf(checkBoxTitle.text != "") }
     var isChecked: Boolean by remember { mutableStateOf(false) }
@@ -48,7 +47,7 @@ fun NewCheckBoxRow(vm: AddNewEntityViewModel,
 
     Row(
         modifier = modifier
-            .padding(start = 10.dp)
+            .padding(10.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -57,6 +56,7 @@ fun NewCheckBoxRow(vm: AddNewEntityViewModel,
         Checkbox(
             modifier = Modifier
                 .size(5.dp)
+                .padding(5.dp)
                 .clickable(onClick = { isChecked = !isChecked }),
             checked = isChecked,
             onCheckedChange = { isChecked = !isChecked },

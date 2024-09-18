@@ -15,7 +15,7 @@ data class JointUserActivity(
     @Relation(
         entity = UserEntity::class,
         parentColumn = "id",
-        entityColumn = "activityId"
+        entityColumn = "activity_id"
     )
     val entities: List<JointEntity>
 

@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import com.example.letscheck.navigation.Routes
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import kotlinx.coroutines.delay
@@ -39,7 +38,7 @@ fun SaveResultToDataBaseButton(vm: AddNewEntityViewModel, navController: NavCont
                     vm.getNewImageUriFromInternalStorage()
                     vm.assignImageToNewEntity()
                     vm.saveNewEntityToDataBase()
-                    delay(1000)
+                    delay(500)
                     // Переход на главную
                     navController.navigate( Routes.Home.route )
                     vm.clearAddNewEntityScreenData()

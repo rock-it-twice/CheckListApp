@@ -12,7 +12,7 @@ data class JointCheckList(
     @Embedded
     val checkList: CheckList,
 
-    @Relation(parentColumn = "id", entityColumn = "checkListId")
+    @Relation(parentColumn = "id", entityColumn = "checklist_id")
     val checkBoxTitles: MutableList<CheckBoxTitle>
 
 )

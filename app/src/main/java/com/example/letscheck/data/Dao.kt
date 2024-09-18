@@ -14,8 +14,6 @@ import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.data.classes.main.UserEntity
-import com.example.letscheck.data.classes.output.JointEntity
-import okhttp3.internal.wait
 
 @Dao
 interface Dao {
@@ -40,32 +38,16 @@ interface Dao {
     suspend fun addCheckBoxTitles(list: List<CheckBoxTitle>)
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(entity: NewEntity){
-        println("start writing data")
+
         val entityId = addUserEntity(entity.entity)
-        println("entity is added")
         entity.checkLists.forEachIndexed{ i, checkList ->
 
-            val newCheckList = CheckList(
-                id = checkList.id,
-                entityId = entityId,
-                checkListName = checkList.checkListName
-            )
+            val newCheckList = checkList.copy(entityId = entityId)
             val checkListId = addCheckList(newCheckList)
-            println("checklist id-$checkListId is added")
-            println("checkboxes id: ")
-            entity.checkBoxTitles[i].forEach { print("/ ${it.id} " ) }
-            println("${entity.checkBoxTitles[i]}")
-            entity.checkBoxTitles[i].forEach{
-                val newTitle = CheckBoxTitle(
-                    id = it.id,
-                    checkListId = checkListId,
-                    text = it.text,
-                    description = it.description
-                )
-                addCheckBoxTitle(newTitle)
-                println("checkBox id$checkListId-${it.id} is added")
+            entity.checkBoxTitles[i].forEach {
+                addCheckBoxTitle(it.copy(checkListId = checkListId))
             }
         }
     }
@@ -100,7 +82,7 @@ interface Dao {
     @Query("DELETE FROM check_box_title WHERE id LIKE :id")
     suspend fun deleteCheckBoxById(id: Long)
 
-    @Query("DELETE FROM check_box_title WHERE checkListId LIKE :checkListId")
+    @Query("DELETE FROM check_box_title WHERE checklist_id LIKE :checkListId")
     suspend fun deleteCheckBoxesByCheckListId(checkListId: Long)
 
 
@@ -120,7 +102,7 @@ interface Dao {
     suspend fun getUserActivityByName(activityName: String): UserActivity?
 
     // ЗАГОЛОВКИ
-    @Query("SELECT * FROM user_entities WHERE activityId LIKE :activityId")
+    @Query("SELECT * FROM user_entities WHERE activity_id LIKE :activityId")
     fun getUserEntities(activityId: Long): List<UserEntity>
 
     // Получение entity по ID
@@ -130,7 +112,7 @@ interface Dao {
     // Получение entity по имени
     @Query(
         "SELECT * FROM user_entities WHERE " +
-                "entity_name LIKE :entityName AND activityId LIKE :userId LIMIT 1"
+                "entity_name LIKE :entityName AND activity_id LIKE :userId LIMIT 1"
     )
     fun getUserEntityByName(entityName: String, userId: Long): UserEntity?
 
@@ -149,18 +131,18 @@ interface Dao {
     suspend fun getJointUserActivityByName(name: String): JointUserActivity?
 
     // ПОДЗАГОЛОВКИ
-    @Query("SELECT * FROM check_lists WHERE entityId LIKE :entityId")
+    @Query("SELECT * FROM check_lists WHERE entity_id LIKE :entityId")
     fun getCheckLists(entityId: Long): List<CheckList>
 
     @Query(
         "SELECT * FROM check_lists " +
-                "WHERE id LIKE :checkListId AND entityId LIKE :entityId LIMIT 1"
+                "WHERE id LIKE :checkListId AND entity_id LIKE :entityId LIMIT 1"
     )
     fun getCheckListById(checkListId: Long, entityId: Long): CheckList?
 
     @Query(
         "SELECT * FROM check_lists " +
-                "WHERE checkListName LIKE :checkListName AND entityId LIKE :entityId LIMIT 1"
+                "WHERE checkListName LIKE :checkListName AND entity_id LIKE :entityId LIMIT 1"
     )
     fun getCheckListByName(checkListName: String, entityId: Long): CheckList?
 
@@ -170,16 +152,19 @@ interface Dao {
 
     @Transaction
     @Query("SELECT * FROM check_lists " +
-            "WHERE check_lists.entityId LIKE :entityId")
+            "WHERE check_lists.entity_id LIKE :entityId")
     suspend fun getJointCheckList(entityId: Long): List<JointCheckList>
 
 
     // ЧЕКБОКСЫ
-    @Query("SELECT * FROM check_box_title WHERE checkListId LIKE :checkListId")
+    @Query("SELECT * FROM check_box_title WHERE checklist_id LIKE :checkListId")
     suspend fun getCheckBoxTitles(checkListId: Long): List<CheckBoxTitle>
 
     @Query("SELECT * FROM check_box_title WHERE id LIKE :id LIMIT 1")
     suspend fun getCheckBoxTitleById(id: Long): CheckBoxTitle?
+
+    @Query("SELECT MAX(id) FROM check_box_title")
+    suspend fun getLastCheckBoxId(): Long
 
 }
 

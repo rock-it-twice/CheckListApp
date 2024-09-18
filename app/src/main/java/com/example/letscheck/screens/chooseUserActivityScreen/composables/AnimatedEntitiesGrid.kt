@@ -58,7 +58,7 @@ import com.example.letscheck.navigation.Routes
 fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
 
     val cellSize: DpSize = DpSize(135.dp, 240.dp)
-    val entities = (vm.currentJointUserActivity?.entities ?: listOf())
+    val entities = ( vm.currentJointUserActivity?.entities ?: listOf() )
 
     AnimatedVisibility(
         visible = vm.isGridVisible(),
@@ -75,8 +75,14 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
             columns = GridCells.Adaptive(cellSize.width),
             contentPadding = PaddingValues(horizontal = 10.dp),
             content = {
-                items(entities) { EntityBox(vm = vm, cellSize, jointEntity = it) }
-                item            { AddNewEntity(navController = navController, cellSize) }
+                items(
+                    items= entities,
+                    key = {item -> item.entity.id}) {
+                    EntityBox(vm = vm, cellSize, jointEntity = it)
+                }
+                item {
+                    AddNewEntity(navController = navController, cellSize)
+                }
             }
         )
     }
@@ -171,23 +177,23 @@ fun DropDownContextMenu(vm: MainViewModel,
     ) {
 
         DropdownMenuItem(
-            modifier    = Modifier,
-            text        = { Text(stringResource(R.string.edit)) },
-            onClick     = {
+            modifier     = Modifier,
+            text         = { Text(stringResource(R.string.edit)) },
+            onClick      = {
             /* ToDo написать функцию помещения выбранных данных на экран редактирования */
                 onValueChange(!isExpanded)
             },
-            leadingIcon = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
+            leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
         )
         DropdownMenuItem(
-            modifier    = Modifier,
-            text        = { Text(stringResource(R.string.delete)) },
-            onClick     = {
+            modifier     = Modifier,
+            text         = { Text(stringResource(R.string.delete)) },
+            onClick      = {
                 vm.deleteEntityById(entityId)
                 vm.getJointActivityByIdAndClearPrevious(activityId)
                 onValueChange(!isExpanded)
                           },
-            leadingIcon = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
+            leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
         )
 
     }

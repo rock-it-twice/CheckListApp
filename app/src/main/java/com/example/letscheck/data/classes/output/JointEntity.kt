@@ -16,7 +16,7 @@ data class JointEntity(
     @Relation(
         entity = CheckList::class,
         parentColumn = "id",
-        entityColumn = "entityId"
+        entityColumn = "entity_id"
     )
     val checkLists: List<JointCheckList>
 )

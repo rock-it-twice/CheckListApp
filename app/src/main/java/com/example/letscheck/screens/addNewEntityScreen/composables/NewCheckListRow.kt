@@ -3,6 +3,7 @@ package com.example.letscheck.screens.addNewEntityScreen.composables
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,14 +37,13 @@ fun NewCheckListRow(vm: AddNewEntityViewModel,
         val textFieldColors = TextFieldDefaults.colors(
             disabledContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
-
         )
         var isEnabled by rememberSaveable { mutableStateOf( checkList.checkListName != "" ) }
         var newName: String by remember { mutableStateOf( checkList.checkListName ) }
 
         Row(modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 15.dp),
+            .padding(10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -57,7 +57,7 @@ fun NewCheckListRow(vm: AddNewEntityViewModel,
                 colors = textFieldColors,
                 placeholder = { Text(stringResource(R.string.new_subtitle_name)) }
             )
-            VerticalDivider(modifier = Modifier.size(10.dp), color = Color.Transparent)
+            Spacer(modifier = Modifier.size(10.dp))
             AcceptRenameDeleteButton(vm = vm, newName = newName, listIndex = index,
                 checkList = checkList, isEnabled = isEnabled, onValueChange = { isEnabled = it })
         }

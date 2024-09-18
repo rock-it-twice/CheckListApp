@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
@@ -37,6 +39,11 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
     var isEnabled by rememberSaveable {
         mutableStateOf( (vm.newEntity?.entity?.entityName ?: "") != "" ) }
     var newName by remember { mutableStateOf( vm.newEntity?.entity?.entityName ?: "" ) }
+
+    val textFieldColors = TextFieldDefaults.colors(
+        disabledContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+    )
 
     Row(modifier = Modifier
         .fillMaxWidth()
@@ -53,7 +60,8 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
                             if (vm.newEntity!!.entity.entityName == "") {
                                 Text(stringResource(R.string.new_entity_name))
                             }
-                          }
+                          },
+            colors = textFieldColors
         )
 
         AcceptOrEditEntityButton( vm = vm, newName = newName,

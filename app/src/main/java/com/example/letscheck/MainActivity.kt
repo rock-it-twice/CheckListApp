@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,8 +19,7 @@ import com.example.compose.LetsCheckTheme
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.MainDb
 import com.example.letscheck.navigation.NavGraph
-import com.example.letscheck.repositories.ChecklistRepository
-import com.example.letscheck.screens.common_composables.Header
+import com.example.letscheck.repository.ChecklistRepository
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.viewModels.factory.AddNewEntityViewModelFactory

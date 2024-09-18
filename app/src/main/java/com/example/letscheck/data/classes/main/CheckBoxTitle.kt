@@ -1,31 +1,39 @@
 package com.example.letscheck.data.classes.main
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "check_box_title",
-    indices = [Index(value = ["checkListId", "id"], unique = true)],
     foreignKeys = [
         ForeignKey(
         entity = CheckList::class,
         parentColumns = ["id"],
-        childColumns = ["checkListId"],
+        childColumns = ["checklist_id"],
+        onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class CheckBoxTitle(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = cnt,
-    var checkListId: Long,
+    @ColumnInfo(name = "id")
+    val id: Long = 0,
+    @ColumnInfo(name = "checklist_id")
+    var checkListId: Long = 0,
     var text: String,
     var description: String = ""
 ) {
 
     init { cnt++ }
-    companion object{ var cnt = 0L }
+    companion object{ var cnt: Int = 0 }
+
+    @Ignore
+    val index = cnt
 
 }
+

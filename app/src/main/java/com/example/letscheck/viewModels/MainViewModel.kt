@@ -2,12 +2,12 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.letscheck.repositories.ChecklistRepository
+import com.example.letscheck.repository.ChecklistRepository
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.data.classes.output.JointEntity
@@ -24,6 +24,8 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     var userActivityName: String by mutableStateOf( "" )
 
+    var currentActivityId: Long by mutableLongStateOf(0)
+
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
 
@@ -39,7 +41,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         }
     }
 
-    fun checkName(value: String): String {
+    private fun checkName(value: String): String {
         return if (value != "") value else "undefined activity"
     }
 
@@ -53,7 +55,6 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         clearStepByStep()
         getJointUserActivityById(id)
     }
-
 
     fun changeActivityName(value: String) { userActivityName = value }
 
