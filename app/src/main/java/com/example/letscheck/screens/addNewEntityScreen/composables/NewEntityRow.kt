@@ -1,6 +1,7 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -25,12 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.viewModels.AddNewEntityViewModel
-
-import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
@@ -38,6 +35,7 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
 
     var isEnabled by rememberSaveable {
         mutableStateOf( (vm.newEntity?.entity?.entityName ?: "") != "" ) }
+    // Если Имя нового списка == null, назначается пустая строка
     var newName by remember { mutableStateOf( vm.newEntity?.entity?.entityName ?: "" ) }
 
     val textFieldColors = TextFieldDefaults.colors(
@@ -56,11 +54,7 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
             onValueChange = { newName = it },
             modifier = Modifier.padding(vertical = 10.dp),
             enabled = !isEnabled,
-            placeholder = {
-                            if (vm.newEntity!!.entity.entityName == "") {
-                                Text(stringResource(R.string.new_entity_name))
-                            }
-                          },
+            placeholder = { TextFieldPlaceholder(R.string.new_entity_name, isEnabled) },
             colors = textFieldColors
         )
 

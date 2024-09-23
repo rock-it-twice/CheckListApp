@@ -16,6 +16,7 @@
     <!-- entities list -->
     <string name="add_new_entity">создать список</string>
     <string name="long_click_label">открыть контекстное меню</string>
+    <string name="no_image_added">изображение не выбрано</string>
     <!-- другие кнопки -->
     <string name="back">назад</string>
 

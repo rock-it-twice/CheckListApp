@@ -11,9 +11,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.DropdownMenu
@@ -43,6 +46,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -126,7 +130,7 @@ fun EntityBox(vm: MainViewModel,
                 contentScale = ContentScale.Crop
             )
             } else {
-                Surface(){ Modifier.fillMaxSize() }
+                NoImageBox()
             }
 
         }
@@ -134,6 +138,36 @@ fun EntityBox(vm: MainViewModel,
             modifier = Modifier.padding(top = 5.dp, bottom = 20.dp),
             text     = jointEntity.entity.entityName
         )
+    }
+}
+
+@Composable
+fun NoImageBox(){
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainer),
+        contentAlignment = Alignment.Center
+    ){
+        Column(
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = "",
+                modifier = Modifier.size(40.dp),
+                tint = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f)
+            )
+            Spacer(Modifier.size(10.dp))
+            Text(
+                text = stringResource(R.string.no_image_added),
+                color = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f),
+                textAlign = TextAlign.Center,
+                minLines = 2
+            )
+        }
     }
 }
 

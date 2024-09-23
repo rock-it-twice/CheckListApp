@@ -191,14 +191,6 @@ fun ExpandButton(
 
 
 
-// Preview section
-
-//@Preview
-//@Composable
-//fun PhotoPickerPreview() {
-//    PhotoPicker(null) {}
-//}
-
 @Preview
 @Composable
 fun ExpandButtonPreview() {

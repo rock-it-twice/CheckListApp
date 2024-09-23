@@ -3,19 +3,17 @@ package com.example.letscheck.screens.addNewEntityScreen.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckBoxTitle
@@ -37,7 +34,7 @@ fun NewCheckBoxRow(vm: AddNewEntityViewModel,
                    checkBoxTitle: CheckBoxTitle
 ) {
     var newName: String by remember { mutableStateOf(checkBoxTitle.text) }
-    var isEnabled: Boolean by rememberSaveable { mutableStateOf(checkBoxTitle.text != "") }
+    var isEnabled: Boolean by remember { mutableStateOf(checkBoxTitle.text != "") }
     var isChecked: Boolean by remember { mutableStateOf(false) }
 
     val textFieldColors = TextFieldDefaults.colors(
@@ -46,39 +43,32 @@ fun NewCheckBoxRow(vm: AddNewEntityViewModel,
     )
 
     Row(
-        modifier = modifier
-            .padding(10.dp)
-            .fillMaxWidth(),
+        modifier = modifier.padding(10.dp).fillMaxWidth().height(60.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Checkbox(
             modifier = Modifier
                 .size(5.dp)
-                .padding(5.dp)
+                .padding(horizontal = 10.dp, vertical = 5.dp)
                 .clickable(onClick = { isChecked = !isChecked }),
             checked = isChecked,
-            onCheckedChange = { isChecked = !isChecked },
-            colors = CheckboxDefaults.colors(
-            )
+            onCheckedChange = { isChecked = !isChecked }
         )
-
-        VerticalDivider(modifier = Modifier.width(5.dp))
-
+        Spacer(Modifier.size(10.dp))
         TextField(
             modifier = Modifier
                 .weight(1F)
-                .clickable{ isChecked = !isChecked },
+                .clickable { isChecked = !isChecked },
             value = newName,
             onValueChange = { newName = it },
             enabled = !isEnabled,
             colors = textFieldColors,
-            placeholder = { Text(stringResource(R.string.new_checkbox_name)) }
+            placeholder = { TextFieldPlaceholder( R.string.new_checkbox_name, isEnabled ) },
+            shape = RoundedCornerShape(20.dp)
         )
 
-        VerticalDivider(modifier = Modifier.width(5.dp))
-
+        Spacer(Modifier.size(10.dp))
         AcceptRenameDeleteButton(
             vm = vm, newName = newName, listIndex = listIndex,
             checkBoxTitle = checkBoxTitle,

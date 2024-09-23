@@ -6,13 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -28,7 +27,9 @@ import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,7 +44,6 @@ fun CurrentEntityColumn(vm: MainViewModel) {
     if (vm.currentJointEntity != null) { CheckListColumn(vm = vm) }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CheckListColumn(vm: MainViewModel) {
     val checklists = vm.currentJointEntity!!.checkLists
@@ -54,24 +54,28 @@ fun CheckListColumn(vm: MainViewModel) {
         vm.checkBoxStateList.add(subList)
     }
     LazyColumn(modifier = Modifier.padding(start = 10.dp)) {
+
         item { Title(vm = vm) }
+
         checklists.forEachIndexed { index, jointCheckList ->
             // Подзаголовок
-            stickyHeader {
-                Subtitle(jointCheckList = jointCheckList, stateList = vm.checkBoxStateList[index])
+            item {
+                Subtitle( checkList = jointCheckList, stateList = vm.checkBoxStateList[index] )
             }
-            item { Spacer(Modifier.height(20.dp)) }
             // Чекбоксы
             itemsIndexed(jointCheckList.checkBoxTitles) { i, title ->
-                CheckBoxRow(checkBoxTitle = title,
+                val isLastIndex = ( i == jointCheckList.checkBoxTitles.lastIndex )
+                CheckBoxRow(
+                    checkBoxTitle = title,
                     isChecked = vm.checkBoxStateList[index][i],
-                    onCheckedChange = { vm.checkBoxStateList[index][i] = it }
-                )
+                    isLastIndex = isLastIndex
+                ) { vm.checkBoxStateList[index][i] = it }
             }
-
         }
+
     }
 }
+
 
 @Composable
 fun Title(vm: MainViewModel) {
@@ -93,7 +97,7 @@ fun Title(vm: MainViewModel) {
 }
 
 @Composable
-fun Subtitle(jointCheckList: JointCheckList, stateList: List<Boolean>) {
+fun Subtitle(checkList: JointCheckList, stateList: List<Boolean>) {
 
     val color =
         when {
@@ -101,20 +105,25 @@ fun Subtitle(jointCheckList: JointCheckList, stateList: List<Boolean>) {
             stateList.none { it } -> MaterialTheme.colorScheme.primary
             else -> MaterialTheme.colorScheme.primary
         }
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-    ) {
-        Row {
-            Text(
-                modifier = Modifier.padding(vertical = 10.dp),
-                style = MaterialTheme.typography.titleLarge,
-                color = color,
-                text = jointCheckList.checkList.checkListName
-            )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth().padding(top = 20.dp)
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+    ){
+        Column(
+            Modifier.fillMaxWidth()
+        ) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = color,
+                    text = checkList.checkList.checkListName
+                )
+            }
+            HorizontalDivider(Modifier.fillMaxWidth())
         }
-        HorizontalDivider(Modifier.fillMaxWidth())
     }
 }
 
@@ -122,39 +131,49 @@ fun Subtitle(jointCheckList: JointCheckList, stateList: List<Boolean>) {
 fun CheckBoxRow(
     checkBoxTitle: CheckBoxTitle,
     isChecked: Boolean,
+    isLastIndex: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
 
     val color: Color = if (isChecked) Color.Green else MaterialTheme.colorScheme.primary
 
-
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 10.dp)
-            .clickable(onClick = { onCheckedChange(!isChecked) }
-            ),
-        verticalAlignment = Alignment.CenterVertically,
+            .clip(
+                if (isLastIndex) RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+                else RectangleShape
+            )
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
-        Checkbox(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange,
-            colors = CheckboxDefaults.colors(
-                checkedColor = Color.Green,
-                uncheckedColor = MaterialTheme.colorScheme.primary
-            )
-        )
-        Column {
-            Text(
-                style = MaterialTheme.typography.bodyLarge,
-                color = color,
-                text = checkBoxTitle.text
-            )
-            if (checkBoxTitle.description != "") {
-                Text(
-                    style = MaterialTheme.typography.labelMedium,
-                    text = checkBoxTitle.description
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp)
+                .clickable(onClick = { onCheckedChange(!isChecked) }
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Color.Green,
+                    uncheckedColor = MaterialTheme.colorScheme.primary
                 )
+            )
+            Column {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = color,
+                    text = checkBoxTitle.text
+                )
+                if (checkBoxTitle.description != "") {
+                    Text(
+                        style = MaterialTheme.typography.labelMedium,
+                        text = checkBoxTitle.description
+                    )
+                }
             }
         }
     }
