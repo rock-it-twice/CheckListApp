@@ -1,7 +1,6 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,9 +33,9 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 fun NewEntityRow(vm: AddNewEntityViewModel){
 
     var isEnabled by rememberSaveable {
-        mutableStateOf( (vm.newEntity?.entity?.entityName ?: "") != "" ) }
+        mutableStateOf( (vm.newEntity?.entityName ?: "") != "" ) }
     // Если Имя нового списка == null, назначается пустая строка
-    var newName by remember { mutableStateOf( vm.newEntity?.entity?.entityName ?: "" ) }
+    var newName by remember { mutableStateOf( vm.newEntity?.entityName ?: "" ) }
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,

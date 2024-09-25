@@ -22,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,14 +54,7 @@ fun ActivityModalMenu(
                 .padding(horizontal = 20.dp, vertical = 5.dp)
                 .verticalScroll(state)
         ) {
-            activities.forEach { it ->
-                ActivityRow(
-                    vm = vm,
-                    scope = scope,
-                    activity = it,
-                    drawerState = drawerState
-                )
-            }
+            activities.forEach { ActivityRow( vm, scope,  it, drawerState ) }
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 5.dp))
             Row(
@@ -110,6 +102,7 @@ fun ActivityRow(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
                 .clickable(onClick = {
+                    vm.clearJointEntity()
                     vm.getActivityId(activity.id)
                     vm.getJointUserActivityById()
                     scope.launch { drawerState.apply { close() } }

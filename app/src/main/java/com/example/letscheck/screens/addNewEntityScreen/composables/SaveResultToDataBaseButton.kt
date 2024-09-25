@@ -41,11 +41,11 @@ fun SaveResultToDataBaseButton(
                 // Присвоение ссылки на изображение классу NewEntity
                 vm.assignImageToNewEntity()
                 // Сохранение нового списка в БД
-                vm.saveNewEntityToDataBase()
+                vm.saveNewDataToDB()
                 // Переход на главную
                 navController.navigate(Routes.Home.route)
                 // Очистка экрана создания
-                vm.clearAddNewEntityScreenData()
+                vm.clearNewEntity()
             },
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary

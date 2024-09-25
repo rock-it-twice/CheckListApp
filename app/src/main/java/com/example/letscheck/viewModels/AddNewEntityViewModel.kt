@@ -8,11 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
-import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.UserEntity
-import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.repository.ChecklistRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,18 +22,15 @@ class AddNewEntityViewModel(
     private val repository: ChecklistRepository,
     private val application: Application): ViewModel() {
 
-
-    var newJointEntity: JointEntity? by mutableStateOf(null)
-
     // New Entity creation
-    var newEntity: NewEntity? by mutableStateOf( null )
+    var newEntity: UserEntity? by mutableStateOf( null )
         private set
 
     // New Entity image
-    var currentImageUri: Uri? by mutableStateOf(null)
+    var newImageUri: Uri? by mutableStateOf(null)
         private set
 
-    private var currentImageName: String? by mutableStateOf(null)
+    private var newImageName: String? by mutableStateOf(null)
 
     var newChecklists: List<CheckList> by mutableStateOf( listOf() )
         private set
@@ -46,109 +41,85 @@ class AddNewEntityViewModel(
 
     // New entity
     fun createNewEntity(activityId: Long, str: String = "") {
-        newEntity = NewEntity(
-            entity = UserEntity( activityId = activityId, entityName = str ) )
-        addNewCurrentImageUri(null)
+        newEntity = UserEntity( activityId = activityId, entityName = str )
+        addNewImageUri(null)
         clearNewCheckLists()
         clearNewCheckBoxes()
     }
 
-    fun createNewJointEntity(activityId: Long, str: String = "") {
-        newJointEntity = JointEntity(
-            entity = UserEntity(activityId = activityId, entityName = str),
-            checkLists = listOf()
-        )
-        addNewCurrentImageUri(null)
-        clearNewCheckLists()
-        clearNewCheckBoxes()
-    }
-
-    fun clearAddNewEntityScreenData(){
+    fun clearNewEntity(){
         newEntity = null
-        addNewCurrentImageUri(null)
+        addNewImageUri(null)
         clearNewCheckLists()
         clearNewCheckBoxes()
     }
 
     fun renameNewEntity(str: String) {
-        vmScope.launch(Dispatchers.Main) { newEntity!!.renameEntity(str) }
+        vmScope.launch(Dispatchers.Main) { newEntity = newEntity!!.copy(entityName = str) }
     }
 
     // new image
-    fun addNewCurrentImageUri(uri: Uri?){
+    fun addNewImageUri(uri: Uri?){
         vmScope.launch(Dispatchers.Main) {
-            currentImageUri = uri
-            when{
-                (currentImageUri == null) -> {
-                            currentImageName = null
-                }
-                (currentImageUri != null) -> {
-                            currentImageName = currentImageUri!!.path?.let { File(it).name }
-                }
+            newImageUri = uri
+            newImageName = when(newImageUri == null){
+                true -> { null }
+                false -> { newImageUri!!.path?.let { File(it).name } }
             }
         }
     }
 
     // Сохранение выбранного изображения во внутреннем хранилище
     fun saveImageToInternalStorage(){
-        if (currentImageUri != null) {
-            vmScope.launch(Dispatchers.IO) {
-                val inputStream = application.contentResolver.openInputStream(currentImageUri!!)
-                val outputStream =
-                    application.openFileOutput(currentImageName, Context.MODE_PRIVATE)
+        if (newImageUri != null) {
+            val inputStream = application.contentResolver.openInputStream(newImageUri!!)
+            val outputStream =
+                application.openFileOutput(newImageName, Context.MODE_PRIVATE)
 
-                inputStream?.use { input ->
-                    outputStream.use { output -> input.copyTo(output) }
-                }
+            inputStream?.use { input ->
+                outputStream.use { output -> input.copyTo(output) }
             }
         }
     }
     // Получение нового uri после сохранения в internal storage
     fun getNewImageUriFromInternalStorage(){
-        vmScope.launch(Dispatchers.IO) {
-            if (currentImageName != null) {
-                val directory = application.applicationContext.filesDir.path
-                currentImageUri = "$directory/$currentImageName".toUri()
-            }
+        if (newImageName != null) {
+            val directory = application.applicationContext.filesDir.path
+            newImageUri = "$directory/$newImageName".toUri()
         }
     }
 
     // Запись uri в класс
     fun assignImageToNewEntity(){
-        vmScope.launch(Dispatchers.IO) {
-            newEntity!!.entity.image = currentImageUri?.toString() ?: ""
-        }
+        newEntity = newEntity!!.copy( image = newImageUri?.toString() ?: "" )
+
     }
 
     // New checklists
 
-    fun addNewCheckList(str: String = "") {
-        vmScope.launch (Dispatchers.Main) {
-            newEntity!!.addCheckList(str)
-            newChecklists = newEntity!!.checkLists.toList()
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-        }
+    fun addNewCheckList() {
+        val newList = newChecklists.toMutableList()
+        newList.add(CheckList())
+        newChecklists = newList.toList()
+
+        val newSubList = newCheckBoxes.toMutableList()
+        newSubList.add(listOf())
+        newCheckBoxes = newSubList.toList()
     }
 
     fun renameNewCheckList(index: Int, str: String) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.renameCheckList(index, str)
-            newChecklists = newEntity!!.checkLists.toList()
-        }
-    }
-    fun renameNewCheckList(checkList: CheckList, str: String) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.renameCheckList(checkList, str)
-            newChecklists = newEntity!!.checkLists.toList()
-        }
+        val newList = newChecklists.toMutableList()
+        newList[index].checkListName = str
+        newChecklists = newList.toList()
     }
 
-    fun deleteNewCheckList(checkList: CheckList) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.deleteCheckList(checkList)
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-            newChecklists = newEntity!!.checkLists.toList()
-        }
+    fun deleteNewCheckList(index: Int) {
+        val newList = newChecklists.toMutableList()
+        val newSubList = newCheckBoxes.toMutableList()
+        newSubList.removeAt(index)
+        newList.removeAt(index)
+        newCheckBoxes = newSubList
+        newChecklists = newList
     }
 
     private fun clearNewCheckLists(){
@@ -156,40 +127,45 @@ class AddNewEntityViewModel(
     }
 
     // New CheckBoxTitles
-
-    fun addNewCheckBox(index: Int, str: String = "") {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.addCheckBoxTitle(index, str)
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-        }
+    fun addNewCheckBox(index: Int) {
+        val newSubLists = newCheckBoxes.toMutableList()
+        val newSubList = newSubLists[index].toMutableList()
+        newSubList.add(CheckBoxTitle())
+        newSubLists[index] = newSubList
+        newCheckBoxes = newSubLists.toList()
     }
 
     fun renameNewCheckBoxTitle(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.renameCheckBoxTitle(index, checkBoxTitle, str)
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-        }
+        val newSubLists = newCheckBoxes.toMutableList()
+        newSubLists[index].find { it == checkBoxTitle }!!.text = str
+        newCheckBoxes = newSubLists
     }
 
     fun deleteNewCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
-        vmScope.launch(Dispatchers.Main) {
-            newEntity!!.deleteCheckBoxTitle(listIndex, checkBoxTitle)
-            clearNewCheckBoxes()
-            newCheckBoxes = newEntity!!.checkBoxTitles.toList()
-        }
+        val newSubLists = newCheckBoxes.toMutableList()
+        val newSubList = newSubLists[listIndex].toMutableList()
+        newSubList.remove(checkBoxTitle)
+        newSubLists[listIndex] = newSubList
+        newCheckBoxes = newSubLists.toList()
     }
 
     private fun clearNewCheckBoxes(){
         newCheckBoxes = listOf()
     }
 
-    fun saveNewEntityToDataBase() {
-        vmScope.launch(Dispatchers.IO) { repository.addEntityWithChecklists(entity = newEntity!!) }
+    fun saveNewDataToDB() {
+        vmScope.launch(Dispatchers.IO) {
+            repository.addNewDataToDB(
+                entity = newEntity!!,
+                checkList = newChecklists,
+                checkBoxTitles = newCheckBoxes
+            )
+        }
     }
 
     fun checkNewEntityRelations(currentActivityId: Long): Boolean{
         return try {
-            ( currentActivityId != newEntity!!.entity.activityId )
+            ( currentActivityId != newEntity!!.activityId )
         } catch (e: NullPointerException) { true }
     }
 

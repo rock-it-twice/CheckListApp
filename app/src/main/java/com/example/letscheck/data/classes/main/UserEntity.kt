@@ -25,7 +25,7 @@ data class UserEntity(
     @ColumnInfo(name = "id")
     val id: Long = 0,
     @ColumnInfo(name = "activity_id")
-    var activityId: Long,
+    var activityId: Long = 0,
     @ColumnInfo(name = "entity_name")
     var entityName: String = "",
     var image: String = "",

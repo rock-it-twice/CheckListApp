@@ -1,34 +1,21 @@
 package com.example.letscheck.screens.addNewEntityScreen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.letscheck.screens.addNewEntityScreen.composables.AddNewChecklistButton
-import com.example.letscheck.screens.addNewEntityScreen.composables.Header
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListLazyColumn
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListTopBar
-import com.example.letscheck.screens.addNewEntityScreen.composables.NewEntityRow
-import com.example.letscheck.screens.addNewEntityScreen.composables.PhotoPicker
 import com.example.letscheck.screens.addNewEntityScreen.composables.SaveResultToDataBaseButton
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
@@ -40,7 +27,6 @@ fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, 
 
     // Проверяем, принадлежит ли новый список текущему разделу (UserActivity),
     // на случай, если экран создания открывается не в первый раз.
-
     if (vm.checkNewEntityRelations(activityId))
         vm.createNewEntity( activityId = activityId, str = "" )
 
@@ -53,7 +39,9 @@ fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, 
         } }
 
     Scaffold(
-        modifier  = Modifier.nestedScroll(topBarScrollBehavior.nestedScrollConnection),
+        modifier  = Modifier
+            .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
+            .padding(10.dp),
         topBar    = { NewCheckListTopBar(vm, navController, topBarScrollBehavior) },
         content   = { innerPadding ->
             NewCheckListLazyColumn(vm = vm, lazyListState, innerPadding, topBarScrollBehavior)

@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.letscheck.data.classes.input.NewEntity
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointCheckList
@@ -20,7 +19,7 @@ interface Dao {
 
     // ДОБАВЛЕНИЕ ДАННЫХ
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUserActivity(userActivity: UserActivity)
+    suspend fun addUserActivity(userActivity: UserActivity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUserEntity(userEntity: UserEntity): Long
@@ -38,15 +37,19 @@ interface Dao {
     suspend fun addCheckBoxTitles(list: List<CheckBoxTitle>)
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addAll(entity: NewEntity){
-
-        val entityId = addUserEntity(entity.entity)
-        entity.checkLists.forEachIndexed{ i, checkList ->
-
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addAll(entity: UserEntity,
+                       checkLists: List<CheckList>,
+                       checkBoxTitles: List<List<CheckBoxTitle>>
+    ){
+        // добавляем UserEntity и получаем присвоенный БД id
+        val entityId = addUserEntity(entity)
+        checkLists.forEachIndexed{ i, checkList ->
             val newCheckList = checkList.copy(entityId = entityId)
+            // добавляем чеклист и получаем присвоенный БД id
             val checkListId = addCheckList(newCheckList)
-            entity.checkBoxTitles[i].forEach {
+            checkBoxTitles[i].forEach {
+                // добавляем чекбокс в БД
                 addCheckBoxTitle(it.copy(checkListId = checkListId))
             }
         }

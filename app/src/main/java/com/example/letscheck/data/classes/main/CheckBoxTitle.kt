@@ -25,7 +25,7 @@ data class CheckBoxTitle(
     val id: Long = 0,
     @ColumnInfo(name = "checklist_id")
     var checkListId: Long = 0,
-    var text: String,
+    var text: String = "",
     var description: String = ""
 ) {
 

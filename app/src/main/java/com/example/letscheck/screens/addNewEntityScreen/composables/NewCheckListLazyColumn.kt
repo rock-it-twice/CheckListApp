@@ -50,7 +50,7 @@ fun NewCheckListLazyColumn(
         contentPadding = innerPadding
     ) {
 
-        item { PhotoPicker(vm.currentImageUri) { vm.addNewCurrentImageUri(uri = it) } }
+        item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
         item { NewEntityRow(vm = vm) }
         vm.newChecklists.forEachIndexed { listIndex, checkList ->
 

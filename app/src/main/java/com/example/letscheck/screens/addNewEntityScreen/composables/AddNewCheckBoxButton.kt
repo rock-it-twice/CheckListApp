@@ -30,7 +30,7 @@ fun AddNewCheckBoxButton(vm: AddNewEntityViewModel, index: Int) {
     ) {
 
         TextButton(
-            onClick = { vm.addNewCheckBox(index, "") },
+            onClick = { vm.addNewCheckBox(index) },
             colors = ButtonDefaults.textButtonColors(
                 contentColor = MaterialTheme.colorScheme.secondary
             )

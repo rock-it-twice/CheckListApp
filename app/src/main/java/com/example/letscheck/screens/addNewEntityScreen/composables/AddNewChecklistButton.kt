@@ -19,7 +19,7 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 fun AddNewChecklistButton(vm: AddNewEntityViewModel){
 
     Button(
-        onClick = { vm.addNewCheckList("") },
+        onClick = { vm.addNewCheckList() },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 20.dp),

@@ -16,9 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.letscheck.navigation.Routes
-import com.example.letscheck.screens.common_composables.CancelChoiceButton
 import com.example.letscheck.viewModels.AddNewEntityViewModel
-import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
 fun Header(navController: NavController, addNewVM: AddNewEntityViewModel) {

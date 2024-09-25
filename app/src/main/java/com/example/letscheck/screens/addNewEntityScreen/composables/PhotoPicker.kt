@@ -1,9 +1,6 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
-import android.app.Application
 import android.content.ContentResolver
-import android.content.Context
-import android.content.res.Resources
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -16,8 +13,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,7 +30,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +37,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,26 +48,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.letscheck.R
-import com.example.letscheck.viewModels.MainViewModel
-import java.io.InputStream
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun PhotoPicker(selectedImageUri: Uri?, onUriChange: (Uri?) -> Unit) {
 
+    var isExpanded: Boolean by remember { mutableStateOf(selectedImageUri != null) }
+
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { onUriChange(it) }
+        onResult = {
+            onUriChange(it)
+            isExpanded = true
+        }
     )
-
-    var isExpanded: Boolean by remember { mutableStateOf(selectedImageUri != null) }
 
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -95,17 +90,17 @@ fun PhotoPicker(selectedImageUri: Uri?, onUriChange: (Uri?) -> Unit) {
                             )
                         )
                         onUriChange(selectedImageUri)
-
                     }
                     )
                     .animateContentSize()
                     .defaultMinSize(minWidth = 135.dp)
-                    .fillMaxWidth( if (selectedImageUri == null || isExpanded) 1f else 0f )
-                    .height( if (selectedImageUri == null || isExpanded) 60.dp else 240.dp ),
+                    .fillMaxWidth( if (selectedImageUri == null || !isExpanded) 1f else 0f )
+                    .height( if (selectedImageUri == null || !isExpanded) 60.dp else 240.dp ),
                 contentAlignment = Alignment.Center
             ) {
                 when (targetState) {
                     true  -> {
+                        LaunchedEffect( isExpanded ) { delay(4000L) ; isExpanded = false }
                         PhotoBox(selectedImageUri)
                         ExpandButton(isExpanded) { isExpanded = it }
                     }
@@ -161,9 +156,8 @@ fun ExpandButton(
     isExpanded: Boolean,
     onValueChange: (Boolean) -> Unit){
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = if (isExpanded) Alignment.CenterEnd else Alignment.TopEnd
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = if (isExpanded) Alignment.TopEnd else Alignment.CenterEnd
     ) {
         Crossfade(
             targetState = isExpanded,
@@ -180,8 +174,8 @@ fun ExpandButton(
                 )
             ) {
                 when(targetState){
-                    true  -> { Icon(Icons.Rounded.KeyboardArrowDown, "expand") }
-                    false -> { Icon(Icons.Rounded.KeyboardArrowUp, "collapse") }
+                    true  -> { Icon(Icons.Rounded.KeyboardArrowUp, "collapse") }
+                    false -> { Icon(Icons.Rounded.KeyboardArrowDown, "expand") }
                 }
 
             }

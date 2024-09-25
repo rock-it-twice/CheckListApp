@@ -19,7 +19,7 @@ import com.example.letscheck.screens.chooseUserActivityScreen.composables.Activi
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.CurrentEntityColumn
-import com.example.letscheck.screens.chooseUserActivityScreen.composables.Menu
+import com.example.letscheck.screens.chooseUserActivityScreen.composables.MenuButton
 import com.example.letscheck.screens.common_composables.Header
 
 
@@ -39,7 +39,7 @@ fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel) {
     ) {
         Header(navController, mainVM = vm)
         // Выбор Activity
-        Menu(vm = vm, scope = scope, drawerState = drawerState)
+        MenuButton(vm = vm, scope = scope, drawerState = drawerState)
         // Боковое меню выбора
         ModalNavigationDrawer(
             drawerState = drawerState,

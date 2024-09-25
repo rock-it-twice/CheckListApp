@@ -59,7 +59,7 @@ fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
                     onClick = {
                         when(true){
                             (checkList != null) ->
-                                vm.renameNewCheckList(checkList, newName)
+                                vm.renameNewCheckList(listIndex, newName)
                             (checkBoxTitle != null) ->
                                 vm.renameNewCheckBoxTitle(listIndex, checkBoxTitle, newName)
                             else -> {}
@@ -85,7 +85,7 @@ fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
                     onClick = {
                         when(true){
                             (checkList != null) ->
-                                vm.deleteNewCheckList(checkList)
+                                vm.deleteNewCheckList(listIndex)
                             (checkBoxTitle != null) -> {
                                 vm.deleteNewCheckBox(listIndex, checkBoxTitle)
                             }

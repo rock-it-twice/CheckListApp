@@ -61,7 +61,10 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     // ENTITIES
 
     fun getJointEntity(entity: JointEntity) {
-        vmScope.launch(Dispatchers.Main) { currentJointEntity = entity }
+        vmScope.launch{
+            checkBoxStateList.clear()
+            currentJointEntity = entity
+        }
     }
 
     fun deleteEntityById(id: Long) {
@@ -70,7 +73,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         }
     }
 
-    private fun clearEntity() { currentJointEntity = null }
+    fun clearJointEntity() { currentJointEntity = null }
 
     //_________________________________________________________________________
 
@@ -88,7 +91,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     fun clearStepByStep() {
         vmScope.launch(Dispatchers.Default) {
             when(true){
-                (currentJointEntity != null) -> { clearEntity() ; checkBoxStateList.clear() }
+                (currentJointEntity != null) -> { clearJointEntity() ; checkBoxStateList.clear() }
                 else                         -> { currentActivityId = 0
                                                   currentJointUserActivity = null
                                                 }
