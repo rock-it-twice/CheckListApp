@@ -77,7 +77,6 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     //_________________________________________________________________________
 
-
     // ОПЕРАЦИИ УДАЛЕНИЯ
     fun deleteUserActivity(id: Long) {
         vmScope.launch(Dispatchers.IO) { repository.deleteUserActivity(id) }

@@ -80,9 +80,8 @@ fun CheckListColumn(vm: MainViewModel) {
 @Composable
 fun Title(vm: MainViewModel) {
 
-    val isEverythingChecked: Boolean by remember {
-        mutableStateOf( vm.checkBoxStateList.flatten().all { it } )
-    }
+    val isEverythingChecked = vm.checkBoxStateList.flatten().all { it }
+
     val color = if (isEverythingChecked) Color.Green else MaterialTheme.colorScheme.primary
 
     Text(

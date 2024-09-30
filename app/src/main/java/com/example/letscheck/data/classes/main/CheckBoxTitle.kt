@@ -26,7 +26,8 @@ data class CheckBoxTitle(
     @ColumnInfo(name = "checklist_id")
     var checkListId: Long = 0,
     var text: String = "",
-    var description: String = ""
+    var description: String = "",
+    var checked: Boolean = false
 ) {
 
     init { cnt++ }

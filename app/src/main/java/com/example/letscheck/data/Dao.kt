@@ -169,5 +169,11 @@ interface Dao {
     @Query("SELECT MAX(id) FROM check_box_title")
     suspend fun getLastCheckBoxId(): Long
 
+    @Query("SELECT checked FROM check_box_title WHERE checklist_id LIKE :checkListId")
+    fun getCheckedList(checkListId: Long): LiveData<List<Boolean>>
+
+    @Query("SELECT checked FROM check_box_title WHERE id LIKE :id LIMIT 1")
+    fun isChecked(id: Long): LiveData<Boolean>
+
 }
 
