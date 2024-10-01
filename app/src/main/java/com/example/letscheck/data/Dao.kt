@@ -169,11 +169,16 @@ interface Dao {
     @Query("SELECT MAX(id) FROM check_box_title")
     suspend fun getLastCheckBoxId(): Long
 
+    @Query("SELECT checked FROM check_box_title " +
+            "INNER JOIN check_lists ON check_box_title.checklist_id=check_lists.id " +
+            "INNER JOIN user_entities ON check_lists.entity_id=user_entities.id " +
+            "WHERE entity_id LIKE :entityId")
+    fun getCheckedList(entityId: Long): LiveData<List<Boolean>>
+
     @Query("SELECT checked FROM check_box_title WHERE checklist_id LIKE :checkListId")
-    fun getCheckedList(checkListId: Long): LiveData<List<Boolean>>
+    fun getCheckedSubList(checkListId: Long): LiveData<List<Boolean>>
 
     @Query("SELECT checked FROM check_box_title WHERE id LIKE :id LIMIT 1")
     fun isChecked(id: Long): LiveData<Boolean>
 
 }
-

@@ -45,11 +45,10 @@ class ChecklistRepository(private val userDao: Dao) {
     }
 
     // CHECKBOXES
+    suspend fun updateCheckBoxTitle(title: CheckBoxTitle) { userDao.updateCheckBoxTitle(title) }
 
-    suspend fun updateCheckBoxTitle(title: CheckBoxTitle) {
-        userDao.updateCheckBoxTitle(title)
-    }
-    fun getCheckedList(id: Long): LiveData<List<Boolean>> = userDao.getCheckedList(id)
+    fun getCheckedList(entityId: Long): LiveData<List<Boolean>> = userDao.getCheckedList(entityId)
+    fun getCheckedSubList(id: Long): LiveData<List<Boolean>> = userDao.getCheckedSubList(id)
     fun isChecked(id: Long): LiveData<Boolean> = userDao.isChecked(id)
 
 }

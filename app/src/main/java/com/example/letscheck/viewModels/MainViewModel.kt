@@ -81,6 +81,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         vmScope.launch(Dispatchers.IO) { repository.updateCheckBoxTitle(title) }
     }
     fun isChecked(id: Long): LiveData<Boolean> = repository.isChecked(id)
+    fun getCheckedSubList(id: Long): LiveData<List<Boolean>> = repository.getCheckedSubList(id)
     fun getCheckedList(id: Long): LiveData<List<Boolean>> = repository.getCheckedList(id)
 
     //_________________________________________________________________________
