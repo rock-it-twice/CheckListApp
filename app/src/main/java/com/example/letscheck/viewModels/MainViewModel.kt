@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.repository.ChecklistRepository
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
@@ -74,6 +75,13 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     }
 
     fun clearJointEntity() { currentJointEntity = null }
+
+    // CheckBoxes
+    fun updateCheckBoxTitle(title: CheckBoxTitle){
+        vmScope.launch(Dispatchers.IO) { repository.updateCheckBoxTitle(title) }
+    }
+    fun isChecked(id: Long): LiveData<Boolean> = repository.isChecked(id)
+    fun getCheckedList(id: Long): LiveData<List<Boolean>> = repository.getCheckedList(id)
 
     //_________________________________________________________________________
 

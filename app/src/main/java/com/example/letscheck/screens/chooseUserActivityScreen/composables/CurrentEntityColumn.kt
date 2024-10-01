@@ -1,6 +1,5 @@
 package com.example.letscheck.screens.chooseUserActivityScreen.composables
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.Checkbox
@@ -20,16 +18,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,45 +40,59 @@ fun CurrentEntityColumn(vm: MainViewModel) {
     if (vm.currentJointEntity != null) { CheckListColumn(vm = vm) }
 }
 
-@Composable
-fun CheckListColumn(vm: MainViewModel) {
-    val checklists = vm.currentJointEntity!!.checkLists
-    // Заполняем во viewModel checkBoxStateList данными
-    checklists.forEach {
-        val subList: MutableList<Boolean> = mutableStateListOf()
-        (0..<it.checkBoxTitles.size).forEach { _ -> subList.add(false) }
-        vm.checkBoxStateList.add(subList)
-    }
-    LazyColumn(modifier = Modifier.padding(start = 10.dp)) {
+    @Composable
+    fun CheckListColumn(vm: MainViewModel) {
 
-        item { Title(vm = vm) }
+        val checklists by rememberSaveable { mutableStateOf(vm.currentJointEntity!!.checkLists) }
 
-        checklists.forEachIndexed { index, jointCheckList ->
-            // Подзаголовок
-            item {
-                Subtitle( checkList = jointCheckList, stateList = vm.checkBoxStateList[index] )
-            }
-            // Чекбоксы
-            itemsIndexed(jointCheckList.checkBoxTitles) { i, title ->
-                val isLastIndex = ( i == jointCheckList.checkBoxTitles.lastIndex )
-                CheckBoxRow(
-                    checkBoxTitle = title,
-                    isChecked = vm.checkBoxStateList[index][i],
-                    isLastIndex = isLastIndex
-                ) { vm.checkBoxStateList[index][i] = it }
+        LazyColumn {
+
+            val mainTitle = vm.currentJointEntity?.entity?.entityName ?: ""
+
+            item { Title(mainTitle, isChecked = false) }
+
+            checklists.forEachIndexed { _, jointCheckList ->
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip( RoundedCornerShape(20.dp) )
+                            .background( MaterialTheme.colorScheme.surfaceContainer )
+                    ) {
+                        // Подзаголовок
+                        Column(modifier = Modifier.padding(start = 10.dp)) {
+
+                            val id = jointCheckList.checkList.id
+                            val stateList by vm.getCheckedList(id = id).observeAsState(listOf())
+
+                            Subtitle(jointCheckList, stateList)
+
+                            // Чекбоксы
+                            jointCheckList.checkBoxTitles.forEach{ title ->
+
+                                val isChecked by vm.isChecked(title.id).observeAsState(false)
+
+                                CheckBoxRow(
+                                    checkBoxTitle = title,
+                                    isChecked = isChecked
+                                ) { vm.updateCheckBoxTitle(title.copy(checked = it)) }
+
+                            }
+                        }
+                    }
+
+                }
             }
         }
-
     }
-}
+
 
 
 @Composable
-fun Title(vm: MainViewModel) {
+fun Title(mainTitle: String, isChecked: Boolean) {
 
-    val isEverythingChecked = vm.checkBoxStateList.flatten().all { it }
-
-    val color = if (isEverythingChecked) Color.Green else MaterialTheme.colorScheme.primary
+    val color = if (isChecked) Color.Green else MaterialTheme.colorScheme.primary
 
     Text(
         modifier = Modifier
@@ -91,9 +101,10 @@ fun Title(vm: MainViewModel) {
         color = color,
         style = MaterialTheme.typography.headlineMedium,
         fontWeight = FontWeight.SemiBold,
-        text = vm.currentJointEntity!!.entity.entityName,
+        text = mainTitle,
     )
 }
+
 
 @Composable
 fun Subtitle(checkList: JointCheckList, stateList: List<Boolean>) {
@@ -126,11 +137,11 @@ fun Subtitle(checkList: JointCheckList, stateList: List<Boolean>) {
     }
 }
 
+
 @Composable
 fun CheckBoxRow(
     checkBoxTitle: CheckBoxTitle,
     isChecked: Boolean,
-    isLastIndex: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
 
@@ -138,12 +149,7 @@ fun CheckBoxRow(
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(
-                if (isLastIndex) RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
-                else RectangleShape
-            )
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+
     ) {
         Row(
             modifier = Modifier
@@ -155,7 +161,7 @@ fun CheckBoxRow(
         ) {
             Checkbox(
                 checked = isChecked,
-                onCheckedChange = onCheckedChange,
+                onCheckedChange = {onCheckedChange(!isChecked)},
                 colors = CheckboxDefaults.colors(
                     checkedColor = Color.Green,
                     uncheckedColor = MaterialTheme.colorScheme.primary

@@ -1,5 +1,6 @@
 package com.example.letscheck.repository
 
+import androidx.lifecycle.LiveData
 import com.example.letscheck.data.Dao
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
@@ -42,6 +43,14 @@ class ChecklistRepository(private val userDao: Dao) {
             userDao.deleteEntity(id)
         }
     }
+
+    // CHECKBOXES
+
+    suspend fun updateCheckBoxTitle(title: CheckBoxTitle) {
+        userDao.updateCheckBoxTitle(title)
+    }
+    fun getCheckedList(id: Long): LiveData<List<Boolean>> = userDao.getCheckedList(id)
+    fun isChecked(id: Long): LiveData<Boolean> = userDao.isChecked(id)
 
 }
 
