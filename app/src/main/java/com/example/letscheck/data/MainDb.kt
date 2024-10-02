@@ -28,7 +28,7 @@ abstract class MainDb : RoomDatabase() {
         fun createDatabase(context: Context): MainDb{
             return Room
                 .databaseBuilder(context, MainDb::class.java, "Main_database")
-                .createFromAsset("database/Main_database.db")
+//                .createFromAsset("database/Main_database.db")
                 .build()
         }
     }

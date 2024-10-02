@@ -16,11 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.ActivityModalMenu
-import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.CurrentEntityColumn
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.MenuButton
 import com.example.letscheck.screens.common_composables.Header
+import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable

@@ -7,6 +7,8 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,22 +30,28 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -58,6 +67,7 @@ import com.example.letscheck.R
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.navigation.Routes
+import com.example.letscheck.ui.theme.checkedDeepGreen
 
 
 @Composable
@@ -85,10 +95,11 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
                 items(
                     items= entities,
                     key = {item -> item.entity.id}) {
-                    EntityBox(vm = vm, cellSize, jointEntity = it)
+                    val progressObserver by vm.getCheckedList(it.entity.id).observeAsState(listOf())
+                    EntityBox(vm, cellSize, it, progressObserver)
                 }
                 item {
-                    AddNewEntity(navController = navController, cellSize)
+                    AddNewEntityBox(navController = navController, cellSize)
                 }
             }
         )
@@ -98,10 +109,15 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EntityBox(vm: MainViewModel,
-              gridSize: DpSize, jointEntity: JointEntity
+              gridSize: DpSize,
+              jointEntity: JointEntity,
+              progressObserver: List<Boolean>
 ){
     val entityId by remember { mutableLongStateOf(jointEntity.entity.id) }
     var isExpanded: Boolean by remember { mutableStateOf(false) }
+
+    val listSize = progressObserver.size
+    val progress = progressObserver.count{ it }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -110,13 +126,13 @@ fun EntityBox(vm: MainViewModel,
             .size(gridSize)
             .clip(RoundedCornerShape(20.dp))
             .combinedClickable(
-                onClick = { vm.getJointEntity(jointEntity) },
+                onClick = { vm.getEntityId(entityId) },
                 onLongClick = { isExpanded = !isExpanded },
                 onLongClickLabel = stringResource(R.string.long_click_label)
             ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.BottomCenter
         ){
-            DropDownContextMenu( vm, isExpanded, gridSize, entityId)  { isExpanded = it }
+            DropDownContextMenu( vm, isExpanded, gridSize, entityId, progressObserver)  { isExpanded = it }
 
             if (jointEntity.entity.image != "") {
             AsyncImage(
@@ -132,12 +148,99 @@ fun EntityBox(vm: MainViewModel,
             } else {
                 NoImageBox()
             }
-
+            ProgressIndicator(progress, listSize)
         }
         Text(
             modifier = Modifier.padding(top = 5.dp, bottom = 20.dp),
-            text     = jointEntity.entity.entityName
+            text     = jointEntity.entity.entityName,
         )
+    }
+}
+
+@Composable
+fun ProgressIndicator(progress: Int, listSize: Int){
+
+    AnimatedVisibility(
+        visible = progress == listSize,
+        enter = fadeIn(),
+        exit = fadeOut(),
+        content = { Box( Modifier.fillMaxSize().alpha(0.5f).background(checkedDeepGreen) ) }
+    )
+    if (progress == listSize) {
+
+        Row(
+            modifier = Modifier.padding(bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Done, "Done",
+                modifier = Modifier.size(20.dp),
+                tint = Color.Green
+            )
+            Text(
+                text = "$progress/$listSize",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.Green
+            )
+        }
+
+    } else {
+        Text(
+            modifier = Modifier.padding(bottom = 10.dp),
+            text = "${stringResource(R.string.progress_bar_text)} $progress/$listSize",
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
+}
+
+@Composable
+fun DropDownContextMenu(vm: MainViewModel,
+                        isExpanded: Boolean,
+                        size: DpSize,
+                        entityId: Long,
+                        progressObserver: List<Boolean>,
+                        onValueChange: (Boolean) -> Unit
+){
+    DropdownMenu(
+        expanded         = isExpanded,
+        onDismissRequest = { onValueChange(!isExpanded) },
+        offset           = DpOffset(size.width/2, (-size.height)/2),
+        modifier         = Modifier,
+    ) {
+
+        DropdownMenuItem(
+            modifier     = Modifier,
+            text         = { Text(stringResource(R.string.entity_reset)) },
+            onClick      = {
+                vm.resetCheckBoxes(entityId)
+                onValueChange(!isExpanded)
+            },
+            enabled      = progressObserver.any { it },
+            leadingIcon  = { Icon(Icons.Default.Refresh, stringResource(R.string.entity_reset)) }
+        )
+
+        DropdownMenuItem(
+            modifier     = Modifier,
+            text         = { Text(stringResource(R.string.edit)) },
+            onClick      = {
+            /* ToDo написать функцию помещения выбранных данных на экран редактирования */
+                onValueChange(!isExpanded)
+            },
+            leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
+        )
+
+        DropdownMenuItem(
+            modifier     = Modifier,
+            text         = { Text(stringResource(R.string.delete)) },
+            onClick      = {
+                vm.deleteEntityById(entityId)
+                vm.getJointUserActivityById()
+                onValueChange(!isExpanded)
+                          },
+            leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
+        )
+
     }
 }
 
@@ -172,7 +275,7 @@ fun NoImageBox(){
 }
 
 @Composable
-fun AddNewEntity(navController: NavController, size: DpSize) {
+fun AddNewEntityBox(navController: NavController, size: DpSize) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
@@ -195,42 +298,5 @@ fun AddNewEntity(navController: NavController, size: DpSize) {
             modifier = Modifier.padding(top = 5.dp, bottom = 20.dp),
             text     = stringResource(id = R.string.add_new_entity)
         )
-    }
-}
-
-@Composable
-fun DropDownContextMenu(vm: MainViewModel,
-                        isExpanded: Boolean,
-                        size: DpSize,
-                        entityId: Long,
-                        onValueChange: (Boolean) -> Unit
-){
-    DropdownMenu(
-        expanded         = isExpanded,
-        onDismissRequest = { onValueChange(!isExpanded) },
-        offset           = DpOffset(size.width/2, (-size.height)/2),
-        modifier         = Modifier,
-    ) {
-
-        DropdownMenuItem(
-            modifier     = Modifier,
-            text         = { Text(stringResource(R.string.edit)) },
-            onClick      = {
-            /* ToDo написать функцию помещения выбранных данных на экран редактирования */
-                onValueChange(!isExpanded)
-            },
-            leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
-        )
-        DropdownMenuItem(
-            modifier     = Modifier,
-            text         = { Text(stringResource(R.string.delete)) },
-            onClick      = {
-                vm.deleteEntityById(entityId)
-                vm.getJointUserActivityById()
-                onValueChange(!isExpanded)
-                          },
-            leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
-        )
-
     }
 }

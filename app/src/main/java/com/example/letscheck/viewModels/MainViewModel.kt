@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.repository.ChecklistRepository
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
@@ -28,6 +29,9 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         private set
 
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
+        private set
+
+    var entityId: Long by mutableLongStateOf(0)
         private set
 
     var currentJointEntity: JointEntity? by mutableStateOf( null )
@@ -60,10 +64,13 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     // ENTITIES
 
-    fun getJointEntity(entity: JointEntity) {
-        vmScope.launch{
+    fun getEntityId(id: Long) { entityId = id }
+
+
+    fun getJointEntityById(entityId: Long) {
+        vmScope.launch(Dispatchers.IO){
             checkBoxStateList.clear()
-            currentJointEntity = entity
+            currentJointEntity = repository.getJointEntityById(entityId)
         }
     }
 
@@ -75,8 +82,19 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     fun clearJointEntity() { currentJointEntity = null }
 
-    //_________________________________________________________________________
+    // CheckBoxes
+    fun updateCheckBoxTitle(title: CheckBoxTitle){
+        vmScope.launch(Dispatchers.IO) { repository.updateCheckBoxTitle(title) }
+    }
+    fun isChecked(id: Long): LiveData<Boolean> = repository.isChecked(id)
+    fun getCheckedSubList(id: Long): LiveData<List<Boolean>> = repository.getCheckedSubList(id)
+    fun getCheckedList(id: Long): LiveData<List<Boolean>> = repository.getCheckedList(id)
 
+    fun resetCheckBoxes(entityId: Long){
+        vmScope.launch(Dispatchers.IO) { repository.resetCheckBoxes(entityId) }
+    }
+
+    //_________________________________________________________________________
 
     // ОПЕРАЦИИ УДАЛЕНИЯ
     fun deleteUserActivity(id: Long) {
