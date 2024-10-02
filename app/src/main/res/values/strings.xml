@@ -17,6 +17,13 @@
     <string name="add_new_entity">создать список</string>
     <string name="long_click_label">открыть контекстное меню</string>
     <string name="no_image_added">изображение не выбрано</string>
+    <string name="progress_bar_text">прогресс:</string>
+
+    <!-- Entity DropDown menu -->
+    <string name="entity_reset">Сбросить прогресс</string>
+    <string name="entity_edit">Изменить</string>
+    <string name="entity_delete">Удалить</string>
+
     <!-- другие кнопки -->
     <string name="back">назад</string>
 

@@ -1,4 +1,4 @@
-package com.example.compose
+package com.example.letscheck.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF002955)
@@ -36,9 +36,11 @@ val surfaceContainerLowLight = Color(0xFFF3F3F9)
 val surfaceContainerLight = Color(0xFFEEEDF3)
 val surfaceContainerHighLight = Color(0xFFE8E8ED)
 val surfaceContainerHighestLight = Color(0xFFE2E2E8)
-val checkedLight = Color(0xFF199619)
+val checkedGreen = Color(0xFF199619)
+val checkedDeepGreen = Color(0xFF085F0A)
 
-val checkedLightsss = Color(0xFF495D91)
+
+
 
 val primaryLightMediumContrast = Color(0xFF002955)
 val onPrimaryLightMediumContrast = Color(0xFFFFFFFF)

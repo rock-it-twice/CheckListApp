@@ -1,18 +1,22 @@
 package com.example.letscheck.screens.chooseUserActivityScreen.composables
 
+import android.widget.ToggleButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,31 +31,20 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MenuButton(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerState) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = {
-                scope.launch { drawerState.apply { if (isClosed) open() else close() } }
-            })
-            .padding(vertical = 10.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    )
-    {
-        Text(
-            text = if (vm.currentJointUserActivity != null) {
-                vm.currentJointUserActivity!!.userActivity.activityName
-            } else stringResource(id = R.string.activity_filter),
-            modifier = Modifier.padding(start = 10.dp)
-        )
 
-        IconToggleButton(
-            checked = drawerState.isClosed,
-            onCheckedChange = {
+        TextButton(
+            onClick = {
                 scope.launch { drawerState.apply { if (isClosed) open() else close() } }
-            }
+            },
+            modifier = Modifier.padding(10.dp).defaultMinSize(minWidth = 120.dp)
         ) {
+            Text(
+                text = if (vm.currentJointUserActivity != null) {
+                    vm.currentJointUserActivity!!.userActivity.activityName
+                } else stringResource(id = R.string.activity_filter),
+                modifier = Modifier.padding(start = 10.dp)
+            )
+
             if (drawerState.isClosed) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -65,5 +58,4 @@ fun MenuButton(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerStat
                 )
             }
         }
-    }
 }

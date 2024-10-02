@@ -84,6 +84,10 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     fun getCheckedSubList(id: Long): LiveData<List<Boolean>> = repository.getCheckedSubList(id)
     fun getCheckedList(id: Long): LiveData<List<Boolean>> = repository.getCheckedList(id)
 
+    fun resetCheckBoxes(entityId: Long){
+        vmScope.launch(Dispatchers.IO) { repository.resetCheckBoxes(entityId) }
+    }
+
     //_________________________________________________________________________
 
     // ОПЕРАЦИИ УДАЛЕНИЯ

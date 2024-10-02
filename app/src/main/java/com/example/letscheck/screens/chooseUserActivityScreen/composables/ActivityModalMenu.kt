@@ -97,7 +97,7 @@ fun ActivityRow(
     Row {
         Text(
             text = activity.activityName,
-            fontSize = 24.sp,
+            fontSize = 18.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)

@@ -13,6 +13,7 @@ import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
 import com.example.letscheck.data.classes.main.UserActivity
 import com.example.letscheck.data.classes.main.UserEntity
+import com.example.letscheck.data.classes.output.JointEntity
 
 @Dao
 interface Dao {
@@ -21,7 +22,7 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUserActivity(userActivity: UserActivity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUserEntity(userEntity: UserEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -61,6 +62,13 @@ interface Dao {
 
     @Update
     suspend fun updateUserEntity(userEntity: UserEntity)
+
+    @Transaction
+    suspend fun resetCheckBoxes(entityId: Long){
+        val checkBoxTitles = getCheckBoxesByEntityId(entityId)
+        println(checkBoxTitles)
+        checkBoxTitles.forEach{ updateCheckBoxTitle( it.copy(checked = false) ) }
+    }
 
     @Update
     suspend fun updateCheckList(checkList: CheckList)
@@ -156,7 +164,7 @@ interface Dao {
     @Transaction
     @Query("SELECT * FROM check_lists " +
             "WHERE check_lists.entity_id LIKE :entityId")
-    suspend fun getJointCheckList(entityId: Long): List<JointCheckList>
+    suspend fun getJointCheckLists(entityId: Long): List<JointCheckList>
 
 
     // ЧЕКБОКСЫ
@@ -168,6 +176,19 @@ interface Dao {
 
     @Query("SELECT MAX(id) FROM check_box_title")
     suspend fun getLastCheckBoxId(): Long
+
+    @Transaction
+    @Query("SELECT check_box_title.id, " +
+            "check_box_title.checklist_id, " +
+            "check_box_title.text, " +
+            "check_box_title.description, " +
+            "check_box_title.checked " +
+            "FROM check_box_title " +
+            "INNER JOIN check_lists ON check_box_title.checklist_id=check_lists.id " +
+            "INNER JOIN user_entities ON check_lists.entity_id=user_entities.id " +
+            "WHERE entity_id LIKE :entityId AND check_box_title.checked LIKE true"
+    )
+    suspend fun getCheckBoxesByEntityId(entityId: Long): List<CheckBoxTitle>
 
     @Query("SELECT checked FROM check_box_title " +
             "INNER JOIN check_lists ON check_box_title.checklist_id=check_lists.id " +
