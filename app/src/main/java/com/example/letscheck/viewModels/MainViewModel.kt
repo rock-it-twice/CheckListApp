@@ -31,6 +31,9 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
 
+    var entityId: Long by mutableLongStateOf(0)
+        private set
+
     var currentJointEntity: JointEntity? by mutableStateOf( null )
         private set
 
@@ -61,10 +64,13 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     // ENTITIES
 
-    fun getJointEntity(entity: JointEntity) {
-        vmScope.launch{
+    fun getEntityId(id: Long) { entityId = id }
+
+
+    fun getJointEntityById(entityId: Long) {
+        vmScope.launch(Dispatchers.IO){
             checkBoxStateList.clear()
-            currentJointEntity = entity
+            currentJointEntity = repository.getJointEntityById(entityId)
         }
     }
 

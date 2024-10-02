@@ -10,11 +10,14 @@ import androidx.navigation.compose.composable
 import com.example.letscheck.screens.chooseUserActivityScreen.ChooseUserActivityScreen
 import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
 import com.example.letscheck.screens.common_composables.Header
+import com.example.letscheck.screens.currentEntityScreen.CurrentEntityScreen
 import com.example.letscheck.viewModels.AddNewEntityViewModel
+import com.example.letscheck.viewModels.CurrentEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
 fun NavGraph( mainVM: MainViewModel,
+              currentVM: CurrentEntityViewModel,
               addNewVM: AddNewEntityViewModel,
               navController: NavHostController ) {
     NavHost(
@@ -23,6 +26,9 @@ fun NavGraph( mainVM: MainViewModel,
     ) {
         composable(route = Routes.Home.route){
             ChooseUserActivityScreen(vm = mainVM, navController = navController)
+        }
+        composable(route = Routes.CurrentEntityScreen.route){
+            CurrentEntityScreen(vm = currentVM, navController = navController, entityId = mainVM.entityId)
         }
         composable(route = Routes.AddNewEntityScreen.route){
             AddNewEntityScreen(vm = addNewVM,

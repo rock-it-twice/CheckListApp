@@ -126,7 +126,7 @@ fun EntityBox(vm: MainViewModel,
             .size(gridSize)
             .clip(RoundedCornerShape(20.dp))
             .combinedClickable(
-                onClick = { vm.getJointEntity(jointEntity) },
+                onClick = { vm.getEntityId(entityId) },
                 onLongClick = { isExpanded = !isExpanded },
                 onLongClickLabel = stringResource(R.string.long_click_label)
             ),

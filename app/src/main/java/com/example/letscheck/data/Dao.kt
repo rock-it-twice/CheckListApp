@@ -141,6 +141,12 @@ interface Dao {
     @Query("SELECT * FROM user_activities WHERE activity_name LIKE :name LIMIT 1")
     suspend fun getJointUserActivityByName(name: String): JointUserActivity?
 
+    // JOINT ENTITY
+
+    @Transaction
+    @Query("SELECT * FROM user_entities WHERE id LIKE :entityId LIMIT 1")
+    suspend fun getJointEntity(entityId: Long): JointEntity?
+
     // ПОДЗАГОЛОВКИ
     @Query("SELECT * FROM check_lists WHERE entity_id LIKE :entityId")
     fun getCheckLists(entityId: Long): List<CheckList>

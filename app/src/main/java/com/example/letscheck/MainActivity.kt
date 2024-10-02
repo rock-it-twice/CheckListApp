@@ -21,8 +21,10 @@ import com.example.letscheck.data.MainDb
 import com.example.letscheck.navigation.NavGraph
 import com.example.letscheck.repository.ChecklistRepository
 import com.example.letscheck.viewModels.AddNewEntityViewModel
+import com.example.letscheck.viewModels.CurrentEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.viewModels.factory.AddNewEntityViewModelFactory
+import com.example.letscheck.viewModels.factory.CurrentEntityViewModelFactory
 import com.example.letscheck.viewModels.factory.MainViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,20 +49,29 @@ class MainActivity : ComponentActivity() {
                         it, "MainViewModel",
                         MainViewModelFactory( vmScope, repository, appContext)
                     )
+                val currentVM: CurrentEntityViewModel =
+                    viewModel(
+                        it, "CurrentEntityViewModel",
+                        CurrentEntityViewModelFactory (vmScope, repository, appContext )
+                    )
                 val addNewVM: AddNewEntityViewModel =
                     viewModel(
                         it,
                         "AddNewEntityViewModel",
-                        AddNewEntityViewModelFactory( vmScope, repository, appContext)
+                        AddNewEntityViewModelFactory( vmScope, repository, appContext )
                     )
-                App(mainVM = mainVM, addNewVM = addNewVM)
+                App(mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
             }
         }
     }
 }
 
 @Composable
-fun App(mainVM: MainViewModel = viewModel(), addNewVM: AddNewEntityViewModel = viewModel()) {
+fun App(
+    mainVM: MainViewModel = viewModel(),
+    currentVM: CurrentEntityViewModel = viewModel(),
+    addNewVM: AddNewEntityViewModel = viewModel()
+) {
     LetsCheckTheme {
         val modifier = Modifier
         // константа для навигации между экранами
@@ -70,7 +81,11 @@ fun App(mainVM: MainViewModel = viewModel(), addNewVM: AddNewEntityViewModel = v
             color = MaterialTheme.colorScheme.background,
             shape = RectangleShape
         ) {
-            NavGraph(mainVM = mainVM, addNewVM = addNewVM, navController = navController)
+            NavGraph(
+                mainVM = mainVM,
+                currentVM = currentVM,
+                addNewVM = addNewVM,
+                navController = navController)
         }
     }
 }

@@ -90,86 +90,10 @@ fun CurrentEntityColumn(vm: MainViewModel) {
 
 
 
-@Composable
-fun Title(mainTitle: String, isListChecked: Boolean) {
-
-    val color = if (isListChecked) Color.Green else MaterialTheme.colorScheme.primary
-
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 20.dp),
-        color = color,
-        style = MaterialTheme.typography.headlineMedium,
-        fontWeight = FontWeight.SemiBold,
-        text = mainTitle,
-    )
-}
-
-
-@Composable
-fun Subtitle(checkList: JointCheckList, isSubListChecked: List<Boolean>) {
-
-    val color =
-        when {
-            isSubListChecked.all { it } -> Color.Green
-            isSubListChecked.none { it } -> MaterialTheme.colorScheme.primary
-            else -> MaterialTheme.colorScheme.primary
-        }
-        Column(
-            Modifier.fillMaxWidth()
-        ) {
-            Row {
-                Text(
-                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = color,
-                    text = checkList.checkList.checkListName
-                )
-            }
-            HorizontalDivider(Modifier.fillMaxWidth())
-        }
-}
 
 
 
-@Composable
-fun CheckBoxRow(
-    checkBoxTitle: CheckBoxTitle,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
 
-    val color: Color = if (isChecked) Color.Green else MaterialTheme.colorScheme.primary
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp)
-            .clickable(onClick = { onCheckedChange(!isChecked) }
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Checkbox(
-            checked = isChecked,
-            onCheckedChange = {onCheckedChange(!isChecked)},
-            colors = CheckboxDefaults.colors(
-                checkedColor = Color.Green,
-                uncheckedColor = MaterialTheme.colorScheme.primary
-            )
-        )
-        Column {
-            Text(
-                style = MaterialTheme.typography.bodyLarge,
-                color = color,
-                text = checkBoxTitle.text
-            )
-            if (checkBoxTitle.description != "") {
-                Text(
-                    style = MaterialTheme.typography.labelMedium,
-                    text = checkBoxTitle.description
-                )
-            }
-        }
-    }
-}
+
+

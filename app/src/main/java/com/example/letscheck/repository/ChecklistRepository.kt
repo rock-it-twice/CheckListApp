@@ -39,6 +39,12 @@ class ChecklistRepository(private val userDao: Dao) {
     }
 
     // USER ENTITIES
+    suspend fun getJointEntityById(entityId: Long): JointEntity? {
+        return withContext(Dispatchers.IO) {
+            return@withContext userDao.getJointEntity(entityId)
+        }
+    }
+
     suspend fun deleteUserEntityById(id: Long){
         withContext(Dispatchers.IO) {
             userDao.deleteEntity(id)
