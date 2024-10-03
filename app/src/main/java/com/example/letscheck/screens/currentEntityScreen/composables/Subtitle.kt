@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen.composables
+package com.example.letscheck.screens.currentEntityScreen.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

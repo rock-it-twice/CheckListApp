@@ -34,12 +34,9 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     var entityId: Long by mutableLongStateOf(0)
         private set
 
-    var currentJointEntity: JointEntity? by mutableStateOf( null )
-        private set
+    //______________________________________________________________________________________________
 
-    val checkBoxStateList: MutableList<MutableList<Boolean>> = mutableListOf()
-
-
+    // User activity
     fun addUserActivity() {
         vmScope.launch(Dispatchers.IO) {
             repository.addUserActivity(UserActivity(activityName = checkName(userActivityName)))
@@ -60,19 +57,10 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     fun changeActivityName(value: String) { userActivityName = value }
 
-    //_________________________________________________________________________
+    //______________________________________________________________________________________________
 
-    // ENTITIES
-
+    // Entities
     fun getEntityId(id: Long) { entityId = id }
-
-
-    fun getJointEntityById(entityId: Long) {
-        vmScope.launch(Dispatchers.IO){
-            checkBoxStateList.clear()
-            currentJointEntity = repository.getJointEntityById(entityId)
-        }
-    }
 
     fun deleteEntityById(id: Long) {
         vmScope.launch(Dispatchers.IO) {
@@ -80,41 +68,26 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         }
     }
 
-    fun clearJointEntity() { currentJointEntity = null }
-
     // CheckBoxes
-    fun updateCheckBoxTitle(title: CheckBoxTitle){
-        vmScope.launch(Dispatchers.IO) { repository.updateCheckBoxTitle(title) }
-    }
-    fun isChecked(id: Long): LiveData<Boolean> = repository.isChecked(id)
-    fun getCheckedSubList(id: Long): LiveData<List<Boolean>> = repository.getCheckedSubList(id)
     fun getCheckedList(id: Long): LiveData<List<Boolean>> = repository.getCheckedList(id)
 
     fun resetCheckBoxes(entityId: Long){
         vmScope.launch(Dispatchers.IO) { repository.resetCheckBoxes(entityId) }
     }
 
-    //_________________________________________________________________________
+    //______________________________________________________________________________________________
 
-    // ОПЕРАЦИИ УДАЛЕНИЯ
+    // Clear operations
     fun deleteUserActivity(id: Long) {
         vmScope.launch(Dispatchers.IO) { repository.deleteUserActivity(id) }
     }
 
-    fun isGridVisible(): Boolean {
-        return  currentJointUserActivity != null && currentJointEntity == null
-    }
+    fun isGridVisible(): Boolean { return  currentJointUserActivity != null }
 
-    // Очистка переменных
-    fun clearStepByStep() {
-        vmScope.launch(Dispatchers.Default) {
-            when(true){
-                (currentJointEntity != null) -> { clearJointEntity() ; checkBoxStateList.clear() }
-                else                         -> { currentActivityId = 0
-                                                  currentJointUserActivity = null
-                                                }
-            }
-        }
+    fun clear() = vmScope.launch {
+        currentActivityId = 0
+        currentJointUserActivity = null
+        entityId = 0
     }
 
 

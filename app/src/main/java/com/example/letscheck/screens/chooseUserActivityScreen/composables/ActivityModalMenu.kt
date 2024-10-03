@@ -102,7 +102,6 @@ fun ActivityRow(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
                 .clickable(onClick = {
-                    vm.clearJointEntity()
                     vm.getActivityId(activity.id)
                     vm.getJointUserActivityById()
                     scope.launch { drawerState.apply { close() } }

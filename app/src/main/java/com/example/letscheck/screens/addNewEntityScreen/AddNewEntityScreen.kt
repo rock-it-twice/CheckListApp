@@ -1,6 +1,5 @@
 package com.example.letscheck.screens.addNewEntityScreen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +20,6 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, activityId: Long) {
 

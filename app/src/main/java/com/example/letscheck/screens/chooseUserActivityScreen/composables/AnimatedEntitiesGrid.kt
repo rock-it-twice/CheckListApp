@@ -96,7 +96,7 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
                     items= entities,
                     key = {item -> item.entity.id}) {
                     val progressObserver by vm.getCheckedList(it.entity.id).observeAsState(listOf())
-                    EntityBox(vm, cellSize, it, progressObserver)
+                    EntityBox(vm, navController, cellSize, it, progressObserver)
                 }
                 item {
                     AddNewEntityBox(navController = navController, cellSize)
@@ -109,6 +109,7 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EntityBox(vm: MainViewModel,
+              navController: NavController,
               gridSize: DpSize,
               jointEntity: JointEntity,
               progressObserver: List<Boolean>
@@ -126,7 +127,10 @@ fun EntityBox(vm: MainViewModel,
             .size(gridSize)
             .clip(RoundedCornerShape(20.dp))
             .combinedClickable(
-                onClick = { vm.getEntityId(entityId) },
+                onClick = {
+                    vm.getEntityId(entityId)
+                    navController.navigate(Routes.CurrentEntityScreen.route)
+                          },
                 onLongClick = { isExpanded = !isExpanded },
                 onLongClickLabel = stringResource(R.string.long_click_label)
             ),
