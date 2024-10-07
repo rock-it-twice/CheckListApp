@@ -7,8 +7,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,23 +34,24 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -64,14 +64,20 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.letscheck.R
-import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.navigation.Routes
 import com.example.letscheck.ui.theme.checkedDeepGreen
+import com.example.letscheck.viewModels.MainViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
+fun AnimatedEntitiesGrid(
+    vm: MainViewModel,
+    navController: NavController,
+    state: LazyGridState,
+    topBarScrollBehavior: TopAppBarScrollBehavior
+){
 
     vm.getJointUserActivityById()
     val cellSize: DpSize = DpSize(135.dp, 240.dp)
@@ -88,8 +94,9 @@ fun AnimatedEntitiesGrid(vm: MainViewModel, navController: NavController){
     ) {
 
         LazyVerticalGrid(
-            modifier = Modifier,
+            modifier = Modifier.nestedScroll( connection = topBarScrollBehavior.nestedScrollConnection),
             columns = GridCells.Adaptive(cellSize.width),
+            state = state,
             contentPadding = PaddingValues(horizontal = 10.dp),
             content = {
                 items(

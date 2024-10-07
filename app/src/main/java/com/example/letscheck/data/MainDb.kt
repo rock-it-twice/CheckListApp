@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
         UserActivity::class,
         UserEntity::class,
         CheckList::class,
-        CheckBoxTitle::class], version = 1
+        CheckBoxTitle::class], version = 3
 )
 abstract class MainDb : RoomDatabase() {
 
@@ -29,6 +29,7 @@ abstract class MainDb : RoomDatabase() {
             return Room
                 .databaseBuilder(context, MainDb::class.java, "Main_database")
 //                .createFromAsset("database/Main_database.db")
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

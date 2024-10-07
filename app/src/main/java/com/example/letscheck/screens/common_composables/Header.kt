@@ -42,12 +42,12 @@ fun Header(
     Row(
         modifier = Modifier
         .fillMaxWidth()
-        .padding(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 10.dp),
+        .padding(start = 10.dp, end = 10.dp, top = 25.dp, bottom = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
         ) {
         Text(text = "Let's check!",
-            fontSize = 42.sp,
+            fontSize = 36.sp,
             fontWeight = FontWeight.SemiBold,
             style = TextStyle(Brush.linearGradient(colors = listOf(Color.Cyan, Color.Magenta)))
             )

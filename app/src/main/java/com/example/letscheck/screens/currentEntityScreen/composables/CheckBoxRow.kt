@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 
@@ -35,7 +36,7 @@ fun CheckBoxRow(
     ) {
         Checkbox(
             checked = isChecked,
-            onCheckedChange = {onCheckedChange(!isChecked)},
+            onCheckedChange = { onCheckedChange(!isChecked) },
             colors = CheckboxDefaults.colors(
                 checkedColor = Color.Green,
                 uncheckedColor = MaterialTheme.colorScheme.primary
@@ -45,7 +46,8 @@ fun CheckBoxRow(
             Text(
                 style = MaterialTheme.typography.bodyLarge,
                 color = color,
-                text = checkBoxTitle.text
+                text = checkBoxTitle.text,
+                textDecoration = if (isChecked) TextDecoration.LineThrough else TextDecoration.None
             )
             if (checkBoxTitle.description != "") {
                 Text(

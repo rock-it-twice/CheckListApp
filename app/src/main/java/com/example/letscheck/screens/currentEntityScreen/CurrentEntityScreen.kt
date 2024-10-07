@@ -11,6 +11,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityColumn
+import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityTopBar
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
