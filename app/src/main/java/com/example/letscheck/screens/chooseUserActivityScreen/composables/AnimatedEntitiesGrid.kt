@@ -136,7 +136,7 @@ fun EntityBox(vm: MainViewModel,
             .combinedClickable(
                 onClick = {
                     vm.getEntityId(entityId)
-                    navController.navigate(Routes.CurrentEntityScreen.route)
+                    navController.navigate( route = Routes.CurrentEntityScreen.route )
                           },
                 onLongClick = { isExpanded = !isExpanded },
                 onLongClickLabel = stringResource(R.string.long_click_label)

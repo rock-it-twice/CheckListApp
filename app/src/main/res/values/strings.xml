@@ -38,4 +38,10 @@
     <string name="new_subtitle_name">Новый подзаголовок</string>
     <string name="new_checkbox_name">Новый чекбокс</string>
 
+    <!-- PopUps -->
+    <string name="pop_up_complete_title">Все элементы списка отмечены!</string>
+    <string name="pop_up_complete_message">Вернуться на главный экран?</string>
+    <string name="pop_up_complete_accept">Вернуться</string>
+    <string name="pop_up_complete_decline">Остаться</string>
+
 </resources>

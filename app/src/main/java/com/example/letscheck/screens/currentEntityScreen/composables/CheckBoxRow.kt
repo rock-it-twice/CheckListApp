@@ -1,5 +1,6 @@
 package com.example.letscheck.screens.currentEntityScreen.composables
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import com.example.letscheck.data.classes.main.CheckBoxTitle
 fun CheckBoxRow(
     checkBoxTitle: CheckBoxTitle,
     isChecked: Boolean,
+    soundEffect: MediaPlayer,
     onCheckedChange: (Boolean) -> Unit
 ) {
 
@@ -30,13 +32,19 @@ fun CheckBoxRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp)
-            .clickable(onClick = { onCheckedChange(!isChecked) }
+            .clickable(onClick = {
+                onCheckedChange(!isChecked)
+                soundEffect.start()
+            }
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
             checked = isChecked,
-            onCheckedChange = { onCheckedChange(!isChecked) },
+            onCheckedChange = {
+                onCheckedChange(!isChecked)
+                soundEffect.start()
+                              },
             colors = CheckboxDefaults.colors(
                 checkedColor = Color.Green,
                 uncheckedColor = MaterialTheme.colorScheme.primary

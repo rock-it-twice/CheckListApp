@@ -53,6 +53,7 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
             onValueChange = { newName = it },
             modifier = Modifier.padding(vertical = 10.dp),
             enabled = !isEnabled,
+            textStyle = MaterialTheme.typography.headlineMedium,
             placeholder = { TextFieldPlaceholder(R.string.new_entity_name, isEnabled) },
             colors = textFieldColors
         )

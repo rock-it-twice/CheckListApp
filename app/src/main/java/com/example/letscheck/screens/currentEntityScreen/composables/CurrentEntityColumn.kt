@@ -1,6 +1,5 @@
 package com.example.letscheck.screens.currentEntityScreen.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,54 +13,47 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.letscheck.R
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentEntityColumn(vm: CurrentEntityViewModel,
-                        navController: NavController,
                         lazyListState: LazyListState,
                         innerPadding: PaddingValues,
-                        topBarScrollBehavior: TopAppBarScrollBehavior
+                        topBarScrollBehavior: TopAppBarScrollBehavior,
+                        isListChecked: List<Boolean>
 ) {
 
     val modifier = Modifier
-    val mainTitle = vm.currentJointEntity?.entity?.entityName ?: ""
     val checklists = vm.currentJointEntity?.checkLists ?: listOf()
-    val isCheckedList by
-    vm.getCheckedList(vm.currentJointEntity?.entity?.id ?: 0).observeAsState(listOf())
-    var vibrate by rememberSaveable { mutableStateOf(false) }
-
+    val onClickSoundEffect = vm.playSound(R.raw.click_type_2)
 
     LazyColumn(
-        modifier = modifier.nestedScroll( connection = topBarScrollBehavior.nestedScrollConnection ),
+        modifier = modifier
+            .nestedScroll( connection = topBarScrollBehavior.nestedScrollConnection ),
         state = lazyListState,
         contentPadding = innerPadding
     ) {
-        // Прерывает текущую вибрацию и запускает длинную вибрацию, когда все чеклисты отмечены
-        vibrate = isCheckedList.all{ it }
-        if (vibrate) {
-            vm.vibrator.cancel()
-            vm.vibrator.vibrate(vm.longVibrationEffect)
-            vibrate = false
-        }
 
-        item { Title(mainTitle, isCheckedList.all { it }) }
+        item { Title(vm.entityName, isListChecked.all { it }) }
 
         checklists.forEachIndexed { _, jointCheckList ->
 
-            item {
+            item(key = jointCheckList.checkList.id) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -73,42 +65,32 @@ fun CurrentEntityColumn(vm: CurrentEntityViewModel,
                     Column(modifier = Modifier.padding(start = 10.dp)) {
 
                         val id = jointCheckList.checkList.id
-                        val isCheckedSubList by
-                        vm.getCheckedSubList(id = id).observeAsState(listOf())
+                        val isSubListChecked by
+                        vm.getCheckedSubList(id = id).observeAsState(listOf(false))
 
-                        // Прерывает текущую и запускает среднюю вибрацию,
-                        // когда все чеклисты в подсписке отмечены
-                        vibrate = isCheckedSubList.all { it }
-                        if (isCheckedSubList.all { it }) {
-                            vm.vibrator.cancel()
-                            vm.vibrator.vibrate(vm.standardVibrationEffect)
-                            vibrate = false
+                        // Определение условия, при котором срабатывает вибрация
+                        val vibrateStandard = (isSubListChecked.all { it } && !isListChecked.all{ it })
+                        // Вызов вибрации, если все чекбоксы в подсписке отмечены
+                        LaunchedEffect(vibrateStandard) {
+                        vm.vibrate(vibrateStandard, "standard")
                         }
 
-                        Subtitle(jointCheckList, isCheckedSubList)
+                        Subtitle(jointCheckList, isSubListChecked)
                         // Чекбоксы
                         jointCheckList.checkBoxTitles.forEach { title ->
 
                             val isChecked by vm.isChecked(title.id).observeAsState(false)
 
-                            // Прерывает текущую и запускает короткую вибрацию,
-                            // когда все чеклисты отмечены
-                            vibrate = isChecked
-                            if (isChecked) {
-                                    vm.vibrator.cancel()
-                                    vm.vibrator.vibrate(vm.shortVibrationEffect)
-                                    vibrate = false
-                            }
-
                             CheckBoxRow(
                                 checkBoxTitle = title,
-                                isChecked = isChecked
-                            ) { vm.updateCheckBoxTitle(title.copy(checked = it)) }
-
+                                isChecked = isChecked,
+                                soundEffect = onClickSoundEffect
+                            ) { vm.updateCheckBoxTitle(title.copy(checked = it))}
+                            // Прерывает текущую и запускает короткую вибрацию,
+                            // когда все чеклисты отмечены
                         }
                     }
                 }
-
             }
         }
     }
