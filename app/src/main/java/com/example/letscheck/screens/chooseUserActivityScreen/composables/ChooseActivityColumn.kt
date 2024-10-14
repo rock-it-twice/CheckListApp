@@ -28,7 +28,9 @@ fun ChooseActivityColumn(
     navController: NavController,
     lazyGridState: LazyGridState,
     innerPadding: PaddingValues,
-    topBarScrollBehavior: TopAppBarScrollBehavior
+    topBarScrollBehavior: TopAppBarScrollBehavior,
+    showPopUp: (Boolean) -> Unit,
+    getEntityId: (Long) -> Unit
 ) {
 
     val modifier = Modifier
@@ -58,7 +60,7 @@ fun ChooseActivityColumn(
             },
             content = {
                 // Сетка со списком чеклистов
-                AnimatedEntitiesGrid(vm, navController, lazyGridState, topBarScrollBehavior)
+                AnimatedEntitiesGrid( vm, navController, lazyGridState, topBarScrollBehavior, showPopUp, getEntityId )
             })
     }
 }

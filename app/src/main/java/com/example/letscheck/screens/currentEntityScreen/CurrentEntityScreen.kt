@@ -15,11 +15,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityColumn
 import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityTopBar
-import com.example.letscheck.screens.currentEntityScreen.composables.PopUpBox
+import com.example.letscheck.screens.common_composables.GoToMainScreenBox
+import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +40,7 @@ fun CurrentEntityScreen(
     val progress by vm.progressObserver.observeAsState(listOf(false))
     var showPopUp by rememberSaveable { mutableStateOf(false) }
 
+    // Когда все чекбоксы отмечены, вызывает срабатывание вибрации и открытия PopUp окна.
     LaunchedEffect(progress.all{ it }) {
         vm.vibrate(progress.all { it }, "long")
         showPopUp = progress.all{ it }
@@ -48,14 +51,19 @@ fun CurrentEntityScreen(
         modifier  = Modifier
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp)
-            .blur( if(showPopUp) 10.dp else 0.dp ),
+            .blur(if (showPopUp) 10.dp else 0.dp),
         topBar    = { CurrentEntityTopBar(vm, navController, topBarScrollBehavior) },
         content   = { innerPadding ->
             // Отображение выбранного чеклиста
             CurrentEntityColumn(vm, lazyListState, innerPadding, topBarScrollBehavior, progress)
         }
     )
-    // Меню перехода на главный экран, после завершения списка
-    PopUpBox( showPopUp, navController) { showPopUp = it }
+    // PopUp окно перехода на главный экран, после завершения списка
+    PopUpBox(
+        size = DpSize(360.dp, 240.dp),
+        showPopUp = showPopUp,
+        onDismiss = { showPopUp = it },
+        content = { GoToMainScreenBox(navController) { showPopUp = it } }
+    )
 }
 

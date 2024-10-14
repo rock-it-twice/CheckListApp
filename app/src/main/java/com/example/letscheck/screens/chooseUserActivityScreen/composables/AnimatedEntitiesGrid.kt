@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
@@ -54,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
@@ -76,11 +76,13 @@ fun AnimatedEntitiesGrid(
     vm: MainViewModel,
     navController: NavController,
     state: LazyGridState,
-    topBarScrollBehavior: TopAppBarScrollBehavior
+    topBarScrollBehavior: TopAppBarScrollBehavior,
+    showPopUp: (Boolean) -> Unit,
+    getEntityId: (Long) -> Unit
 ){
 
     vm.getJointUserActivityById()
-    val cellSize: DpSize = DpSize(135.dp, 240.dp)
+    val cellSize = DpSize(135.dp, 240.dp)
     val entities = ( vm.currentJointUserActivity?.entities ?: listOf() )
 
     AnimatedVisibility(
@@ -103,7 +105,7 @@ fun AnimatedEntitiesGrid(
                     items= entities,
                     key = {item -> item.entity.id}) {
                     val progressObserver by vm.getCheckedList(it.entity.id).observeAsState(listOf())
-                    EntityBox(vm, navController, cellSize, it, progressObserver)
+                    EntityBox(vm, navController, cellSize, it, progressObserver, showPopUp, getEntityId)
                 }
                 item {
                     AddNewEntityBox(navController = navController, cellSize)
@@ -119,7 +121,9 @@ fun EntityBox(vm: MainViewModel,
               navController: NavController,
               gridSize: DpSize,
               jointEntity: JointEntity,
-              progressObserver: List<Boolean>
+              progressObserver: List<Boolean>,
+              showPopUp: (Boolean) -> Unit,
+              getEntityId: (Long) -> Unit
 ){
     val entityId by remember { mutableLongStateOf(jointEntity.entity.id) }
     var isExpanded: Boolean by remember { mutableStateOf(false) }
@@ -143,7 +147,16 @@ fun EntityBox(vm: MainViewModel,
             ),
             contentAlignment = Alignment.BottomCenter
         ){
-            DropDownContextMenu( vm, isExpanded, gridSize, entityId, progressObserver)  { isExpanded = it }
+            DropDownContextMenu(
+                vm = vm,
+                isExpanded = isExpanded,
+                size = gridSize,
+                entityId = entityId,
+                progressObserver = progressObserver,
+                onValueChange = { isExpanded = it },
+                showPopUp = showPopUp,
+                getEntityId= getEntityId
+            )
 
             if (jointEntity.entity.image != "") {
             AsyncImage(
@@ -211,7 +224,9 @@ fun DropDownContextMenu(vm: MainViewModel,
                         size: DpSize,
                         entityId: Long,
                         progressObserver: List<Boolean>,
-                        onValueChange: (Boolean) -> Unit
+                        onValueChange: (Boolean) -> Unit,
+                        showPopUp: (Boolean) -> Unit,
+                        getEntityId: (Long) -> Unit
 ){
     DropdownMenu(
         expanded         = isExpanded,
@@ -245,8 +260,8 @@ fun DropDownContextMenu(vm: MainViewModel,
             modifier     = Modifier,
             text         = { Text(stringResource(R.string.delete)) },
             onClick      = {
-                vm.deleteEntityById(entityId)
-                vm.getJointUserActivityById()
+                showPopUp(true)
+                getEntityId(entityId)
                 onValueChange(!isExpanded)
                           },
             leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
@@ -269,9 +284,9 @@ fun NoImageBox(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Default.CheckCircle,
+                painter = painterResource(R.drawable.image_icon),
                 contentDescription = "",
-                modifier = Modifier.size(40.dp),
+                modifier = Modifier.size(60.dp),
                 tint = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f)
             )
             Spacer(Modifier.size(10.dp))

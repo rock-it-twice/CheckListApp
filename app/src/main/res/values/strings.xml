@@ -39,6 +39,10 @@
     <string name="new_checkbox_name">Новый чекбокс</string>
 
     <!-- PopUps -->
+    <string name="pop_up_delete_warning_title">Удалить список?</string>
+    <string name="pop_up_delete_warning_message">После подтверждения, список будет удалён безвозвратно.</string>
+    <string name="pop_up_delete_warning_accept">Подтвердить</string>
+    <string name="pop_up_delete_warning_decline">Отменить</string>
     <string name="pop_up_complete_title">Все элементы списка отмечены!</string>
     <string name="pop_up_complete_message">Вернуться на главный экран?</string>
     <string name="pop_up_complete_accept">Вернуться</string>

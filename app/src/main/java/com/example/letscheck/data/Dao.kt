@@ -38,7 +38,7 @@ interface Dao {
     suspend fun addCheckBoxTitles(list: List<CheckBoxTitle>)
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(entity: UserEntity,
                        checkLists: List<CheckList>,
                        checkBoxTitles: List<List<CheckBoxTitle>>
