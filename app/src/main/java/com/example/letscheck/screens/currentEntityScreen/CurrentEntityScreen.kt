@@ -18,8 +18,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityColumn
-import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityTopBar
 import com.example.letscheck.screens.common_composables.GoToMainScreenBox
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.CurrentEntityViewModel
@@ -52,7 +52,12 @@ fun CurrentEntityScreen(
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp)
             .blur(if (showPopUp) 10.dp else 0.dp),
-        topBar    = { CurrentEntityTopBar(vm, navController, topBarScrollBehavior) },
+        topBar    = {
+            CommonTopAppBar(
+                currentVM = vm,
+                navController = navController,
+                scrollBehavior = topBarScrollBehavior)
+        },
         content   = { innerPadding ->
             // Отображение выбранного чеклиста
             CurrentEntityColumn(vm, lazyListState, innerPadding, topBarScrollBehavior, progress)

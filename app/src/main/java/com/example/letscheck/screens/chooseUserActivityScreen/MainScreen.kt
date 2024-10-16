@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.screens.chooseUserActivityScreen.composables.ChooseActivityColumn
-import com.example.letscheck.screens.chooseUserActivityScreen.composables.ChooseActivityTopBar
+import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.common_composables.DeleteWarning
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.MainViewModel
@@ -26,7 +26,7 @@ import com.example.letscheck.viewModels.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel) {
+fun MainScreen(navController: NavController, vm: MainViewModel) {
 
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -39,7 +39,12 @@ fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel) {
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp)
             .blur(if (showPopUp) 10.dp else 0.dp),
-        topBar    = { ChooseActivityTopBar(vm, navController, topBarScrollBehavior) },
+        topBar    = {
+            CommonTopAppBar(
+                mainVM = vm,
+                navController = navController,
+                scrollBehavior = topBarScrollBehavior)
+                    },
         content   = { innerPadding ->
             ChooseActivityColumn(
                 vm = vm, navController = navController, lazyGridState = lazyGridState,
@@ -52,8 +57,9 @@ fun ChooseUserActivityScreen(navController: NavController, vm: MainViewModel) {
         showPopUp = showPopUp,
         size = DpSize(360.dp, 240.dp),
         onDismiss = { showPopUp = it },
-        content = { DeleteWarning( onClick = { showPopUp = it }, delete = { vm.deleteEntityById(entityId) ; vm.getJointUserActivityById() } )
-        }
+        content = { DeleteWarning( onClick = { showPopUp = it },
+            delete = { vm.deleteEntityById(entityId) ; vm.getJointUserActivityById() }
+        ) }
     )
 
 }

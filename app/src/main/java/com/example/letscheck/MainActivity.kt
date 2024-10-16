@@ -1,6 +1,8 @@
 package com.example.letscheck
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,9 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
@@ -35,6 +42,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
+
+            if (!sharedPref.contains("dark_mode")) {
+                sharedPref.edit().putBoolean("dark_mode", false).apply()
+            }
+            val darkModeEnabled: Boolean = sharedPref.getBoolean("dark_mode", false)
+
 
             val database = MainDb.createDatabase(application)
             val userDao: Dao = database.dao()
@@ -60,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         "AddNewEntityViewModel",
                         AddNewEntityViewModelFactory( vmScope, repository, appContext )
                     )
-                App(mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
+                App(darkModeEnabled = darkModeEnabled, mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
             }
         }
     }
@@ -68,14 +83,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(
+    darkModeEnabled: Boolean,
     mainVM: MainViewModel = viewModel(),
     currentVM: CurrentEntityViewModel = viewModel(),
     addNewVM: AddNewEntityViewModel = viewModel()
 ) {
-    LetsCheckTheme {
+    LetsCheckTheme(darkModeEnabled) {
         val modifier = Modifier
         // константа для навигации между экранами
         val navController = rememberNavController()
+
         Surface(
             modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
