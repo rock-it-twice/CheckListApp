@@ -43,14 +43,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
-
-            if (!sharedPref.contains("dark_mode")) {
-                sharedPref.edit().putBoolean("dark_mode", false).apply()
-            }
-            val darkModeEnabled: Boolean = sharedPref.getBoolean("dark_mode", false)
-
-
             val database = MainDb.createDatabase(application)
             val userDao: Dao = database.dao()
             val repository = ChecklistRepository(userDao)
@@ -75,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         "AddNewEntityViewModel",
                         AddNewEntityViewModelFactory( vmScope, repository, appContext )
                     )
-                App(darkModeEnabled = darkModeEnabled, mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
+                App(mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
             }
         }
     }
@@ -83,12 +75,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(
-    darkModeEnabled: Boolean,
     mainVM: MainViewModel = viewModel(),
     currentVM: CurrentEntityViewModel = viewModel(),
     addNewVM: AddNewEntityViewModel = viewModel()
 ) {
-    LetsCheckTheme(darkModeEnabled) {
+    LetsCheckTheme() {
         val modifier = Modifier
         // константа для навигации между экранами
         val navController = rememberNavController()

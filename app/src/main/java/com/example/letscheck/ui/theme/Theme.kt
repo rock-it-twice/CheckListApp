@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
@@ -180,9 +181,26 @@ val unspecified_scheme = ColorFamily(
 
 @Composable
  fun LetsCheckTheme(
-    darkModeEnabled: Boolean,
     content: @Composable() () -> Unit
  ) {
+
+    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
+
+    if (!sharedPref.contains("dark_mode")) {
+        sharedPref.edit().putBoolean("dark_mode", false).apply()
+    }
+
+    var darkModeEnabled: Boolean by remember {
+        mutableStateOf(sharedPref.getBoolean("dark_mode", false))
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        sharedPref.registerOnSharedPreferenceChangeListener {
+            _, key -> if (key == "dark_mode") {
+                darkModeEnabled = sharedPref.getBoolean("dark_mode", false)
+            }
+        }
+    }
 
     val colorScheme = when {
             darkModeEnabled -> darkScheme

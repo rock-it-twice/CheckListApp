@@ -41,7 +41,8 @@ private fun GoBackIconButton(vm: MainViewModel?){
         IconButton(
             onClick = { vm?.clear() },
             colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Icon(
@@ -61,7 +62,8 @@ private fun GoBackIconButton(vm: CurrentEntityViewModel?, navController: NavCont
             vm?.clear()
         },
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Icon(
@@ -80,7 +82,8 @@ private fun GoBackIconButton(vm: AddNewEntityViewModel?, navController: NavContr
             navController.navigate(route = Routes.Home.route)
         },
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Icon(
