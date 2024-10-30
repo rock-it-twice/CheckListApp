@@ -6,6 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -21,12 +22,10 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNewEntityScreen(navController: NavController, vm: AddNewEntityViewModel, activityId: Long) {
-
-    // Проверяем, принадлежит ли новый список текущему разделу (UserActivity),
-    // на случай, если экран создания открывается не в первый раз.
-    if (vm.checkNewEntityRelations(activityId))
-        vm.createNewEntity( activityId = activityId, str = "" )
+fun AddNewEntityScreen(
+    navController: NavController,
+    vm: AddNewEntityViewModel
+) {
 
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

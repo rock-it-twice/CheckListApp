@@ -81,8 +81,8 @@ fun AcceptOrEditEntityButton(
                 enabled = !isEnabled,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
                 )
                 ) {
                 Icon(
@@ -99,8 +99,8 @@ fun AcceptOrEditEntityButton(
                 enabled = isEnabled,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
                 Icon(

@@ -31,7 +31,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
         private set
 
-    var entityId: Long by mutableLongStateOf(0)
+    var entityId: Long by mutableLongStateOf(0L)
         private set
 
     //______________________________________________________________________________________________

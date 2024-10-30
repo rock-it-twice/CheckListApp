@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Title(mainTitle: String, isListChecked: Boolean) {
 
-    val color = if (isListChecked) Color.Green else MaterialTheme.colorScheme.primary
+    val color = if (isListChecked) Color.Green else MaterialTheme.colorScheme.onSurface
 
     Text(
         modifier = Modifier

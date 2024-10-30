@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen
+package com.example.letscheck.screens.mainScreen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -17,7 +17,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.letscheck.screens.chooseUserActivityScreen.composables.ChooseActivityColumn
+import com.example.letscheck.screens.mainScreen.composables.ChooseActivityColumn
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.common_composables.DeleteWarning
 import com.example.letscheck.screens.common_composables.PopUpBox
@@ -57,7 +57,8 @@ fun MainScreen(navController: NavController, vm: MainViewModel) {
         showPopUp = showPopUp,
         size = DpSize(360.dp, 240.dp),
         onDismiss = { showPopUp = it },
-        content = { DeleteWarning( onClick = { showPopUp = it },
+        content = {
+            DeleteWarning( onClick = { showPopUp = it },
             delete = { vm.deleteEntityById(entityId) ; vm.getJointUserActivityById() }
         ) }
     )

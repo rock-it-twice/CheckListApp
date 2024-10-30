@@ -19,8 +19,7 @@ fun Subtitle(checkList: JointCheckList, isSubListChecked: List<Boolean>) {
     val color =
         when {
             isSubListChecked.all { it } -> Color.Green
-            isSubListChecked.none { it } -> MaterialTheme.colorScheme.primary
-            else -> MaterialTheme.colorScheme.primary
+            else                        -> MaterialTheme.colorScheme.onSurface
         }
     Column(
         Modifier.fillMaxWidth()

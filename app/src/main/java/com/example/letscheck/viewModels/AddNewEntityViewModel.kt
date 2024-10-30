@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
@@ -21,6 +22,9 @@ class AddNewEntityViewModel(
     private val vmScope: CoroutineScope,
     private val repository: ChecklistRepository,
     private val application: Application): ViewModel() {
+
+    var entityId: Long by mutableLongStateOf(0L)
+        private set
 
     // New Entity creation
     var newEntity: UserEntity? by mutableStateOf( null )
@@ -95,8 +99,23 @@ class AddNewEntityViewModel(
 
     }
 
-    // New checklists
 
+    fun getEntityId(id: Long) { entityId = id }
+
+    // Setting the current entity
+    fun setCurrentEntityAsNew(){
+        vmScope.launch {
+            val entity = repository.getJointEntityById(entityId)
+            if (entity != null) {
+                newEntity = entity.entity
+                newImageUri = entity.entity.image.toUri()
+                newChecklists = entity.checkLists.map { it.checkList }
+                newCheckBoxes = entity.checkLists.map { it.checkBoxTitles.toList() }
+            }
+        }
+    }
+
+    // New checklists
     fun addNewCheckList() {
         val newList = newChecklists.toMutableList()
         newList.add(CheckList())

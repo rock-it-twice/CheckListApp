@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen.composables
+package com.example.letscheck.screens.mainScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -82,7 +84,7 @@ fun AnimatedEntitiesGrid(
 ){
 
     vm.getJointUserActivityById()
-    val cellSize = DpSize(135.dp, 240.dp)
+    val cellSize = DpSize(135.dp, 135.dp)
     val entities = ( vm.currentJointUserActivity?.entities ?: listOf() )
 
     AnimatedVisibility(
@@ -96,10 +98,13 @@ fun AnimatedEntitiesGrid(
     ) {
 
         LazyVerticalGrid(
-            modifier = Modifier.nestedScroll( connection = topBarScrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll( connection = topBarScrollBehavior.nestedScrollConnection ),
             columns = GridCells.Adaptive(cellSize.width),
             state = state,
-            contentPadding = PaddingValues(horizontal = 10.dp),
+            contentPadding = PaddingValues(20.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             content = {
                 items(
                     items= entities,
@@ -108,7 +113,7 @@ fun AnimatedEntitiesGrid(
                     EntityBox(vm, navController, cellSize, it, progressObserver, showPopUp, getEntityId)
                 }
                 item {
-                    AddNewEntityBox(navController = navController, cellSize)
+                    AddNewEntityBox(navController, cellSize)
                 }
             }
         )
@@ -132,7 +137,7 @@ fun EntityBox(vm: MainViewModel,
     val progress = progressObserver.count{ it }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(modifier = Modifier
             .size(gridSize)
@@ -149,6 +154,7 @@ fun EntityBox(vm: MainViewModel,
         ){
             DropDownContextMenu(
                 vm = vm,
+                navController = navController,
                 isExpanded = isExpanded,
                 size = gridSize,
                 entityId = entityId,
@@ -169,9 +175,7 @@ fun EntityBox(vm: MainViewModel,
                 contentDescription = "Image",
                 contentScale = ContentScale.Crop
             )
-            } else {
-                NoImageBox()
-            }
+            } else { NoImageBox() }
             ProgressIndicator(progress, listSize)
         }
         Text(
@@ -188,7 +192,7 @@ fun ProgressIndicator(progress: Int, listSize: Int){
         visible = progress == listSize,
         enter = fadeIn(),
         exit = fadeOut(),
-        content = { Box( Modifier.fillMaxSize().alpha(0.5f).background(checkedDeepGreen) ) }
+        content = { Box( Modifier.fillMaxSize().alpha(0.7f).background(checkedDeepGreen) ) }
     )
     if (progress == listSize) {
 
@@ -220,6 +224,7 @@ fun ProgressIndicator(progress: Int, listSize: Int){
 
 @Composable
 fun DropDownContextMenu(vm: MainViewModel,
+                        navController: NavController,
                         isExpanded: Boolean,
                         size: DpSize,
                         entityId: Long,
@@ -234,7 +239,7 @@ fun DropDownContextMenu(vm: MainViewModel,
         offset           = DpOffset(size.width/2, (-size.height)/2),
         modifier         = Modifier,
     ) {
-
+        // Сброс чекбоксов
         DropdownMenuItem(
             modifier     = Modifier,
             text         = { Text(stringResource(R.string.entity_reset)) },
@@ -245,17 +250,18 @@ fun DropDownContextMenu(vm: MainViewModel,
             enabled      = progressObserver.any { it },
             leadingIcon  = { Icon(Icons.Default.Refresh, stringResource(R.string.entity_reset)) }
         )
-
+        // Редактирование
         DropdownMenuItem(
             modifier     = Modifier,
             text         = { Text(stringResource(R.string.edit)) },
             onClick      = {
-            /* ToDo написать функцию помещения выбранных данных на экран редактирования */
+                getEntityId(entityId)
+                navController.navigate( route = Routes.AddNewEntityScreen.route )
                 onValueChange(!isExpanded)
             },
             leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
         )
-
+        // Удаление
         DropdownMenuItem(
             modifier     = Modifier,
             text         = { Text(stringResource(R.string.delete)) },
@@ -275,7 +281,8 @@ fun NoImageBox(){
     Box(
         Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainer),
+            .background(Color.Transparent)
+            .border(1.dp, Color.LightGray, RoundedCornerShape(20.dp)),
         contentAlignment = Alignment.Center
     ){
         Column(
@@ -287,15 +294,15 @@ fun NoImageBox(){
                 painter = painterResource(R.drawable.image_icon),
                 contentDescription = "",
                 modifier = Modifier.size(60.dp),
-                tint = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f)
+                tint = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(Modifier.size(10.dp))
-            Text(
-                text = stringResource(R.string.no_image_added),
-                color = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f),
-                textAlign = TextAlign.Center,
-                minLines = 2
-            )
+//            Spacer(Modifier.size(10.dp))
+//            Text(
+//                text = stringResource(R.string.no_image_added),
+//                color = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f),
+//                textAlign = TextAlign.Center,
+//                minLines = 2
+//            )
         }
     }
 }
@@ -316,8 +323,7 @@ fun AddNewEntityBox(navController: NavController, size: DpSize) {
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "ADD",
-                tint = MaterialTheme.colorScheme.onPrimary
+                contentDescription = "ADD"
             )
         }
         Text(

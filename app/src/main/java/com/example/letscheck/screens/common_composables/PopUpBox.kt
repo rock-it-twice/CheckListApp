@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -100,11 +102,19 @@ fun DeleteWarning(onClick: (Boolean) -> Unit, delete: () -> Unit){
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Button(onClick = { delete() ; onClick( false ) }
+            Button(
+                onClick = { delete() ; onClick( false ) },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
             ) {
                 Text(stringResource(R.string.pop_up_delete_warning_accept))
             }
-            Button(onClick = { onClick( false ) }
+            Button(
+                onClick = { onClick( false ) },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
             ) {
                 Text(stringResource(R.string.pop_up_delete_warning_decline))
             }
@@ -140,11 +150,19 @@ fun GoToMainScreenBox(navController: NavController, onClick: (Boolean) -> Unit){
                 .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Button(onClick = { navController.navigate(route = Routes.Home.route) }
+                Button(
+                    onClick = { navController.navigate(route = Routes.Home.route) },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 ) {
                     Text(stringResource(R.string.pop_up_complete_accept))
                 }
-                Button(onClick = { onClick( false ) }
+                Button(
+                    onClick = { onClick( false ) },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 ) {
                     Text(stringResource(R.string.pop_up_complete_decline))
                 }

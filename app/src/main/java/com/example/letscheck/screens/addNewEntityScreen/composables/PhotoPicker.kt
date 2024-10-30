@@ -95,7 +95,7 @@ fun PhotoPicker(selectedImageUri: Uri?, onUriChange: (Uri?) -> Unit) {
                     .animateContentSize()
                     .defaultMinSize(minWidth = 135.dp)
                     .fillMaxWidth( if (selectedImageUri == null || !isExpanded) 1f else 0f )
-                    .height( if (selectedImageUri == null || !isExpanded) 60.dp else 240.dp ),
+                    .height( if (selectedImageUri == null || !isExpanded) 60.dp else 135.dp ),
                 contentAlignment = Alignment.Center
             ) {
                 when (targetState) {

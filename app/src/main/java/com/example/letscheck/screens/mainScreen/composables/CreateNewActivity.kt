@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen.composables
+package com.example.letscheck.screens.mainScreen.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

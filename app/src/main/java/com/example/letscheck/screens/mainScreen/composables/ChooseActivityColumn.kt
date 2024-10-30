@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.chooseUserActivityScreen.composables
+package com.example.letscheck.screens.mainScreen.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

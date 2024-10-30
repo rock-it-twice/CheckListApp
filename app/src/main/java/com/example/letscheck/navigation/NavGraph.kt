@@ -1,10 +1,11 @@
 package com.example.letscheck.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.letscheck.screens.chooseUserActivityScreen.MainScreen
+import com.example.letscheck.screens.mainScreen.MainScreen
 import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
 import com.example.letscheck.screens.currentEntityScreen.CurrentEntityScreen
 import com.example.letscheck.viewModels.AddNewEntityViewModel
@@ -27,10 +28,26 @@ fun NavGraph( mainVM: MainViewModel,
             CurrentEntityScreen(vm = currentVM, navController = navController, entityId = mainVM.entityId)
         }
         composable(route = Routes.AddNewEntityScreen.route){
-            AddNewEntityScreen(vm = addNewVM,
-                navController = navController,
-                activityId = mainVM.currentJointUserActivity!!.userActivity.id
-            )
+
+            addNewVM.getEntityId(mainVM.entityId)
+            mainVM.getEntityId(0L)
+
+            // 1. Проверяем, принадлежит ли новый список текущему разделу (UserActivity),
+            //    на случай, если экран создания открывается не в первый раз;
+            // 2. Проверяем, создаётся ли новый список или редактируется уже существующий
+
+            val activityId = mainVM.currentJointUserActivity!!.userActivity.id
+            when {
+                (addNewVM.entityId > 0L) -> {
+                    addNewVM.setCurrentEntityAsNew()
+                }
+
+                (addNewVM.checkNewEntityRelations(activityId) && (addNewVM.entityId == 0L)) -> {
+                    addNewVM.createNewEntity(activityId = activityId, str = "")
+                }
+            }
+
+            AddNewEntityScreen(vm = addNewVM, navController = navController)
         }
     }
 }

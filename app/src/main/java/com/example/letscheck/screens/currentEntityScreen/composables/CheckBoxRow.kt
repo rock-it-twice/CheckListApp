@@ -26,7 +26,7 @@ fun CheckBoxRow(
     onCheckedChange: (Boolean) -> Unit
 ) {
 
-    val color: Color = if (isChecked) Color.Green else MaterialTheme.colorScheme.primary
+    val color: Color = if (isChecked) Color.Green else MaterialTheme.colorScheme.onSurface
 
     Row(
         modifier = Modifier
