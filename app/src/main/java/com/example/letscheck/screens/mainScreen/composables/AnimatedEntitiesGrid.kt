@@ -165,18 +165,22 @@ fun EntityBox(vm: MainViewModel,
             )
 
             if (jointEntity.entity.image != "") {
-            AsyncImage(
-                modifier = Modifier.fillMaxSize(),
-                model = ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(jointEntity.entity.image.toUri())
-                    .crossfade(500)
-                    .build(),
-                contentDescription = "Image",
-                contentScale = ContentScale.Crop
-            )
-            } else { NoImageBox() }
-            ProgressIndicator(progress, listSize)
+                AsyncImage(
+                    modifier = Modifier.fillMaxSize(),
+                    model = ImageRequest
+                        .Builder(LocalContext.current)
+                        .data(jointEntity.entity.image.toUri())
+                        .crossfade(500)
+                        .build(),
+                    contentDescription = "Image",
+                    contentScale = ContentScale.Crop
+                )
+                ProgressIndicator(progress, listSize)
+            } else {
+                ProgressIndicator(progress, listSize)
+                NoImageBox(progress, listSize)
+            }
+
         }
         Text(
             modifier = Modifier.padding(top = 5.dp, bottom = 20.dp),
@@ -189,10 +193,10 @@ fun EntityBox(vm: MainViewModel,
 fun ProgressIndicator(progress: Int, listSize: Int){
 
     AnimatedVisibility(
-        visible = progress == listSize,
+        visible = (progress == listSize),
         enter = fadeIn(),
         exit = fadeOut(),
-        content = { Box( Modifier.fillMaxSize().alpha(0.7f).background(checkedDeepGreen) ) }
+        content = { Box( Modifier.fillMaxSize().alpha(0.5f).background(checkedDeepGreen) ) }
     )
     if (progress == listSize) {
 
@@ -277,7 +281,8 @@ fun DropDownContextMenu(vm: MainViewModel,
 }
 
 @Composable
-fun NoImageBox(){
+fun NoImageBox(progress: Int, listSize: Int){
+
     Box(
         Modifier
             .fillMaxSize()
@@ -290,19 +295,25 @@ fun NoImageBox(){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                painter = painterResource(R.drawable.image_icon),
-                contentDescription = "",
-                modifier = Modifier.size(60.dp),
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-//            Spacer(Modifier.size(10.dp))
-//            Text(
-//                text = stringResource(R.string.no_image_added),
-//                color = (MaterialTheme.colorScheme.onSurface).copy(alpha = 0.3f),
-//                textAlign = TextAlign.Center,
-//                minLines = 2
-//            )
+            when ( progress == listSize ){
+                true  -> {
+                    Icon(
+                        painter = painterResource(R.drawable.image_icon_checked),
+                        contentDescription = "",
+                        modifier = Modifier.size(60.dp),
+                        tint = Color.Green
+                    )
+                }
+                false -> {
+                    Icon(
+                        painter = painterResource(R.drawable.image_icon_unchecked),
+                        contentDescription = "",
+                        modifier = Modifier.size(60.dp),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+
         }
     }
 }
