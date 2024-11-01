@@ -1,4 +1,4 @@
-package com.example.letscheck.data
+package com.example.letscheck.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,7 +11,7 @@ import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
-import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
 
@@ -20,7 +20,7 @@ interface Dao {
 
     // ДОБАВЛЕНИЕ ДАННЫХ
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUserActivity(userActivity: UserActivity): Long
+    suspend fun addUserActivity(folder: Folder): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUserEntity(userEntity: UserEntity): Long
@@ -58,7 +58,7 @@ interface Dao {
 
     // ОБНОВЛЕНИЕ
     @Update
-    suspend fun updateUserActivity(userActivity: UserActivity)
+    suspend fun updateUserActivity(folder: Folder)
 
     @Update
     suspend fun updateUserEntity(userEntity: UserEntity)
@@ -66,7 +66,6 @@ interface Dao {
     @Transaction
     suspend fun resetCheckBoxes(entityId: Long){
         val checkBoxTitles = getCheckBoxesByEntityId(entityId)
-        println(checkBoxTitles)
         checkBoxTitles.forEach{ updateCheckBoxTitle( it.copy(checked = false) ) }
     }
 
@@ -101,16 +100,16 @@ interface Dao {
 
     // Получение списка всех пользователей
     @Query("SELECT * FROM user_activities")
-    fun getAllUserActivities(): LiveData<List<UserActivity>>
+    fun getAllUserActivities(): LiveData<List<Folder>>
 
     // Получение пользователя по id
     @Query("SELECT * FROM user_activities WHERE id LIKE :activityId LIMIT 1")
-    suspend fun getUserActivityById(activityId: Long): UserActivity?
+    suspend fun getUserActivityById(activityId: Long): Folder?
 
 
     // Получение пользователя по имени
     @Query("SELECT * FROM user_activities WHERE activity_name LIKE :activityName LIMIT 1")
-    suspend fun getUserActivityByName(activityName: String): UserActivity?
+    suspend fun getUserActivityByName(activityName: String): Folder?
 
     // ЗАГОЛОВКИ
     @Query("SELECT * FROM user_entities WHERE activity_id LIKE :activityId")

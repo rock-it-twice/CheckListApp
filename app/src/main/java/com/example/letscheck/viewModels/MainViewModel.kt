@@ -7,11 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.repository.ChecklistRepository
 import com.example.letscheck.data.classes.output.JointUserActivity
-import com.example.letscheck.data.classes.main.UserActivity
-import com.example.letscheck.data.classes.output.JointEntity
+import com.example.letscheck.data.classes.main.Folder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +19,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
                           private val repository: ChecklistRepository,
                           private val application: Application ) : ViewModel() {
 
-    val userActivities: LiveData<List<UserActivity>> = repository.userActivities
+    val userActivities: LiveData<List<Folder>> = repository.userActivities
 
     var userActivityName: String by mutableStateOf( "" )
 
@@ -39,7 +37,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     // User activity
     fun addUserActivity() {
         vmScope.launch(Dispatchers.IO) {
-            repository.addUserActivity(UserActivity(activityName = checkName(userActivityName)))
+            repository.addUserActivity(Folder(folderName = checkName(userActivityName)))
         }
     }
 

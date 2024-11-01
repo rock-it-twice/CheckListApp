@@ -25,7 +25,7 @@ import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun CreateNewActivity( vm: MainViewModel, visible: Boolean, onValueChange: (Boolean) -> Unit ) {
+fun CreateNewFolder(vm: MainViewModel, visible: Boolean, onValueChange: (Boolean) -> Unit ) {
     AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
         Row(
             Modifier

@@ -201,15 +201,16 @@ fun ProgressIndicator(progress: Int, listSize: Int){
     if (progress == listSize) {
 
         Row(
-            modifier = Modifier.padding(bottom = 10.dp),
+            modifier = Modifier.padding(bottom = 10.dp, end = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
                 imageVector = Icons.Default.Done, "Done",
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(15.dp),
                 tint = Color.Green
             )
+            Spacer(Modifier.size(5.dp))
             Text(
                 text = "$progress/$listSize",
                 style = MaterialTheme.typography.labelSmall,
@@ -226,59 +227,6 @@ fun ProgressIndicator(progress: Int, listSize: Int){
     }
 }
 
-@Composable
-fun DropDownContextMenu(vm: MainViewModel,
-                        navController: NavController,
-                        isExpanded: Boolean,
-                        size: DpSize,
-                        entityId: Long,
-                        progressObserver: List<Boolean>,
-                        onValueChange: (Boolean) -> Unit,
-                        showPopUp: (Boolean) -> Unit,
-                        getEntityId: (Long) -> Unit
-){
-    DropdownMenu(
-        expanded         = isExpanded,
-        onDismissRequest = { onValueChange(!isExpanded) },
-        offset           = DpOffset(size.width/2, (-size.height)/2),
-        modifier         = Modifier,
-    ) {
-        // Сброс чекбоксов
-        DropdownMenuItem(
-            modifier     = Modifier,
-            text         = { Text(stringResource(R.string.entity_reset)) },
-            onClick      = {
-                vm.resetCheckBoxes(entityId)
-                onValueChange(!isExpanded)
-            },
-            enabled      = progressObserver.any { it },
-            leadingIcon  = { Icon(Icons.Default.Refresh, stringResource(R.string.entity_reset)) }
-        )
-        // Редактирование
-        DropdownMenuItem(
-            modifier     = Modifier,
-            text         = { Text(stringResource(R.string.edit)) },
-            onClick      = {
-                getEntityId(entityId)
-                navController.navigate( route = Routes.AddNewEntityScreen.route )
-                onValueChange(!isExpanded)
-            },
-            leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
-        )
-        // Удаление
-        DropdownMenuItem(
-            modifier     = Modifier,
-            text         = { Text(stringResource(R.string.delete)) },
-            onClick      = {
-                showPopUp(true)
-                getEntityId(entityId)
-                onValueChange(!isExpanded)
-                          },
-            leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
-        )
-
-    }
-}
 
 @Composable
 fun NoImageBox(progress: Int, listSize: Int){

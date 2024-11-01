@@ -2,7 +2,7 @@ package com.example.letscheck.data.classes.output
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 
 
@@ -10,7 +10,7 @@ import com.example.letscheck.data.classes.main.UserEntity
 data class JointUserActivity(
 
     @Embedded
-    val userActivity: UserActivity,
+    val folder: Folder,
 
     @Relation(
         entity = UserEntity::class,

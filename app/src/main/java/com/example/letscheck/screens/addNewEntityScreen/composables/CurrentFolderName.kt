@@ -9,9 +9,9 @@ import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
 fun CurrentActivityName(vm: MainViewModel){
-    val currentActivity = vm.currentJointUserActivity!!.userActivity
+    val currentActivity = vm.currentJointUserActivity!!.folder
     Text(
         modifier = Modifier.padding(vertical = 21.dp),
-        text = currentActivity.activityName,
+        text = currentActivity.folderName,
     )
 }

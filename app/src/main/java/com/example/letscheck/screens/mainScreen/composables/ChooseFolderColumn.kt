@@ -23,7 +23,7 @@ import com.example.letscheck.viewModels.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseActivityColumn(
+fun ChooseFolderColumn(
     vm: MainViewModel,
     navController: NavController,
     lazyGridState: LazyGridState,
@@ -45,7 +45,7 @@ fun ChooseActivityColumn(
             .fillMaxSize()
             .padding(top = topPadding, bottom = 40.dp, start = 10.dp, end = 10.dp)
     ) {
-        // Выбор Activity
+        // Выбор папки
         MenuButton(vm = vm, scope = scope, drawerState = drawerState)
         // Боковое меню выбора
         ModalNavigationDrawer(

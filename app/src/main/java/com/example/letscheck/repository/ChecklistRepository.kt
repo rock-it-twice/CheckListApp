@@ -1,11 +1,11 @@
 package com.example.letscheck.repository
 
 import androidx.lifecycle.LiveData
-import com.example.letscheck.data.Dao
+import com.example.letscheck.data.dao.Dao
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointUserActivity
-import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +17,8 @@ class ChecklistRepository(private val userDao: Dao) {
     val userActivities = userDao.getAllUserActivities()
 
     // INSERT INTO
-    suspend fun addUserActivity(userActivity: UserActivity) {
-        userDao.addUserActivity(userActivity)
+    suspend fun addUserActivity(folder: Folder) {
+        userDao.addUserActivity(folder)
     }
 
     suspend fun addNewDataToDB(entity: UserEntity,

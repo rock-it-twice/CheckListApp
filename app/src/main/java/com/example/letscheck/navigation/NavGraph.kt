@@ -1,7 +1,6 @@
 package com.example.letscheck.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,7 +35,7 @@ fun NavGraph( mainVM: MainViewModel,
             //    на случай, если экран создания открывается не в первый раз;
             // 2. Проверяем, создаётся ли новый список или редактируется уже существующий
 
-            val activityId = mainVM.currentJointUserActivity!!.userActivity.id
+            val activityId = mainVM.currentJointUserActivity!!.folder.id
             when {
                 (addNewVM.entityId > 0L) -> {
                     addNewVM.setCurrentEntityAsNew()

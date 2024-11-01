@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.letscheck.R
-import com.example.letscheck.data.classes.main.UserActivity
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.viewModels.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -80,7 +80,7 @@ fun ActivityModalMenu(
                     )
                 }
             }
-            CreateNewActivity(
+            CreateNewFolder(
                 vm = vm,
                 visible = isVisible,
                 onValueChange = { onValueChange(!isVisible) })
@@ -92,11 +92,11 @@ fun ActivityModalMenu(
 @Composable
 fun ActivityRow(
     vm: MainViewModel, scope: CoroutineScope,
-    activity: UserActivity, drawerState: DrawerState
+    activity: Folder, drawerState: DrawerState
 ) {
     Row {
         Text(
-            text = activity.activityName,
+            text = activity.folderName,
             fontSize = 18.sp,
             modifier = Modifier
                 .fillMaxWidth()

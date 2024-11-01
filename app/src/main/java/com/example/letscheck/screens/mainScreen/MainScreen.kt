@@ -17,7 +17,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.letscheck.screens.mainScreen.composables.ChooseActivityColumn
+import com.example.letscheck.screens.mainScreen.composables.ChooseFolderColumn
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.common_composables.DeleteWarning
 import com.example.letscheck.screens.common_composables.PopUpBox
@@ -46,7 +46,7 @@ fun MainScreen(navController: NavController, vm: MainViewModel) {
                 scrollBehavior = topBarScrollBehavior)
                     },
         content   = { innerPadding ->
-            ChooseActivityColumn(
+            ChooseFolderColumn(
                 vm = vm, navController = navController, lazyGridState = lazyGridState,
                 innerPadding = innerPadding, topBarScrollBehavior = topBarScrollBehavior,
                 showPopUp = { showPopUp = it }, getEntityId = { entityId = it }

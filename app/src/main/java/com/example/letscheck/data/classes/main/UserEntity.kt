@@ -4,15 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
-import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.letscheck.data.classes.main.CheckBoxTitle.Companion
 
 @Entity(
     tableName = "user_entities",
     foreignKeys =
     [ForeignKey(
-        entity = UserActivity::class,
+        entity = Folder::class,
         parentColumns = ["id"],
         childColumns = ["activity_id"],
         onUpdate = ForeignKey.CASCADE,
