@@ -8,10 +8,10 @@ import androidx.compose.ui.unit.dp
 import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun CurrentActivityName(vm: MainViewModel){
-    val currentActivity = vm.currentJointUserActivity!!.folder
+fun CurrentFolderName(vm: MainViewModel){
+    val currentFolder = vm.currentJointFolder!!.folder
     Text(
         modifier = Modifier.padding(vertical = 21.dp),
-        text = currentActivity.folderName,
+        text = currentFolder.folderName,
     )
 }

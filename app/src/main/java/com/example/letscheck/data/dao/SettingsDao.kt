@@ -18,7 +18,10 @@ interface SettingsDao {
     @Update
     suspend fun switchTheme(appSettings: AppSettings)
 
-    @Query("SELECT appTheme FROM app_settings WHERE `key` LIKE 'settings' LIMIT 1")
-    fun getThemeSettings(): LiveData<AppTheme>
+    @Query("SELECT * FROM app_settings WHERE `key` LIKE 'settings' LIMIT 1")
+    fun getSettings(): LiveData<AppSettings>
+
+    @Query("SELECT COUNT(*) FROM app_settings")
+    suspend fun count(): Int
 
 }

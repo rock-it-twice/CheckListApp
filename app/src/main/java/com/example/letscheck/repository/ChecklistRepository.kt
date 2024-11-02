@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.letscheck.data.dao.Dao
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
-import com.example.letscheck.data.classes.output.JointUserActivity
+import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
@@ -14,11 +14,11 @@ import kotlinx.coroutines.withContext
 
 class ChecklistRepository(private val userDao: Dao) {
 
-    val userActivities = userDao.getAllUserActivities()
+    val folders = userDao.getAllFolders()
 
     // INSERT INTO
     suspend fun addUserActivity(folder: Folder) {
-        userDao.addUserActivity(folder)
+        userDao.addFolder(folder)
     }
 
     suspend fun addNewDataToDB(entity: UserEntity,
@@ -29,13 +29,13 @@ class ChecklistRepository(private val userDao: Dao) {
 
 
     // USER ACTIVITIES
-    suspend fun getJointUserActivityById(id: Long): JointUserActivity? {
+    suspend fun getJointUserActivityById(id: Long): JointFolder? {
         return withContext(Dispatchers.IO)
         { return@withContext userDao.getJointUserActivityById(id) }
     }
 
     suspend fun deleteUserActivity(id: Long) {
-        userDao.deleteUserActivity(id)
+        userDao.deleteFolder(id)
     }
 
     // USER ENTITIES

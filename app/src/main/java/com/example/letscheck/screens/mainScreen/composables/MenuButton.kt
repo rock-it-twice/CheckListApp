@@ -35,8 +35,8 @@ fun MenuButton(vm: MainViewModel, scope: CoroutineScope, drawerState: DrawerStat
             )
         ) {
             Text(
-                text = if (vm.currentJointUserActivity != null) {
-                    vm.currentJointUserActivity!!.folder.folderName
+                text = if (vm.currentJointFolder != null) {
+                    vm.currentJointFolder!!.folder.folderName
                 } else stringResource(id = R.string.activity_filter),
                 color = MaterialTheme.colorScheme.onSurface,
             )

@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.repository.ChecklistRepository
-import com.example.letscheck.data.classes.output.JointUserActivity
+import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,14 +19,14 @@ open class MainViewModel( private val vmScope: CoroutineScope,
                           private val repository: ChecklistRepository,
                           private val application: Application ) : ViewModel() {
 
-    val userActivities: LiveData<List<Folder>> = repository.userActivities
+    val folders: LiveData<List<Folder>> = repository.folders
 
-    var userActivityName: String by mutableStateOf( "" )
+    var folderName: String by mutableStateOf( "" )
 
-    var currentActivityId: Long by mutableLongStateOf(0)
+    var currentFolderId: Long by mutableLongStateOf(0)
         private set
 
-    var currentJointUserActivity: JointUserActivity? by mutableStateOf( null )
+    var currentJointFolder: JointFolder? by mutableStateOf( null )
         private set
 
     var entityId: Long by mutableLongStateOf(0L)
@@ -34,10 +34,10 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     //______________________________________________________________________________________________
 
-    // User activity
-    fun addUserActivity() {
+    // Folder
+    fun addFolder() {
         vmScope.launch(Dispatchers.IO) {
-            repository.addUserActivity(Folder(folderName = checkName(userActivityName)))
+            repository.addUserActivity(Folder(folderName = checkName(folderName)))
         }
     }
 
@@ -45,15 +45,15 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         return if (value != "") value else "undefined activity"
     }
 
-    fun getActivityId(id:Long) { currentActivityId = id }
+    fun getFolderId(id:Long) { currentFolderId = id }
 
-    fun getJointUserActivityById() {
+    fun getJointFolderById() {
         vmScope.launch(Dispatchers.IO) {
-            currentJointUserActivity = repository.getJointUserActivityById(currentActivityId)
+            currentJointFolder = repository.getJointUserActivityById(currentFolderId)
         }
     }
 
-    fun changeActivityName(value: String) { userActivityName = value }
+    fun changeFolderName(value: String) { folderName = value }
 
     //______________________________________________________________________________________________
 
@@ -80,11 +80,11 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         vmScope.launch(Dispatchers.IO) { repository.deleteUserActivity(id) }
     }
 
-    fun isGridVisible(): Boolean { return  currentJointUserActivity != null }
+    fun isGridVisible(): Boolean { return  currentJointFolder != null }
 
     fun clear() = vmScope.launch {
-        currentActivityId = 0
-        currentJointUserActivity = null
+        currentFolderId = 0
+        currentJointFolder = null
         entityId = 0
     }
 

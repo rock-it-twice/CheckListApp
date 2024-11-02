@@ -32,7 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun ActivityModalMenu(
+fun FolderModalMenu(
     vm: MainViewModel,
     scope: CoroutineScope,
     drawerState: DrawerState,
@@ -41,7 +41,7 @@ fun ActivityModalMenu(
 ) {
 
     if (drawerState.isClosed) onValueChange(false)
-    val activities by vm.userActivities.observeAsState(listOf())
+    val folders by vm.folders.observeAsState(listOf())
     val state = rememberScrollState()
 
     ModalDrawerSheet(
@@ -54,7 +54,7 @@ fun ActivityModalMenu(
                 .padding(horizontal = 20.dp, vertical = 5.dp)
                 .verticalScroll(state)
         ) {
-            activities.forEach { ActivityRow( vm, scope,  it, drawerState ) }
+            folders.forEach { FolderRow( vm, scope,  it, drawerState ) }
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 5.dp))
             Row(
@@ -90,7 +90,7 @@ fun ActivityModalMenu(
 }
 
 @Composable
-fun ActivityRow(
+fun FolderRow(
     vm: MainViewModel, scope: CoroutineScope,
     activity: Folder, drawerState: DrawerState
 ) {
@@ -102,8 +102,8 @@ fun ActivityRow(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
                 .clickable(onClick = {
-                    vm.getActivityId(activity.id)
-                    vm.getJointUserActivityById()
+                    vm.getFolderId(activity.id)
+                    vm.getJointFolderById()
                     scope.launch { drawerState.apply { close() } }
                 })
         )

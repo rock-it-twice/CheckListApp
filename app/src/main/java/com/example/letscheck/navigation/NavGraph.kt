@@ -4,15 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.mainScreen.MainScreen
 import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
 import com.example.letscheck.screens.currentEntityScreen.CurrentEntityScreen
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
+import com.example.letscheck.viewModels.SettingsViewModel
 
 @Composable
-fun NavGraph( mainVM: MainViewModel,
+fun NavGraph( settings: AppSettings,
+              mainVM: MainViewModel,
               currentVM: CurrentEntityViewModel,
               addNewVM: AddNewEntityViewModel,
               navController: NavHostController ) {
@@ -35,7 +38,7 @@ fun NavGraph( mainVM: MainViewModel,
             //    на случай, если экран создания открывается не в первый раз;
             // 2. Проверяем, создаётся ли новый список или редактируется уже существующий
 
-            val activityId = mainVM.currentJointUserActivity!!.folder.id
+            val activityId = mainVM.currentJointFolder!!.folder.id
             when {
                 (addNewVM.entityId > 0L) -> {
                     addNewVM.setCurrentEntityAsNew()

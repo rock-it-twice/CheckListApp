@@ -10,7 +10,7 @@ import androidx.room.Update
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.output.JointCheckList
-import com.example.letscheck.data.classes.output.JointUserActivity
+import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
@@ -20,7 +20,7 @@ interface Dao {
 
     // ДОБАВЛЕНИЕ ДАННЫХ
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUserActivity(folder: Folder): Long
+    suspend fun addFolder(folder: Folder): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUserEntity(userEntity: UserEntity): Long
@@ -58,7 +58,7 @@ interface Dao {
 
     // ОБНОВЛЕНИЕ
     @Update
-    suspend fun updateUserActivity(folder: Folder)
+    suspend fun updateFolder(folder: Folder)
 
     @Update
     suspend fun updateUserEntity(userEntity: UserEntity)
@@ -77,8 +77,8 @@ interface Dao {
 
 
     // УДАЛЕНИЕ
-    @Query("DELETE FROM user_activities WHERE id = :id")
-    suspend fun deleteUserActivity(id: Long)
+    @Query("DELETE FROM folders WHERE id = :id")
+    suspend fun deleteFolder(id: Long)
 
     @Query("DELETE FROM user_entities WHERE id = :entityId")
     suspend fun deleteEntity(entityId: Long)
@@ -99,21 +99,21 @@ interface Dao {
     // ЗАПРОСЫ К БД --------------------------------------------
 
     // Получение списка всех пользователей
-    @Query("SELECT * FROM user_activities")
-    fun getAllUserActivities(): LiveData<List<Folder>>
+    @Query("SELECT * FROM folders")
+    fun getAllFolders(): LiveData<List<Folder>>
 
     // Получение пользователя по id
-    @Query("SELECT * FROM user_activities WHERE id LIKE :activityId LIMIT 1")
-    suspend fun getUserActivityById(activityId: Long): Folder?
+    @Query("SELECT * FROM folders WHERE id LIKE :folderId LIMIT 1")
+    suspend fun getFolderById(folderId: Long): Folder?
 
 
     // Получение пользователя по имени
-    @Query("SELECT * FROM user_activities WHERE activity_name LIKE :activityName LIMIT 1")
-    suspend fun getUserActivityByName(activityName: String): Folder?
+    @Query("SELECT * FROM folders WHERE folder_name LIKE :folderName LIMIT 1")
+    suspend fun getFolderByName(folderName: String): Folder?
 
     // ЗАГОЛОВКИ
-    @Query("SELECT * FROM user_entities WHERE activity_id LIKE :activityId")
-    fun getUserEntities(activityId: Long): List<UserEntity>
+    @Query("SELECT * FROM user_entities WHERE activity_id LIKE :folderId")
+    fun getUserEntities(folderId: Long): List<UserEntity>
 
     // Получение entity по ID
     @Query("SELECT * FROM user_entities WHERE id LIKE :entityId LIMIT 1")
@@ -129,16 +129,16 @@ interface Dao {
     // JointUserActivity (JointUserActivity + JointEntities + JointChecklists)
 
     @Transaction
-    @Query("SELECT * FROM user_activities")
-    fun getJointUserActivities(): LiveData<List<JointUserActivity>>
+    @Query("SELECT * FROM folders")
+    fun getJointUserActivities(): LiveData<List<JointFolder>>
 
     @Transaction
-    @Query("SELECT * FROM user_activities WHERE user_activities.id LIKE :id LIMIT 1")
-    suspend fun getJointUserActivityById(id: Long): JointUserActivity?
+    @Query("SELECT * FROM folders WHERE folders.id LIKE :id LIMIT 1")
+    suspend fun getJointUserActivityById(id: Long): JointFolder?
 
     @Transaction
-    @Query("SELECT * FROM user_activities WHERE activity_name LIKE :name LIMIT 1")
-    suspend fun getJointUserActivityByName(name: String): JointUserActivity?
+    @Query("SELECT * FROM folders WHERE folder_name LIKE :name LIMIT 1")
+    suspend fun getJointUserActivityByName(name: String): JointFolder?
 
     // JOINT ENTITY
 
@@ -163,8 +163,8 @@ interface Dao {
     fun getCheckListByName(checkListName: String, entityId: Long): CheckList?
 
     @Transaction
-    @Query("SELECT * FROM user_activities WHERE id LIKE :id")
-    suspend fun getJointUser(id: Long): JointUserActivity?
+    @Query("SELECT * FROM folders WHERE id LIKE :id")
+    suspend fun getJointFolder(id: Long): JointFolder?
 
     @Transaction
     @Query("SELECT * FROM check_lists " +

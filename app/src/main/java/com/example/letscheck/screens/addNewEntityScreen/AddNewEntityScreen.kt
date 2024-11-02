@@ -24,7 +24,8 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 @Composable
 fun AddNewEntityScreen(
     navController: NavController,
-    vm: AddNewEntityViewModel
+    vm: AddNewEntityViewModel,
+    topAppBar: @Composable ()->Unit
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -39,12 +40,7 @@ fun AddNewEntityScreen(
         modifier  = Modifier
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp),
-        topBar    = {
-            CommonTopAppBar(
-                addNewVM = vm,
-                navController = navController,
-                scrollBehavior = topBarScrollBehavior)
-        },
+        topBar    = { topAppBar },
         content   = { innerPadding ->
             NewCheckListLazyColumn(vm = vm, lazyListState, innerPadding, topBarScrollBehavior)
                     },

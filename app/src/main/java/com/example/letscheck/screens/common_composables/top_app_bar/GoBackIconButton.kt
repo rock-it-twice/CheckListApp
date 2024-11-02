@@ -33,7 +33,7 @@ fun GoBackIconButton(
 @Composable
 private fun GoBackIconButton(vm: MainViewModel?){
 
-    val visible = vm?.currentJointUserActivity != null
+    val visible = vm?.currentJointFolder != null
 
     AnimatedVisibility(
         visible = visible

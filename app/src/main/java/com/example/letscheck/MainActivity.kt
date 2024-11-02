@@ -18,14 +18,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.compose.LetsCheckTheme
 import com.example.letscheck.data.dao.Dao
 import com.example.letscheck.data.MainDb
+import com.example.letscheck.data.dao.SettingsDao
 import com.example.letscheck.navigation.NavGraph
 import com.example.letscheck.repository.ChecklistRepository
+import com.example.letscheck.repository.SettingsRepository
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
+import com.example.letscheck.viewModels.SettingsViewModel
 import com.example.letscheck.viewModels.factory.AddNewEntityViewModelFactory
 import com.example.letscheck.viewModels.factory.CurrentEntityViewModelFactory
 import com.example.letscheck.viewModels.factory.MainViewModelFactory
+import com.example.letscheck.viewModels.factory.SettingsViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -37,30 +41,40 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val database = MainDb.createDatabase(application)
+
             val userDao: Dao = database.dao()
-            val repository = ChecklistRepository(userDao)
+            val settingsDao: SettingsDao = database.settingsDao()
+
+            val settingsRepository = SettingsRepository(settingsDao)
+            val mainRepository = ChecklistRepository(userDao)
+
             val vmScope = CoroutineScope(Dispatchers.Main)
 
             val owner = LocalViewModelStoreOwner.current
             owner?.let {
                 val appContext = LocalContext.current.applicationContext as Application
+                val settingsVM: SettingsViewModel =
+                    viewModel(
+                        it, "SettingsViewModel",
+                        SettingsViewModelFactory(vmScope, settingsRepository)
+                    )
                 val mainVM: MainViewModel =
                     viewModel(
                         it, "MainViewModel",
-                        MainViewModelFactory( vmScope, repository, appContext)
+                        MainViewModelFactory( vmScope, mainRepository, appContext )
                     )
                 val currentVM: CurrentEntityViewModel =
                     viewModel(
                         it, "CurrentEntityViewModel",
-                        CurrentEntityViewModelFactory (vmScope, repository, appContext )
+                        CurrentEntityViewModelFactory ( vmScope, mainRepository, appContext )
                     )
                 val addNewVM: AddNewEntityViewModel =
                     viewModel(
                         it,
                         "AddNewEntityViewModel",
-                        AddNewEntityViewModelFactory( vmScope, repository, appContext )
+                        AddNewEntityViewModelFactory( vmScope, mainRepository, appContext )
                     )
-                App(mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
+                App(settingsVM = settingsVM, mainVM = mainVM, currentVM = currentVM, addNewVM = addNewVM)
             }
         }
     }
@@ -68,11 +82,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(
+    settingsVM: SettingsViewModel = viewModel(),
     mainVM: MainViewModel = viewModel(),
     currentVM: CurrentEntityViewModel = viewModel(),
     addNewVM: AddNewEntityViewModel = viewModel()
 ) {
-    LetsCheckTheme() {
+    LetsCheckTheme(settingsVM) {
         val modifier = Modifier
         // константа для навигации между экранами
         val navController = rememberNavController()

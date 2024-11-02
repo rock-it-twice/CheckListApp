@@ -45,7 +45,7 @@ class AddNewEntityViewModel(
 
     // New entity
     fun createNewEntity(activityId: Long, str: String = "") {
-        newEntity = UserEntity( activityId = activityId, entityName = str )
+        newEntity = UserEntity( folderId = activityId, entityName = str )
         addNewImageUri(null)
         clearNewCheckLists()
         clearNewCheckBoxes()
@@ -184,7 +184,7 @@ class AddNewEntityViewModel(
 
     fun checkNewEntityRelations(currentActivityId: Long): Boolean{
         return try {
-            ( currentActivityId != newEntity!!.activityId )
+            ( currentActivityId != newEntity!!.folderId )
         } catch (e: NullPointerException) { true }
     }
 

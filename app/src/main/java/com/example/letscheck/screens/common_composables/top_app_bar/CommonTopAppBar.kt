@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
@@ -22,6 +23,7 @@ fun CommonTopAppBar(
     mainVM: MainViewModel? = null,
     currentVM: CurrentEntityViewModel? = null,
     addNewVM: AddNewEntityViewModel? = null,
+    settings: AppSettings,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
 

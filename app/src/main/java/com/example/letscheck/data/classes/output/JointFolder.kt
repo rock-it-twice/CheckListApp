@@ -7,7 +7,7 @@ import com.example.letscheck.data.classes.main.UserEntity
 
 
 // Объединенный класс
-data class JointUserActivity(
+data class JointFolder(
 
     @Embedded
     val folder: Folder,

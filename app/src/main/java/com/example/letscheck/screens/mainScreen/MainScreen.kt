@@ -17,6 +17,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.mainScreen.composables.ChooseFolderColumn
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.common_composables.DeleteWarning
@@ -26,7 +27,10 @@ import com.example.letscheck.viewModels.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController, vm: MainViewModel) {
+fun MainScreen(
+    navController: NavController,
+    vm: MainViewModel,
+    topAppBar: @Composable ()->Unit) {
 
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -39,12 +43,7 @@ fun MainScreen(navController: NavController, vm: MainViewModel) {
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp)
             .blur(if (showPopUp) 10.dp else 0.dp),
-        topBar    = {
-            CommonTopAppBar(
-                mainVM = vm,
-                navController = navController,
-                scrollBehavior = topBarScrollBehavior)
-                    },
+        topBar    = { topAppBar() },
         content   = { innerPadding ->
             ChooseFolderColumn(
                 vm = vm, navController = navController, lazyGridState = lazyGridState,
@@ -59,7 +58,7 @@ fun MainScreen(navController: NavController, vm: MainViewModel) {
         onDismiss = { showPopUp = it },
         content = {
             DeleteWarning( onClick = { showPopUp = it },
-            delete = { vm.deleteEntityById(entityId) ; vm.getJointUserActivityById() }
+            delete = { vm.deleteEntityById(entityId) ; vm.getJointFolderById() }
         ) }
     )
 

@@ -51,7 +51,7 @@ fun ChooseFolderColumn(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ActivityModalMenu(
+                FolderModalMenu(
                     vm = vm,
                     scope = scope,
                     drawerState = drawerState,

@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import com.example.letscheck.data.classes.main.AppSettings
+import com.example.letscheck.data.classes.main.AppTheme
 import com.example.letscheck.ui.theme.backgroundDark
 import com.example.letscheck.ui.theme.backgroundLight
 import com.example.letscheck.ui.theme.errorContainerDark
@@ -87,6 +89,7 @@ import com.example.letscheck.ui.theme.tertiaryContainerDark
 import com.example.letscheck.ui.theme.tertiaryContainerLight
 import com.example.letscheck.ui.theme.tertiaryDark
 import com.example.letscheck.ui.theme.tertiaryLight
+import com.example.letscheck.viewModels.SettingsViewModel
 import com.example.ui.theme.AppTypography
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -182,30 +185,33 @@ val unspecified_scheme = ColorFamily(
 
 @Composable
  fun LetsCheckTheme(
+    settingsVM: SettingsViewModel,
     content: @Composable() () -> Unit
  ) {
 
-    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
+     val settings by settingsVM.settings.observeAsState(AppSettings())
 
-    if (!sharedPref.contains("dark_mode")) {
-        sharedPref.edit().putBoolean("dark_mode", false).apply()
-    }
+//    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
+//
+//    if (!sharedPref.contains("dark_mode")) {
+//        sharedPref.edit().putBoolean("dark_mode", false).apply()
+//    }
+//
+//    var darkModeEnabled: Boolean by remember {
+//        mutableStateOf(sharedPref.getBoolean("dark_mode", false))
+//    }
+//
+//    LaunchedEffect(key1 = Unit) {
+//        sharedPref.registerOnSharedPreferenceChangeListener {
+//            _, key -> if (key == "dark_mode") {
+//                darkModeEnabled = sharedPref.getBoolean("dark_mode", false)
+//            }
+//        }
+//    }
 
-    var darkModeEnabled: Boolean by remember {
-        mutableStateOf(sharedPref.getBoolean("dark_mode", false))
-    }
-
-    LaunchedEffect(key1 = Unit) {
-        sharedPref.registerOnSharedPreferenceChangeListener {
-            _, key -> if (key == "dark_mode") {
-                darkModeEnabled = sharedPref.getBoolean("dark_mode", false)
-            }
-        }
-    }
-
-    val colorScheme = when {
-            darkModeEnabled -> darkScheme
-            else            -> lightScheme
+    val colorScheme = when(settings.appTheme) {
+             AppTheme.DARK   -> darkScheme
+             AppTheme.LIGHT  -> lightScheme
         }
 
     MaterialTheme(

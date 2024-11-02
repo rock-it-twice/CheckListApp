@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "user_activities",
+    tableName = "folders",
     )
 data class Folder(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long = 0,
-    @ColumnInfo("activity_name")
+    @ColumnInfo("folder_name")
     val folderName: String
 )

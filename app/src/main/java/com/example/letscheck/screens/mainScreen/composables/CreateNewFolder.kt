@@ -34,11 +34,11 @@ fun CreateNewFolder(vm: MainViewModel, visible: Boolean, onValueChange: (Boolean
                 .padding(top = 20.dp, bottom = 20.dp, end = 10.dp)
         ) {
             OutlinedTextField(
-                value = vm.userActivityName,
+                value = vm.folderName,
                 modifier = Modifier
                     .padding(end = 20.dp)
                     .weight(0.75F, true),
-                onValueChange = { vm.changeActivityName(it) },
+                onValueChange = { vm.changeFolderName(it) },
                 placeholder = {
                     Text(
                         text = stringResource(id = R.string.add_new_activity_type),
@@ -50,7 +50,7 @@ fun CreateNewFolder(vm: MainViewModel, visible: Boolean, onValueChange: (Boolean
             )
             Button(
                 onClick = {
-                    vm.addUserActivity()
+                    vm.addFolder()
                     onValueChange(!visible)
                 },
                 shape = RoundedCornerShape(2.dp),
