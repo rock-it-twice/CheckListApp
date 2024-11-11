@@ -5,22 +5,16 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="GreetingPreview">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-10-03T10:49:46.038914100Z">
+        <DropdownSelection timestamp="2024-11-11T14:13:28.003303200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Rock-it-twice\.android\avd\Pixel_8a_API_TiramisuPrivacySandbox.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Rock-it-twice\.android\avd\Pixel_8a_API_TiramisuPrivacySandbox_1.avd" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="PhotoPickerPreview">
-        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="ExpandButtonPreview">
         <option name="selectionMode" value="DROPDOWN" />

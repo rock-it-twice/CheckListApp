@@ -14,9 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.example.letscheck.data.classes.main.AppSettings
 
 @Composable
-fun SettingsButton(){
+fun SettingsButton(settings: AppSettings, onSettingsChange: ()-> Unit){
+
     var isVisible by rememberSaveable { mutableStateOf(false) }
     Row {
 
@@ -25,7 +27,7 @@ fun SettingsButton(){
             enter = slideInHorizontally( initialOffsetX = { it / 2 } ),
             exit = slideOutHorizontally( targetOffsetX  = { it / 2 } )
         ) {
-            ThemeSwitcher()
+            ThemeSwitcher(settings, onSettingsChange)
         }
         // Гамбургер меню
         IconButton(

@@ -31,7 +31,8 @@ fun CurrentEntityScreen(
     vm: CurrentEntityViewModel,
     navController: NavController,
     entityId: Long,
-    topAppBar: @Composable ()->Unit
+    settings: AppSettings,
+    onSettingsChange: () -> Unit
 ){
     vm.getEntityId(entityId)
     vm.getJointEntityById()
@@ -54,7 +55,15 @@ fun CurrentEntityScreen(
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp)
             .blur(if (showPopUp) 10.dp else 0.dp),
-        topBar    = { topAppBar },
+        topBar    = {
+            CommonTopAppBar(
+            navController = navController,
+            currentVM = vm,
+            settings = settings,
+            onSettingsChange = onSettingsChange,
+            scrollBehavior = topBarScrollBehavior,
+            )
+                    },
         content   = { innerPadding ->
             // Отображение выбранного чеклиста
             CurrentEntityColumn(vm, lazyListState, innerPadding, topBarScrollBehavior, progress)

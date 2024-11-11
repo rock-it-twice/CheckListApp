@@ -1,5 +1,6 @@
 package com.example.letscheck.navigation
 
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -7,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.mainScreen.MainScreen
 import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
+import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.currentEntityScreen.CurrentEntityScreen
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.CurrentEntityViewModel
@@ -14,20 +16,22 @@ import com.example.letscheck.viewModels.MainViewModel
 import com.example.letscheck.viewModels.SettingsViewModel
 
 @Composable
-fun NavGraph( settings: AppSettings,
-              mainVM: MainViewModel,
+fun NavGraph( mainVM: MainViewModel,
               currentVM: CurrentEntityViewModel,
               addNewVM: AddNewEntityViewModel,
-              navController: NavHostController ) {
+              navController: NavHostController,
+              settings: AppSettings,
+              onSettingsChange: ()-> Unit) {
     NavHost(
         navController = navController,
         startDestination = Routes.Home.route
     ) {
+
         composable(route = Routes.Home.route){
-            MainScreen(vm = mainVM, navController = navController)
+            MainScreen(vm = mainVM, navController = navController, settings = settings, onSettingsChange = onSettingsChange)
         }
         composable(route = Routes.CurrentEntityScreen.route){
-            CurrentEntityScreen(vm = currentVM, navController = navController, entityId = mainVM.entityId)
+            CurrentEntityScreen(vm = currentVM, navController = navController, entityId = mainVM.entityId, settings = settings, onSettingsChange = onSettingsChange)
         }
         composable(route = Routes.AddNewEntityScreen.route){
 
@@ -49,7 +53,7 @@ fun NavGraph( settings: AppSettings,
                 }
             }
 
-            AddNewEntityScreen(vm = addNewVM, navController = navController)
+            AddNewEntityScreen(vm = addNewVM, navController = navController, settings = settings, onSettingsChange = onSettingsChange)
         }
     }
 }

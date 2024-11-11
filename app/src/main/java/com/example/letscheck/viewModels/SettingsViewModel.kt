@@ -1,5 +1,8 @@
 package com.example.letscheck.viewModels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.data.classes.main.AppSettings
@@ -13,18 +16,20 @@ class SettingsViewModel(
     val repository: SettingsRepository
 ) : ViewModel() {
 
-    val settings: LiveData<AppSettings> = repository.settings
+    var settings by mutableStateOf(AppSettings())
+        private set
 
-    fun switchTheme(appSettings: AppSettings){
+    fun updateTheme(){
         vmScope.launch(Dispatchers.IO) {
-            repository.switchTheme(appSettings)
+            repository.updateTheme(settings)
+            settings = repository.getSettings()
         }
     }
 
     init {
-        vmScope.launch {
-            if (repository.isSettingsNotCreated())
-            repository.insertSettings(appSettings = AppSettings())
+        vmScope.launch(Dispatchers.IO) {
+            if (!repository.isSettingsCreated()) repository.insertSettings(appSettings = AppSettings())
+        settings = repository.getSettings()
         }
     }
 

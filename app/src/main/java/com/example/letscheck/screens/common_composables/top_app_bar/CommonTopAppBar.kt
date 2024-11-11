@@ -2,7 +2,6 @@ package com.example.letscheck.screens.common_composables.top_app_bar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -14,6 +13,7 @@ import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 import com.example.letscheck.viewModels.MainViewModel
+import com.example.letscheck.viewModels.SettingsViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,13 +24,14 @@ fun CommonTopAppBar(
     currentVM: CurrentEntityViewModel? = null,
     addNewVM: AddNewEntityViewModel? = null,
     settings: AppSettings,
+    onSettingsChange: ()-> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
 
     TopAppBar(
         title = { AppLogo() },
         navigationIcon = { GoBackIconButton(navController, mainVM, currentVM, addNewVM) },
-        actions = { SettingsButton() },
+        actions = { SettingsButton(settings, onSettingsChange) },
         scrollBehavior = scrollBehavior,
         modifier = Modifier.fillMaxWidth(),
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)

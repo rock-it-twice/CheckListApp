@@ -30,7 +30,9 @@ import com.example.letscheck.viewModels.MainViewModel
 fun MainScreen(
     navController: NavController,
     vm: MainViewModel,
-    topAppBar: @Composable ()->Unit) {
+    settings: AppSettings,
+    onSettingsChange: () -> Unit
+    ) {
 
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -43,7 +45,15 @@ fun MainScreen(
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp)
             .blur(if (showPopUp) 10.dp else 0.dp),
-        topBar    = { topAppBar() },
+        topBar    = {
+            CommonTopAppBar(
+                navController = navController,
+                mainVM = vm,
+                settings = settings,
+                onSettingsChange = onSettingsChange,
+                scrollBehavior = topBarScrollBehavior,
+            )
+        },
         content   = { innerPadding ->
             ChooseFolderColumn(
                 vm = vm, navController = navController, lazyGridState = lazyGridState,

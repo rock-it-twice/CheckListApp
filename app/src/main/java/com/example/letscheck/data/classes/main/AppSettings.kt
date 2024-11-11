@@ -4,23 +4,25 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
+enum class AppTheme{ DARK, LIGHT }
+
 @Entity(
     tableName = "app_settings"
 )
 data class AppSettings(
     @PrimaryKey
     val key: String = "settings",
-    private var _appTheme: AppTheme = AppTheme.LIGHT,
+    var appTheme: AppTheme = AppTheme.LIGHT
 
 ){
-    val appTheme = _appTheme
+
     fun switchTheme(){
-        when (_appTheme) {
-            AppTheme.LIGHT -> this._appTheme = AppTheme.DARK
-            AppTheme.DARK  -> this._appTheme = AppTheme.LIGHT
+        appTheme = when (appTheme) {
+            AppTheme.LIGHT -> AppTheme.DARK
+            AppTheme.DARK  -> AppTheme.LIGHT
         }
     }
 
 }
 
-enum class AppTheme{ DARK, LIGHT }
+

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListLazyColumn
 import com.example.letscheck.screens.addNewEntityScreen.composables.SaveResultToDataBaseButton
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
@@ -25,7 +26,8 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 fun AddNewEntityScreen(
     navController: NavController,
     vm: AddNewEntityViewModel,
-    topAppBar: @Composable ()->Unit
+    settings: AppSettings,
+    onSettingsChange: () -> Unit
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -40,7 +42,15 @@ fun AddNewEntityScreen(
         modifier  = Modifier
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
             .padding(10.dp),
-        topBar    = { topAppBar },
+        topBar    = {
+            CommonTopAppBar(
+                navController = navController,
+                addNewVM = vm,
+                settings = settings,
+                onSettingsChange = onSettingsChange,
+                scrollBehavior = topBarScrollBehavior,
+            )
+        },
         content   = { innerPadding ->
             NewCheckListLazyColumn(vm = vm, lazyListState, innerPadding, topBarScrollBehavior)
                     },

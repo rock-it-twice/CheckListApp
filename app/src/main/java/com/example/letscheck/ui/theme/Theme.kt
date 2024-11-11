@@ -189,7 +189,6 @@ val unspecified_scheme = ColorFamily(
     content: @Composable() () -> Unit
  ) {
 
-     val settings by settingsVM.settings.observeAsState(AppSettings())
 
 //    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
 //
@@ -209,10 +208,18 @@ val unspecified_scheme = ColorFamily(
 //        }
 //    }
 
-    val colorScheme = when(settings.appTheme) {
+
+    var colorScheme = when(settingsVM.settings.appTheme) {
              AppTheme.DARK   -> darkScheme
              AppTheme.LIGHT  -> lightScheme
         }
+
+    LaunchedEffect(settingsVM.settings.appTheme) {
+        colorScheme = when(settingsVM.settings.appTheme) {
+            AppTheme.DARK   -> darkScheme
+            AppTheme.LIGHT  -> lightScheme
+        }
+    }
 
     MaterialTheme(
       colorScheme = colorScheme,

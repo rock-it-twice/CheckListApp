@@ -82,14 +82,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(
-    settingsVM: SettingsViewModel = viewModel(),
-    mainVM: MainViewModel = viewModel(),
-    currentVM: CurrentEntityViewModel = viewModel(),
-    addNewVM: AddNewEntityViewModel = viewModel()
+    settingsVM: SettingsViewModel      = viewModel(),
+    mainVM:     MainViewModel          = viewModel(),
+    currentVM:  CurrentEntityViewModel = viewModel(),
+    addNewVM:   AddNewEntityViewModel  = viewModel()
 ) {
     LetsCheckTheme(settingsVM) {
+
         val modifier = Modifier
-        // константа для навигации между экранами
         val navController = rememberNavController()
 
         Surface(
@@ -101,7 +101,10 @@ fun App(
                 mainVM = mainVM,
                 currentVM = currentVM,
                 addNewVM = addNewVM,
-                navController = navController)
+                navController = navController,
+                settings = settingsVM.settings,
+                onSettingsChange = { settingsVM.updateTheme() }
+            )
         }
     }
 }

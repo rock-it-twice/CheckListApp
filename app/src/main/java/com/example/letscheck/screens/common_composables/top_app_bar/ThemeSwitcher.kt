@@ -15,30 +15,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.letscheck.App
 import com.example.letscheck.R
+import com.example.letscheck.data.classes.main.AppSettings
+import com.example.letscheck.data.classes.main.AppTheme
 
 @Composable
-fun ThemeSwitcher(){
-
-    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
-
-    var darkModeEnabled by remember {
-        mutableStateOf(sharedPref.getBoolean("dark_mode", false))
-    }
+fun ThemeSwitcher(settings: AppSettings, onSettingsChange: () -> Unit){
 
     Switch(
-        checked = darkModeEnabled,
+        checked = (settings.appTheme == AppTheme.DARK),
         onCheckedChange = {
-            with(sharedPref.edit()){
-                putBoolean("dark_mode", it)
-                apply()
-            }
-            darkModeEnabled = sharedPref.getBoolean("dark_mode", it)
-            println(sharedPref.getBoolean("dark_mode", false))
+            onSettingsChange()
         },
         thumbContent = {
             val size = 12.dp
-            if (darkModeEnabled)
+            if (settings.appTheme == AppTheme.DARK)
                 Icon(
                     painter            = painterResource(R.drawable.dark_mode_24dp),
                     contentDescription = "dark_mode",
@@ -56,8 +48,8 @@ fun ThemeSwitcher(){
 }
 
 
-@Preview
-@Composable
-fun ThemeSwitcherPreview(){
-    ThemeSwitcher()
-}
+//@Preview
+//@Composable
+//fun ThemeSwitcherPreview(){
+//    ThemeSwitcher()
+//}
