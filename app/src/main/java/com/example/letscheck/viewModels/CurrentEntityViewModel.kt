@@ -59,6 +59,7 @@ class CurrentEntityViewModel(
 
     // Entity
     fun getEntityId(id:Long){ entityId = id }
+
     fun getJointEntityById() {
         vmScope.launch(Dispatchers.IO){
             currentJointEntity = repository.getJointEntityById(entityId)

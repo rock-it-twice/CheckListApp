@@ -21,4 +21,8 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         return ( settingsDao.count() > 0 )
     }
 
+    suspend fun initializeSettings(){
+        if (!isSettingsCreated()) insertSettings(appSettings = AppSettings())
+    }
+
 }

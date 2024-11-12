@@ -6,6 +6,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +25,7 @@ import com.example.letscheck.data.classes.main.AppTheme
 fun ThemeSwitcher(settings: AppSettings, onSettingsChange: () -> Unit){
 
     Switch(
-        checked = (settings.appTheme == AppTheme.DARK),
+        checked = settings.appTheme == AppTheme.DARK,
         onCheckedChange = {
             onSettingsChange()
         },

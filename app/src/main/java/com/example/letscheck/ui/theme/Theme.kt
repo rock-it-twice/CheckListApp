@@ -1,22 +1,11 @@
 package com.example.compose
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.data.classes.main.AppTheme
 import com.example.letscheck.ui.theme.backgroundDark
@@ -91,8 +80,6 @@ import com.example.letscheck.ui.theme.tertiaryDark
 import com.example.letscheck.ui.theme.tertiaryLight
 import com.example.letscheck.viewModels.SettingsViewModel
 import com.example.ui.theme.AppTypography
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -184,11 +171,10 @@ val unspecified_scheme = ColorFamily(
 )
 
 @Composable
- fun LetsCheckTheme(
-    settingsVM: SettingsViewModel,
-    content: @Composable() () -> Unit
+ fun Theme(
+    settings: AppSettings,
+    content: @Composable () -> Unit
  ) {
-
 
 //    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
 //
@@ -208,17 +194,9 @@ val unspecified_scheme = ColorFamily(
 //        }
 //    }
 
-
-    var colorScheme = when(settingsVM.settings.appTheme) {
+    val colorScheme = when(settings.appTheme) {
              AppTheme.DARK   -> darkScheme
              AppTheme.LIGHT  -> lightScheme
-        }
-
-    LaunchedEffect(settingsVM.settings.appTheme) {
-        colorScheme = when(settingsVM.settings.appTheme) {
-            AppTheme.DARK   -> darkScheme
-            AppTheme.LIGHT  -> lightScheme
-        }
     }
 
     MaterialTheme(
