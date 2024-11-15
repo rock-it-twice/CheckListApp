@@ -122,8 +122,10 @@ fun EntityBox(vm: MainViewModel,
               showPopUp: (Boolean) -> Unit,
               getEntityId: (Long) -> Unit
 ){
+
     val entityId by remember { mutableLongStateOf(jointEntity.entity.id) }
     var isExpanded: Boolean by remember { mutableStateOf(false) }
+    val isResetEnabled: Boolean by remember { mutableStateOf(progressObserver.all { it }) }
 
     val listSize = progressObserver.size
     val progress = progressObserver.count{ it }
@@ -145,13 +147,13 @@ fun EntityBox(vm: MainViewModel,
             contentAlignment = Alignment.BottomCenter
         ){
             DropDownContextMenu(
-                vm = vm,
                 navController = navController,
                 isExpanded = isExpanded,
                 size = gridSize,
                 entityId = entityId,
-                progressObserver = progressObserver,
-                onValueChange = { isExpanded = it },
+                isResetEnabled = isResetEnabled,
+                resetProgress = { vm.resetCheckBoxes(it) },
+                onExpandedChange = { isExpanded = it },
                 showPopUp = showPopUp,
                 getEntityId= getEntityId
             )

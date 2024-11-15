@@ -42,15 +42,16 @@ fun NavGraph( mainVM: MainViewModel,
             //    на случай, если экран создания открывается не в первый раз;
             // 2. Проверяем, создаётся ли новый список или редактируется уже существующий
 
-            val activityId = mainVM.currentJointFolder!!.folder.id
+            val activityId = mainVM.currentJointFolder?.folder?.id ?: 0L
             when {
-                (addNewVM.entityId > 0L) -> {
-                    addNewVM.setCurrentEntityAsNew()
-                }
+                (addNewVM.entityId > 0L)
+                    -> {
+                        addNewVM.setCurrentEntityAsNew()
+                        println("Попытка изменить существующий список")
+                    }
 
-                (addNewVM.checkNewEntityRelations(activityId) && (addNewVM.entityId == 0L)) -> {
-                    addNewVM.createNewEntity(activityId = activityId, str = "")
-                }
+                (addNewVM.checkNewEntityRelations(activityId) && (addNewVM.entityId == 0L))
+                    -> { addNewVM.createNewEntity(activityId = activityId, str = "") }
             }
 
             AddNewEntityScreen(vm = addNewVM, navController = navController, settings = settings, onSettingsChange = onSettingsChange)

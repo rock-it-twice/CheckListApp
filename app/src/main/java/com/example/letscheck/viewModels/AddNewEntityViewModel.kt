@@ -67,7 +67,7 @@ class AddNewEntityViewModel(
         vmScope.launch(Dispatchers.Main) {
             newImageUri = uri
             newImageName = when(newImageUri == null){
-                true -> { null }
+                true ->  { null }
                 false -> { newImageUri!!.path?.let { File(it).name } }
             }
         }
@@ -108,7 +108,7 @@ class AddNewEntityViewModel(
             val entity = repository.getJointEntityById(entityId)
             if (entity != null) {
                 newEntity = entity.entity
-                newImageUri = entity.entity.image.toUri()
+                if (entity.entity.image != "") newImageUri = entity.entity.image.toUri()
                 newChecklists = entity.checkLists.map { it.checkList }
                 newCheckBoxes = entity.checkLists.map { it.checkBoxTitles.toList() }
             }

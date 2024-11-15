@@ -28,12 +28,15 @@
     <string name="back">назад</string>
 
     <!-- Add New entity screen -->
-    <string name="add_new_subtitle">Новый подзаголовок</string>
+        <!-- Buttons -->
+    <string name="add_new_subtitle">Новый раздел</string>
     <string name="add_new_checkbox">Добавить чекбокс</string>
     <string name="accept">Принять</string>
     <string name="edit">Изменить</string>
     <string name="delete">Удалить</string>
-
+        <!-- Fields and labels -->
+    <string name="new_title_label">Заголовок</string>
+    <string name="new_subtitle_label">Подзаголовок</string>
     <string name="new_entity_name">Новый список</string>
     <string name="new_subtitle_name">Новый подзаголовок</string>
     <string name="new_checkbox_name">Новый чекбокс</string>

@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.viewModels.AddNewEntityViewModel
@@ -32,10 +34,11 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 @Composable
 fun NewEntityRow(vm: AddNewEntityViewModel){
 
-    var isEnabled by rememberSaveable {
-        mutableStateOf( (vm.newEntity?.entityName ?: "") != "" ) }
     // Если Имя нового списка == null, назначается пустая строка
     var newName by remember { mutableStateOf( vm.newEntity?.entityName ?: "" ) }
+    var isEnabled by rememberSaveable { mutableStateOf( newName != "") }
+
+
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
@@ -54,6 +57,7 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
             modifier = Modifier.padding(vertical = 10.dp),
             enabled = !isEnabled,
             textStyle = MaterialTheme.typography.headlineMedium,
+            label = { Text( stringResource(R.string.new_title_label) ) },
             placeholder = { TextFieldPlaceholder(R.string.new_entity_name, isEnabled) },
             colors = textFieldColors
         )

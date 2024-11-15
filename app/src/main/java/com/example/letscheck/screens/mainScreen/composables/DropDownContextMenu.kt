@@ -16,23 +16,23 @@ import androidx.compose.ui.unit.DpSize
 import androidx.navigation.NavController
 import com.example.letscheck.R
 import com.example.letscheck.navigation.Routes
-import com.example.letscheck.viewModels.MainViewModel
+
 
 
 @Composable
-fun DropDownContextMenu(vm: MainViewModel,
-                        navController: NavController,
+fun DropDownContextMenu(navController: NavController,
                         isExpanded: Boolean,
                         size: DpSize,
                         entityId: Long,
-                        progressObserver: List<Boolean>,
-                        onValueChange: (Boolean) -> Unit,
+                        isResetEnabled: Boolean,
+                        resetProgress: (Long) -> Unit,
+                        onExpandedChange: (Boolean) -> Unit,
                         showPopUp: (Boolean) -> Unit,
                         getEntityId: (Long) -> Unit
 ){
     DropdownMenu(
         expanded         = isExpanded,
-        onDismissRequest = { onValueChange(!isExpanded) },
+        onDismissRequest = { onExpandedChange(!isExpanded) },
         offset           = DpOffset(size.width/2, (-size.height)/2),
         modifier         = Modifier,
     ) {
@@ -41,10 +41,10 @@ fun DropDownContextMenu(vm: MainViewModel,
             modifier     = Modifier,
             text         = { Text(stringResource(R.string.entity_reset)) },
             onClick      = {
-                vm.resetCheckBoxes(entityId)
-                onValueChange(!isExpanded)
+                resetProgress(entityId)
+                onExpandedChange(!isExpanded)
             },
-            enabled      = progressObserver.any { it },
+            enabled      = isResetEnabled,
             leadingIcon  = { Icon(Icons.Default.Refresh, stringResource(R.string.entity_reset)) }
         )
         // Редактирование
@@ -54,7 +54,7 @@ fun DropDownContextMenu(vm: MainViewModel,
             onClick      = {
                 getEntityId(entityId)
                 navController.navigate( route = Routes.AddNewEntityScreen.route )
-                onValueChange(!isExpanded)
+                onExpandedChange(!isExpanded)
             },
             leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
         )
@@ -65,7 +65,7 @@ fun DropDownContextMenu(vm: MainViewModel,
             onClick      = {
                 showPopUp(true)
                 getEntityId(entityId)
-                onValueChange(!isExpanded)
+                onExpandedChange(!isExpanded)
             },
             leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
         )

@@ -36,7 +36,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     // Folder
     fun addFolder() {
-        vmScope.launch(Dispatchers.IO) {
+        vmScope.launch(Dispatchers.Default) {
             repository.addUserActivity(Folder(folderName = checkName(folderName)))
         }
     }
@@ -48,7 +48,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     fun getFolderId(id:Long) { currentFolderId = id }
 
     fun getJointFolderById() {
-        vmScope.launch(Dispatchers.IO) {
+        vmScope.launch(Dispatchers.Default) {
             currentJointFolder = repository.getJointUserActivityById(currentFolderId)
         }
     }
@@ -61,7 +61,7 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     fun getEntityId(id: Long) { entityId = id }
 
     fun deleteEntityById(id: Long) {
-        vmScope.launch(Dispatchers.IO) {
+        vmScope.launch(Dispatchers.Default) {
             repository.deleteUserEntityById(id)
         }
     }
@@ -70,14 +70,15 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     fun getCheckedList(id: Long): LiveData<List<Boolean>> = repository.getCheckedList(id)
 
     fun resetCheckBoxes(entityId: Long){
-        vmScope.launch(Dispatchers.IO) { repository.resetCheckBoxes(entityId) }
+        vmScope.launch(Dispatchers.Default) { repository.resetCheckBoxes(entityId) }
     }
 
     //______________________________________________________________________________________________
 
     // Clear operations
-    fun deleteUserActivity(id: Long) {
-        vmScope.launch(Dispatchers.IO) { repository.deleteUserActivity(id) }
+    // Not implemented yet...
+    fun deleteFolder(id: Long) {
+        vmScope.launch(Dispatchers.Default) { repository.deleteUserActivity(id) }
     }
 
     fun isGridVisible(): Boolean { return  currentJointFolder != null }
@@ -87,7 +88,5 @@ open class MainViewModel( private val vmScope: CoroutineScope,
         currentJointFolder = null
         entityId = 0
     }
-
-
 
 }
