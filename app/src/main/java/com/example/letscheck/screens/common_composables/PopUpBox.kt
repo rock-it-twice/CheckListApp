@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -77,7 +76,7 @@ fun PopUpBox(showPopUp: Boolean,
 }
 
 @Composable
-fun DeleteWarning(onClick: (Boolean) -> Unit, delete: () -> Unit){
+fun DeleteWarningPopUp(onClick: (Boolean) -> Unit, delete: () -> Unit){
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -125,7 +124,7 @@ fun DeleteWarning(onClick: (Boolean) -> Unit, delete: () -> Unit){
 }
 
 @Composable
-fun GoToMainScreenBox(navController: NavController, onClick: (Boolean) -> Unit){
+fun GoToMainScreenPopUp(navController: NavController, onClick: (Boolean) -> Unit){
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -169,4 +168,58 @@ fun GoToMainScreenBox(navController: NavController, onClick: (Boolean) -> Unit){
             }
             Spacer(Modifier.size(10.dp))
         }
+}
+
+@Composable
+fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline: () -> Unit){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Заголовок
+        Text(
+            text = stringResource(R.string.pop_up_new_entity_title),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.size(20.dp))
+        // Сообщение
+        Text(
+            text = stringResource(R.string.pop_up_new_entity_message),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.size(10.dp))
+        // Кнопки
+        Row(modifier = Modifier
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(
+                onClick = {
+                    onAccept()
+                    navController.navigate(route = Routes.AddNewEntityScreen.route)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Text(stringResource(R.string.pop_up_new_entity_accept))
+            }
+            Button(
+                onClick = {
+                    onDecline()
+                    navController.navigate(route = Routes.AddNewEntityScreen.route)
+                          },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Text(stringResource(R.string.pop_up_new_entity_decline))
+            }
+        }
+        Spacer(Modifier.size(10.dp))
+    }
+
 }

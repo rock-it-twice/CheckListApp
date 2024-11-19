@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityColumn
-import com.example.letscheck.screens.common_composables.GoToMainScreenBox
+import com.example.letscheck.screens.common_composables.GoToMainScreenPopUp
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 
@@ -74,7 +74,7 @@ fun CurrentEntityScreen(
         size = DpSize(360.dp, 240.dp),
         showPopUp = showPopUp,
         onDismiss = { showPopUp = it },
-        content = { GoToMainScreenBox(navController) { showPopUp = it } }
+        content = { GoToMainScreenPopUp(navController) { showPopUp = it } }
     )
 }
 

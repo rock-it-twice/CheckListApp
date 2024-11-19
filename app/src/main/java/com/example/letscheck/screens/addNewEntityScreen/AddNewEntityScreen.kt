@@ -36,7 +36,8 @@ fun AddNewEntityScreen(
         derivedStateOf {
             val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
             lastVisibleIndex == lazyListState.layoutInfo.totalItemsCount-1
-        } }
+        }
+    }
 
     Scaffold(
         modifier  = Modifier

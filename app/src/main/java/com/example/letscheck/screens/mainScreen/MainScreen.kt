@@ -20,7 +20,7 @@ import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.mainScreen.composables.ChooseFolderColumn
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
-import com.example.letscheck.screens.common_composables.DeleteWarning
+import com.example.letscheck.screens.common_composables.DeleteWarningPopUp
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.MainViewModel
 
@@ -54,12 +54,19 @@ fun MainScreen(
                 scrollBehavior = topBarScrollBehavior,
             )
         },
-        content   = { innerPadding ->
+        content   = {
+            innerPadding ->
             ChooseFolderColumn(
-                vm = vm, navController = navController, lazyGridState = lazyGridState,
-                innerPadding = innerPadding, topBarScrollBehavior = topBarScrollBehavior,
-                showPopUp = { showPopUp = it }, getEntityId = { entityId = it }
-                )
+                vm = vm,
+                navController = navController,
+                lazyGridState = lazyGridState,
+                innerPadding = innerPadding,
+                topBarScrollBehavior = topBarScrollBehavior,
+                showPopUp = { showPopUp = it },
+                getEntityId = { entityId = it
+                                vm.getEntityId(it)
+                }
+            )
         }
     )
     PopUpBox(
@@ -67,9 +74,12 @@ fun MainScreen(
         size = DpSize(360.dp, 240.dp),
         onDismiss = { showPopUp = it },
         content = {
-            DeleteWarning( onClick = { showPopUp = it },
-            delete = { vm.deleteEntityById(entityId) ; vm.getJointFolderById() }
-        ) }
+            DeleteWarningPopUp(
+                onClick = { showPopUp = it },
+                delete  = { vm.deleteEntityById(entityId)
+                            vm.getJointFolderById()
+                }
+            )
+        }
     )
-
 }

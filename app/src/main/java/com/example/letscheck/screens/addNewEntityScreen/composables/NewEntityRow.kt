@@ -32,13 +32,9 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun NewEntityRow(vm: AddNewEntityViewModel){
+fun NewEntityRow(name: String, onNameChange: (String) -> Unit){
 
-    // Если Имя нового списка == null, назначается пустая строка
-    var newName by remember { mutableStateOf( vm.newEntity?.entityName ?: "" ) }
-    var isEnabled by rememberSaveable { mutableStateOf( newName != "") }
-
-
+    var isEnabled by rememberSaveable { mutableStateOf( name != "") }
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
@@ -52,8 +48,8 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
         verticalAlignment = Alignment.CenterVertically) {
 
         TextField(
-            value = newName,
-            onValueChange = { newName = it },
+            value = name,
+            onValueChange = { onNameChange(it) },
             modifier = Modifier.padding(vertical = 10.dp),
             enabled = !isEnabled,
             textStyle = MaterialTheme.typography.headlineMedium,
@@ -62,8 +58,12 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
             colors = textFieldColors
         )
 
-        AcceptOrEditEntityButton( vm = vm, newName = newName,
-            isEnabled = isEnabled, onValueChange = { isEnabled = it} )
+        AcceptOrEditEntityButton(
+            name = name,
+            isEnabled = isEnabled,
+            onNameChange = onNameChange,
+            onValueChange = { isEnabled = it}
+        )
 
     }
 
@@ -71,15 +71,15 @@ fun NewEntityRow(vm: AddNewEntityViewModel){
 
 @Composable
 fun AcceptOrEditEntityButton(
-                       vm: AddNewEntityViewModel,
-                       newName: String,
+                       name: String,
                        isEnabled: Boolean,
+                       onNameChange: (String) -> Unit,
                        onValueChange: (Boolean) -> Unit){
     Row {
         AnimatedVisibility(visible = !isEnabled ) {
             IconButton(
                 onClick = {
-                    vm.renameNewEntity( newName )
+                    onNameChange(name)
                     onValueChange(!isEnabled)
                 },
                 enabled = !isEnabled,
@@ -88,7 +88,7 @@ fun AcceptOrEditEntityButton(
                     containerColor = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.onSecondary
                 )
-                ) {
+            ) {
                 Icon(
                     imageVector = Icons.Default.Done,
                     modifier = Modifier.size(15.dp),

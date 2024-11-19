@@ -46,9 +46,15 @@
     <string name="pop_up_delete_warning_message">После подтверждения, список будет удалён безвозвратно.</string>
     <string name="pop_up_delete_warning_accept">Подтвердить</string>
     <string name="pop_up_delete_warning_decline">Отменить</string>
+
     <string name="pop_up_complete_title">Все элементы списка отмечены!</string>
     <string name="pop_up_complete_message">Вернуться на главный экран?</string>
     <string name="pop_up_complete_accept">Вернуться</string>
     <string name="pop_up_complete_decline">Остаться</string>
+
+    <string name="pop_up_new_entity_title">Новый список содержит заполненные поля.</string>
+    <string name="pop_up_new_entity_message">Хотите продолжить работу с текущим списком, или создать новый список?</string>
+    <string name="pop_up_new_entity_accept">Да, продолжить</string>
+    <string name="pop_up_new_entity_decline">Нет, создать</string>
 
 </resources>

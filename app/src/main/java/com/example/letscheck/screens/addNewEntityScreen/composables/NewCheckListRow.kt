@@ -1,5 +1,7 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -31,6 +35,8 @@ fun NewCheckListRow(vm: AddNewEntityViewModel,
                     index: Int,
                     checkList: CheckList) {
 
+    var isVisible by rememberSaveable { mutableStateOf(checkList.checkListName != "") }
+
     Column {
         val textFieldColors = TextFieldDefaults.colors(
             disabledContainerColor = Color.Transparent,
@@ -39,26 +45,45 @@ fun NewCheckListRow(vm: AddNewEntityViewModel,
         var isEnabled by rememberSaveable { mutableStateOf( checkList.checkListName != "" ) }
         var newName: String by remember { mutableStateOf( checkList.checkListName ) }
 
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextField(
-                value = newName,
-                modifier = Modifier
-                    .weight(1F)
-                    .fillMaxWidth(),
-                enabled = !isEnabled,
-                onValueChange = { newName = it },
-                textStyle = MaterialTheme.typography.titleLarge,
-                colors = textFieldColors,
-                placeholder = { TextFieldPlaceholder(R.string.new_subtitle_name, isEnabled) }
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            AcceptRenameDeleteButton(vm = vm, newName = newName, listIndex = index,
-                checkList = checkList, isEnabled = isEnabled, onValueChange = { isEnabled = it })
+        AnimatedVisibility(visible = !isVisible) {
+            Row(
+                modifier = modifier.fillMaxWidth().padding(10.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { isVisible = !isVisible }
+                ) { Text(text = "Добавить подзаголовок") }
+            }
         }
+        AnimatedVisibility(visible = isVisible) {
+            Row(modifier = modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextField(
+                    value = newName,
+                    modifier = Modifier.weight(1F).fillMaxWidth(),
+                    enabled = !isEnabled,
+                    onValueChange = { newName = it },
+                    textStyle = MaterialTheme.typography.titleLarge,
+                    colors = textFieldColors,
+                    placeholder = { TextFieldPlaceholder(R.string.new_subtitle_name, isEnabled) }
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+                AcceptRenameDeleteButton(
+                    vm = vm,
+                    newName = newName,
+                    listIndex = index,
+                    checkList = checkList,
+                    isEnabled = isEnabled,
+                    onValueChange = { isEnabled = it }
+                )
+            }
+        }
+
     }
 }

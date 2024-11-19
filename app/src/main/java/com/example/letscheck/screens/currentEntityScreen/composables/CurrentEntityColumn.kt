@@ -62,7 +62,7 @@ fun CurrentEntityColumn(vm: CurrentEntityViewModel,
                         .background(MaterialTheme.colorScheme.surfaceContainer)
                 ) {
                     // Подзаголовок
-                    Column(modifier = Modifier.padding(start = 10.dp)) {
+                    Column(modifier = Modifier.padding(top = 10.dp, start = 10.dp)) {
 
                         val id = jointCheckList.checkList.id
                         val isSubListChecked by

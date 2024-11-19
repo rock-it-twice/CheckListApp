@@ -12,10 +12,12 @@ import androidx.lifecycle.ViewModel
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.UserEntity
+import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.repository.ChecklistRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class AddNewEntityViewModel(
@@ -26,9 +28,8 @@ class AddNewEntityViewModel(
     var entityId: Long by mutableLongStateOf(0L)
         private set
 
-    // New Entity creation
+    // New Entity
     var newEntity: UserEntity? by mutableStateOf( null )
-        private set
 
     // New Entity image
     var newImageUri: Uri? by mutableStateOf(null)
@@ -44,8 +45,8 @@ class AddNewEntityViewModel(
 
 
     // New entity
-    fun createNewEntity(activityId: Long, str: String = "") {
-        newEntity = UserEntity( folderId = activityId, entityName = str )
+    fun createNewEntity(folderId: Long, str: String) {
+        newEntity = UserEntity( folderId = folderId, entityName = str )
         addNewImageUri(null)
         clearNewCheckLists()
         clearNewCheckBoxes()
@@ -58,9 +59,7 @@ class AddNewEntityViewModel(
         clearNewCheckBoxes()
     }
 
-    fun renameNewEntity(str: String) {
-        vmScope.launch(Dispatchers.Main) { newEntity = newEntity!!.copy(entityName = str) }
-    }
+    fun renameNewEntity(str: String) { newEntity = newEntity!!.copy( entityName = str ) }
 
     // new image
     fun addNewImageUri(uri: Uri?){
@@ -96,21 +95,22 @@ class AddNewEntityViewModel(
     // Запись uri в класс
     fun assignImageToNewEntity(){
         newEntity = newEntity!!.copy( image = newImageUri?.toString() ?: "" )
-
     }
-
 
     fun getEntityId(id: Long) { entityId = id }
 
     // Setting the current entity
     fun setCurrentEntityAsNew(){
         vmScope.launch {
-            val entity = repository.getJointEntityById(entityId)
+            var entity: JointEntity?
+            withContext(Dispatchers.Default){
+                entity = repository.getJointEntityById(entityId)
+            }
             if (entity != null) {
-                newEntity = entity.entity
-                if (entity.entity.image != "") newImageUri = entity.entity.image.toUri()
-                newChecklists = entity.checkLists.map { it.checkList }
-                newCheckBoxes = entity.checkLists.map { it.checkBoxTitles.toList() }
+                newEntity = entity!!.entity
+                newImageUri = if (entity!!.entity.image != "") entity!!.entity.image.toUri() else null
+                newChecklists = entity!!.checkLists.map { it.checkList }
+                newCheckBoxes = entity!!.checkLists.map { it.checkBoxTitles.toList() }
             }
         }
     }
@@ -182,9 +182,9 @@ class AddNewEntityViewModel(
         }
     }
 
-    fun checkNewEntityRelations(currentActivityId: Long): Boolean{
+    fun isDifferentFolders(currentFolderId: Long): Boolean {
         return try {
-            ( currentActivityId != newEntity!!.folderId )
+            ( currentFolderId != newEntity!!.folderId )
         } catch (e: NullPointerException) { true }
     }
 

@@ -21,9 +21,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -42,6 +44,12 @@ fun NewCheckListLazyColumn(
 
     val modifier = Modifier
 
+    var entityName = vm.newEntity?.entityName ?: ""
+
+    LaunchedEffect(vm.newEntity?.entityName) {
+        entityName = vm.newEntity?.entityName ?: ""
+    }
+
     LazyColumn(
         modifier = modifier.nestedScroll(
             connection = topAppBarScrollBehavior.nestedScrollConnection
@@ -49,9 +57,8 @@ fun NewCheckListLazyColumn(
         state = lazyListState,
         contentPadding = innerPadding
     ) {
-
         item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
-        item { NewEntityRow(vm = vm) }
+        item { NewEntityRow(entityName) { vm.renameNewEntity(it) } }
         vm.newChecklists.forEachIndexed { listIndex, checkList ->
 
 

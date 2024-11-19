@@ -105,7 +105,7 @@ fun AnimatedEntitiesGrid(
                     EntityBox(vm, navController, cellSize, it, progressObserver, showPopUp, getEntityId)
                 }
                 item {
-                    AddNewEntityBox(navController, cellSize)
+                    AddNewEntityBox(navController, cellSize){ getEntityId(0L) }
                 }
             }
         )
@@ -261,7 +261,7 @@ fun NoImageBox(progress: Int, listSize: Int){
 }
 
 @Composable
-fun AddNewEntityBox(navController: NavController, size: DpSize) {
+fun AddNewEntityBox(navController: NavController, size: DpSize, onClick: () -> Unit) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
@@ -270,6 +270,7 @@ fun AddNewEntityBox(navController: NavController, size: DpSize) {
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.primary)
                 .clickable(onClick = {
+                    onClick()
                     navController.navigate(route = Routes.AddNewEntityScreen.route)
                 }),
             contentAlignment = Alignment.Center

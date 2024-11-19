@@ -16,22 +16,24 @@ import com.example.letscheck.data.classes.output.JointCheckList
 @Composable
 fun Subtitle(checkList: JointCheckList, isSubListChecked: List<Boolean>) {
 
-    val color =
-        when {
-            isSubListChecked.all { it } -> Color.Green
-            else                        -> MaterialTheme.colorScheme.onSurface
+    if (checkList.checkList.checkListName != ""){
+        val color =
+            when {
+                isSubListChecked.all { it } -> Color.Green
+                else                        -> MaterialTheme.colorScheme.onSurface
+            }
+        Column(
+            Modifier.fillMaxWidth()
+        ) {
+            Row {
+                Text(
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = color,
+                    text = checkList.checkList.checkListName
+                )
+            }
+            HorizontalDivider(Modifier.fillMaxWidth())
         }
-    Column(
-        Modifier.fillMaxWidth()
-    ) {
-        Row {
-            Text(
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
-                style = MaterialTheme.typography.titleLarge,
-                color = color,
-                text = checkList.checkList.checkListName
-            )
-        }
-        HorizontalDivider(Modifier.fillMaxWidth())
     }
 }
