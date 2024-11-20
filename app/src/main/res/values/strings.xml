@@ -31,9 +31,10 @@
         <!-- Buttons -->
     <string name="add_new_subtitle">Новый раздел</string>
     <string name="add_new_checkbox">Добавить чекбокс</string>
-    <string name="accept">Принять</string>
-    <string name="edit">Изменить</string>
-    <string name="delete">Удалить</string>
+    <string name="add_new_accept">Принять</string>
+    <string name="add_new_edit">Изменить</string>
+    <string name="add_new_delete_checklist">Удалить раздел</string>
+    <string name="add_new_delete">Удалить</string>
         <!-- Fields and labels -->
     <string name="new_title_label">Заголовок</string>
     <string name="new_subtitle_label">Подзаголовок</string>
@@ -56,5 +57,11 @@
     <string name="pop_up_new_entity_message">Хотите продолжить работу с текущим списком, или создать новый список?</string>
     <string name="pop_up_new_entity_accept">Да, продолжить</string>
     <string name="pop_up_new_entity_decline">Нет, создать</string>
+
+    <string name="pop_up_delete_check_list_title">Удалить раздел?</string>
+    <string name="pop_up_delete_check_list_accept">Да</string>
+    <string name="pop_up_delete_check_list_decline">Нет</string>
+
+
 
 </resources>

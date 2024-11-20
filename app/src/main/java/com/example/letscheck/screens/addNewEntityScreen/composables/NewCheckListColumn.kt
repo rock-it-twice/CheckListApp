@@ -26,7 +26,7 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun NewCheckBoxesColumn(vm: AddNewEntityViewModel, listIndex: Int){
+fun NewCheckListColumn(vm: AddNewEntityViewModel, listIndex: Int){
 
     Column(modifier = Modifier.padding(start = 5.dp)) {
         vm.newCheckBoxes[listIndex].forEachIndexed { index, checkBoxTitle ->
@@ -69,9 +69,9 @@ fun NewCheckBoxesColumn(vm: AddNewEntityViewModel, listIndex: Int){
 
                 VerticalDivider(modifier = Modifier.width(5.dp))
 
-                AcceptRenameDeleteButton(vm = vm, newName = newName,
+                AcceptRenameDeleteButton(newName = newName,
                     listIndex = listIndex, checkBoxTitle = checkBoxTitle,
-                    isEnabled = isEnabled, onValueChange = { isEnabled = it })
+                    isEnabled = isEnabled, onEnabledChange = { isEnabled = it })
             }
         }
     }

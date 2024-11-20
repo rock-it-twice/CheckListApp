@@ -6,10 +6,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -24,11 +27,27 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewEntityScreen(
+    folderId: Long,
+    entityId: Long,
     navController: NavController,
     vm: AddNewEntityViewModel,
     settings: AppSettings,
     onSettingsChange: () -> Unit
 ) {
+
+    // Создание entity при запуске
+    LaunchedEffect(key1 = Unit){
+        // передаем id списка в addNewVM
+        vm.getEntityId(entityId)
+
+        when {
+            (vm.entityId == 0L && vm.newEntity == null)
+                -> { vm.createNewEntity(folderId = folderId, str = "") }
+
+            (vm.entityId  > 0L && vm.newEntity == null)
+                -> { vm.setCurrentEntityAsNew() }
+        }
+    }
 
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

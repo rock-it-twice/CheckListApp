@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
@@ -51,7 +52,8 @@ fun PopUpBox(showPopUp: Boolean,
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(0.75f)
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.background)
+                .shadow(elevation = 10.dp),
             contentAlignment = Alignment.Center
         ){
             Popup(
@@ -76,7 +78,7 @@ fun PopUpBox(showPopUp: Boolean,
 }
 
 @Composable
-fun DeleteWarningPopUp(onClick: (Boolean) -> Unit, delete: () -> Unit){
+fun DeleteWarningPopUp(onClose: (Boolean) -> Unit, delete: () -> Unit){
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -102,7 +104,7 @@ fun DeleteWarningPopUp(onClick: (Boolean) -> Unit, delete: () -> Unit){
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(
-                onClick = { delete() ; onClick( false ) },
+                onClick = { delete() ; onClose( false ) },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 )
@@ -110,7 +112,7 @@ fun DeleteWarningPopUp(onClick: (Boolean) -> Unit, delete: () -> Unit){
                 Text(stringResource(R.string.pop_up_delete_warning_accept))
             }
             Button(
-                onClick = { onClick( false ) },
+                onClick = { onClose( false ) },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 )
@@ -124,7 +126,7 @@ fun DeleteWarningPopUp(onClick: (Boolean) -> Unit, delete: () -> Unit){
 }
 
 @Composable
-fun GoToMainScreenPopUp(navController: NavController, onClick: (Boolean) -> Unit){
+fun GoToMainScreenPopUp(navController: NavController, onClose: (Boolean) -> Unit){
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -158,7 +160,7 @@ fun GoToMainScreenPopUp(navController: NavController, onClick: (Boolean) -> Unit
                     Text(stringResource(R.string.pop_up_complete_accept))
                 }
                 Button(
-                    onClick = { onClick( false ) },
+                    onClick = { onClose( false ) },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.onSurface
                     )
@@ -217,6 +219,51 @@ fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline
                 )
             ) {
                 Text(stringResource(R.string.pop_up_new_entity_decline))
+            }
+        }
+        Spacer(Modifier.size(10.dp))
+    }
+
+}
+
+@Composable
+fun DeleteCheckListPopUp(listIndex: Int, onAccept: (Int) -> Unit, onDecline: (Boolean) -> Unit){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Заголовок
+        Text(
+            text = stringResource(R.string.pop_up_delete_check_list_title),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.size(20.dp))
+        // Кнопки
+        Row(modifier = Modifier
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(
+                onClick = {
+                    onAccept(listIndex)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Text(stringResource(R.string.pop_up_delete_check_list_accept))
+            }
+            Button(
+                onClick = {
+                    onDecline(false)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Text(stringResource(R.string.pop_up_delete_warning_decline))
             }
         }
         Spacer(Modifier.size(10.dp))

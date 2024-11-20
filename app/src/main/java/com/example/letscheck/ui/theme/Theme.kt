@@ -78,7 +78,6 @@ import com.example.letscheck.ui.theme.tertiaryContainerDark
 import com.example.letscheck.ui.theme.tertiaryContainerLight
 import com.example.letscheck.ui.theme.tertiaryDark
 import com.example.letscheck.ui.theme.tertiaryLight
-import com.example.letscheck.viewModels.SettingsViewModel
 import com.example.ui.theme.AppTypography
 
 private val lightScheme = lightColorScheme(
@@ -175,24 +174,6 @@ val unspecified_scheme = ColorFamily(
     settings: AppSettings,
     content: @Composable () -> Unit
  ) {
-
-//    val sharedPref = LocalContext.current.getSharedPreferences("main_prefs", Context.MODE_PRIVATE)
-//
-//    if (!sharedPref.contains("dark_mode")) {
-//        sharedPref.edit().putBoolean("dark_mode", false).apply()
-//    }
-//
-//    var darkModeEnabled: Boolean by remember {
-//        mutableStateOf(sharedPref.getBoolean("dark_mode", false))
-//    }
-//
-//    LaunchedEffect(key1 = Unit) {
-//        sharedPref.registerOnSharedPreferenceChangeListener {
-//            _, key -> if (key == "dark_mode") {
-//                darkModeEnabled = sharedPref.getBoolean("dark_mode", false)
-//            }
-//        }
-//    }
 
     val colorScheme = when(settings.appTheme) {
              AppTheme.DARK   -> darkScheme

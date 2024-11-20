@@ -154,13 +154,13 @@ class AddNewEntityViewModel(
         newCheckBoxes = newSubLists.toList()
     }
 
-    fun renameNewCheckBoxTitle(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
+    fun renameCheckBox(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
         val newSubLists = newCheckBoxes.toMutableList()
         newSubLists[index].find { it == checkBoxTitle }!!.text = str
         newCheckBoxes = newSubLists
     }
 
-    fun deleteNewCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
+    fun deleteCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
         val newSubLists = newCheckBoxes.toMutableList()
         val newSubList = newSubLists[listIndex].toMutableList()
         newSubList.remove(checkBoxTitle)

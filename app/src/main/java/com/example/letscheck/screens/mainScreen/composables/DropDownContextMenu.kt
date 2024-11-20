@@ -50,24 +50,24 @@ fun DropDownContextMenu(navController: NavController,
         // Редактирование
         DropdownMenuItem(
             modifier     = Modifier,
-            text         = { Text(stringResource(R.string.edit)) },
+            text         = { Text(stringResource(R.string.add_new_edit)) },
             onClick      = {
                 getEntityId(entityId)
                 navController.navigate( route = Routes.AddNewEntityScreen.route )
                 onExpandedChange(!isExpanded)
             },
-            leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.edit)) }
+            leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.add_new_edit)) }
         )
         // Удаление
         DropdownMenuItem(
             modifier     = Modifier,
-            text         = { Text(stringResource(R.string.delete)) },
+            text         = { Text(stringResource(R.string.add_new_delete)) },
             onClick      = {
                 showPopUp(true)
                 getEntityId(entityId)
                 onExpandedChange(!isExpanded)
             },
-            leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.delete)) }
+            leadingIcon  = { Icon(Icons.Default.Delete, stringResource(R.string.add_new_delete)) }
         )
 
     }

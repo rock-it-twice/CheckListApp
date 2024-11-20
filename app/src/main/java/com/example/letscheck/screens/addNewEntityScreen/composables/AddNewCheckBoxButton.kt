@@ -19,27 +19,17 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun AddNewCheckBoxButton(vm: AddNewEntityViewModel, index: Int) {
+fun AddNewCheckBoxButton(index: Int, onAdd: (index: Int) -> Unit) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 20.dp, end = 10.dp),
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically
+    TextButton(
+        onClick = { onAdd(index) },
+        colors = ButtonDefaults.textButtonColors(
+            contentColor = MaterialTheme.colorScheme.secondary
+        )
     ) {
-
-        TextButton(
-            onClick = { vm.addNewCheckBox(index) },
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = MaterialTheme.colorScheme.secondary
-            )
-        ) {
-            Text(
-                text = stringResource(id = R.string.add_new_checkbox)
-            )
-        }
-
+        Text(
+            text = stringResource(id = R.string.add_new_checkbox)
+        )
     }
 
 }

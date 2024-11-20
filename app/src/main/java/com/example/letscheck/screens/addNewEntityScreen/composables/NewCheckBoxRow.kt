@@ -13,6 +13,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,18 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckBoxTitle
-import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun NewCheckBoxRow(vm: AddNewEntityViewModel,
-                   modifier: Modifier,
+fun NewCheckBoxRow(modifier: Modifier,
                    listIndex: Int,
-                   checkBoxTitle: CheckBoxTitle
+                   checkBoxTitle: CheckBoxTitle,
+                   onRename: (Int, CheckBoxTitle, String) -> Unit,
+                   onDelete: (Int, CheckBoxTitle) -> Unit
 ) {
-    var newName: String by remember { mutableStateOf(checkBoxTitle.text) }
+
+    var newName: String    by remember { mutableStateOf(checkBoxTitle.text) }
     var isEnabled: Boolean by remember { mutableStateOf(checkBoxTitle.text != "") }
     var isChecked: Boolean by remember { mutableStateOf(false) }
+
+    LaunchedEffect(checkBoxTitle.text) { newName = checkBoxTitle.text }
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
@@ -72,9 +76,13 @@ fun NewCheckBoxRow(vm: AddNewEntityViewModel,
 
         Spacer(Modifier.size(10.dp))
         AcceptRenameDeleteButton(
-            vm = vm, newName = newName, listIndex = listIndex,
+            newName = newName,
+            listIndex = listIndex,
             checkBoxTitle = checkBoxTitle,
-            isEnabled = isEnabled, onValueChange = { isEnabled = it }
+            isEnabled = isEnabled,
+            onEnabledChange = { isEnabled = it },
+            onRenameCheckBox = { i, item, name -> onRename(i, item, name) },
+            onDeleteCheckBox = { i, item -> onDelete( i, item) }
         )
 
     }

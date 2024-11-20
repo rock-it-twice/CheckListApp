@@ -1,6 +1,14 @@
 package com.example.letscheck.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,29 +31,24 @@ fun NavGraph( mainVM: MainViewModel,
         navController = navController,
         startDestination = Routes.Home.route
     ) {
-
         composable(route = Routes.Home.route){
+            // При переходе с экрана AddNewEntityScreen на экран Home, очищаем addNewVM
+            LaunchedEffect(key1 = Unit) { addNewVM.clearNewEntity() }
             MainScreen(vm = mainVM, navController = navController, settings = settings, onSettingsChange = onSettingsChange)
         }
         composable(route = Routes.CurrentEntityScreen.route){
             CurrentEntityScreen(vm = currentVM, navController = navController, entityId = mainVM.entityId, settings = settings, onSettingsChange = onSettingsChange)
         }
-        composable(route = Routes.AddNewEntityScreen.route){
-
-            println("mainVM.entityId = ${ mainVM.entityId }")
-            // передаем id списка в addNewVM
-            addNewVM.getEntityId(mainVM.entityId)
-
-            // Проверяем, создаётся новый список или редактируется уже существующий
-
+        composable( route = Routes.AddNewEntityScreen.route ){
             val folderId = mainVM.currentJointFolder?.folder?.id ?: 0L
-
-            when(addNewVM.entityId > 0L) {
-                true  -> { addNewVM.setCurrentEntityAsNew() }
-                false -> { addNewVM.createNewEntity(folderId = folderId, str = "") }
-            }
-
-            AddNewEntityScreen(vm = addNewVM, navController = navController, settings = settings, onSettingsChange = onSettingsChange)
+            AddNewEntityScreen(
+                folderId = folderId,
+                entityId = mainVM.entityId,
+                vm = addNewVM,
+                navController = navController,
+                settings = settings,
+                onSettingsChange = onSettingsChange
+            )
         }
     }
 }

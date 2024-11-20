@@ -1,6 +1,5 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,24 +26,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckList
-import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun NewCheckListRow(vm: AddNewEntityViewModel,
-                    modifier: Modifier,
-                    index: Int,
-                    checkList: CheckList) {
+fun NewSubtitleRow(modifier: Modifier,
+                   index: Int,
+                   checkList: CheckList,
+                   onRename: (Int, String) -> Unit
+) {
 
-    var isVisible by rememberSaveable { mutableStateOf(checkList.checkListName != "") }
+    var isEnabled by rememberSaveable { mutableStateOf( checkList.checkListName.isNotBlank() ) }
+    var newName   by rememberSaveable { mutableStateOf( checkList.checkListName ) }
+    val textFieldColors = TextFieldDefaults.colors(
+        disabledContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+    )
 
     Column {
-        val textFieldColors = TextFieldDefaults.colors(
-            disabledContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-        )
-        var isEnabled by rememberSaveable { mutableStateOf( checkList.checkListName != "" ) }
-        var newName: String by remember { mutableStateOf( checkList.checkListName ) }
+
+        var isVisible by remember { mutableStateOf( newName.isNotBlank() ) }
+        LaunchedEffect(isEnabled) { isVisible = newName.isNotBlank() }
 
         AnimatedVisibility(visible = !isVisible) {
             Row(
@@ -75,12 +77,15 @@ fun NewCheckListRow(vm: AddNewEntityViewModel,
                 )
                 Spacer(modifier = Modifier.size(10.dp))
                 AcceptRenameDeleteButton(
-                    vm = vm,
-                    newName = newName,
+                    newName   = newName,
                     listIndex = index,
                     checkList = checkList,
                     isEnabled = isEnabled,
-                    onValueChange = { isEnabled = it }
+                    onEnabledChange   = { isEnabled = it },
+                    onRenameCheckList = { i, name ->
+                        onRename(i, name)
+                        newName = name
+                    }
                 )
             }
         }

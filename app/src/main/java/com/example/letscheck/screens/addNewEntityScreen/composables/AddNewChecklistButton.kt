@@ -16,10 +16,10 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun AddNewChecklistButton(vm: AddNewEntityViewModel){
+fun AddNewChecklistButton(onAddNewChecklist: () -> Unit){
 
     Button(
-        onClick = { vm.addNewCheckList() },
+        onClick = { onAddNewChecklist() },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 20.dp),

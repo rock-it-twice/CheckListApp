@@ -17,24 +17,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
-import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
-fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
-                              newName: String,
-                              listIndex: Int,
-                              checkList: CheckList? = null,
-                              checkBoxTitle: CheckBoxTitle? = null,
-                              isEnabled: Boolean,
-                              onValueChange: (Boolean) -> Unit
+fun AcceptRenameDeleteButton(newName: String,
+                             listIndex: Int,
+                             checkList: CheckList? = null,
+                             checkBoxTitle: CheckBoxTitle? = null,
+                             isEnabled: Boolean,
+                             onEnabledChange: (Boolean) -> Unit,
+                             onRenameCheckList: ( (Int, String) -> Unit )? = null,
+                             onRenameCheckBox:  ( (Int, CheckBoxTitle, String ) -> Unit)? = null,
+                             onDeleteCheckBox:  ( (Int, CheckBoxTitle) -> Unit )? = null
 ) {
     Row {
         // изменить запись
         AnimatedVisibility(visible = isEnabled) {
             IconButton(
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
-                onClick = { onValueChange(!isEnabled) },
+                onClick = { onEnabledChange(!isEnabled) },
                 enabled = isEnabled,
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
@@ -58,13 +59,15 @@ fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
                     ),
                     onClick = {
                         when(true){
-                            (checkList != null) ->
-                                vm.renameNewCheckList(listIndex, newName)
-                            (checkBoxTitle != null) ->
-                                vm.renameNewCheckBoxTitle(listIndex, checkBoxTitle, newName)
+                            (checkList != null) -> {
+                                onRenameCheckList!!(listIndex, newName)
+                            }
+                            (checkBoxTitle != null) -> {
+                                onRenameCheckBox!!(listIndex, checkBoxTitle, newName)
+                            }
                             else -> {}
                         }
-                        onValueChange(!isEnabled)
+                        onEnabledChange(!isEnabled)
                     },
                     enabled = !isEnabled
                 ) { Icon(
@@ -75,7 +78,7 @@ fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
 
                 }
                 Spacer(Modifier.size(10.dp))
-                // Удалить
+                // Удалить или стереть
                 IconButton(
                     modifier = Modifier.size(width = 50.dp, height = 25.dp),
                     colors = IconButtonDefaults.iconButtonColors(
@@ -84,10 +87,12 @@ fun AcceptRenameDeleteButton( vm: AddNewEntityViewModel,
                     ),
                     onClick = {
                         when(true){
-                            (checkList != null) ->
-                                vm.deleteNewCheckList(listIndex)
+                            (checkList != null) -> {
+                                onRenameCheckList!!(listIndex, "")
+                                onEnabledChange(!isEnabled)
+                            }
                             (checkBoxTitle != null) -> {
-                                vm.deleteNewCheckBox(listIndex, checkBoxTitle)
+                                onDeleteCheckBox!!(listIndex, checkBoxTitle)
                             }
                             else -> {}
                         }

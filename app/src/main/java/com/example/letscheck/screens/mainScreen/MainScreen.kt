@@ -75,7 +75,7 @@ fun MainScreen(
         onDismiss = { showPopUp = it },
         content = {
             DeleteWarningPopUp(
-                onClick = { showPopUp = it },
+                onClose = { showPopUp = it },
                 delete  = { vm.deleteEntityById(entityId)
                             vm.getJointFolderById()
                 }
