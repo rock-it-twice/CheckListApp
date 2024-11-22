@@ -8,11 +8,11 @@
     <string name="home">choose_UserActivity</string>
     <string name="create">create new screen</string>
     <!-- Modal menu-->
-    <string name="activity_filter">сортировка по типу</string>
-    <string name="add_new_activity">добавить</string>
-    <string name="add_new_activity_type">введите название</string>
+    <string name="choose_folder">выбрать папку</string>
+    <string name="add_new_folder">создать папку</string>
+    <string name="add_new_folder_name">введите имя папки</string>
     <string name="add_button">+</string>
-    <string name="undefined_activity">undefined activity</string>
+    <string name="undefined_folder">без имени</string>
     <!-- entities list -->
     <string name="add_new_entity">создать список</string>
     <string name="long_click_label">открыть контекстное меню</string>
@@ -36,6 +36,8 @@
     <string name="add_new_delete_checklist">Удалить раздел</string>
     <string name="add_new_delete">Удалить</string>
         <!-- Fields and labels -->
+    <string name="new_folder_title">Выбор папки: </string>
+    <string name="new_folder_no_folder">без папки</string>
     <string name="new_title_label">Заголовок</string>
     <string name="new_subtitle_label">Подзаголовок</string>
     <string name="new_entity_name">Новый список</string>

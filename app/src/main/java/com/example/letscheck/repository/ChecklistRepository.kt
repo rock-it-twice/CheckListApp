@@ -17,7 +17,7 @@ class ChecklistRepository(private val userDao: Dao) {
     val folders = userDao.getAllFolders()
 
     // INSERT INTO
-    suspend fun addUserActivity(folder: Folder) {
+    suspend fun addFolder(folder: Folder) {
         userDao.addFolder(folder)
     }
 
@@ -28,13 +28,17 @@ class ChecklistRepository(private val userDao: Dao) {
     }
 
 
-    // USER ACTIVITIES
-    suspend fun getJointUserActivityById(id: Long): JointFolder? {
+    // FOLDERS
+    suspend fun getJointFolderById(id: Long): JointFolder? {
         return withContext(Dispatchers.IO)
-        { return@withContext userDao.getJointUserActivityById(id) }
+        { return@withContext userDao.getJointFolderById(id) }
     }
 
-    suspend fun deleteUserActivity(id: Long) {
+    suspend fun updateFolder(folder: Folder){
+        userDao.updateFolder(folder)
+    }
+
+    suspend fun deleteFolder(id: Long) {
         userDao.deleteFolder(id)
     }
 

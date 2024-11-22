@@ -21,11 +21,14 @@ import com.example.letscheck.data.classes.main.CheckList
 
 @Composable
 fun AcceptRenameDeleteButton(newName: String,
-                             listIndex: Int,
+                             folderId: Long? = null,
+                             listIndex: Int? = null,
                              checkList: CheckList? = null,
                              checkBoxTitle: CheckBoxTitle? = null,
                              isEnabled: Boolean,
-                             onEnabledChange: (Boolean) -> Unit,
+                             onEnabledChange:   (Boolean) -> Unit,
+                             onRenameFolder:    ( (String) -> Unit )? = null,
+                             onDeleteFolder:    ( (Long) -> Unit )? = null,
                              onRenameCheckList: ( (Int, String) -> Unit )? = null,
                              onRenameCheckBox:  ( (Int, CheckBoxTitle, String ) -> Unit)? = null,
                              onDeleteCheckBox:  ( (Int, CheckBoxTitle) -> Unit )? = null
@@ -59,11 +62,14 @@ fun AcceptRenameDeleteButton(newName: String,
                     ),
                     onClick = {
                         when(true){
+                            (folderId != null) -> {
+                                onRenameFolder!!(newName)
+                            }
                             (checkList != null) -> {
-                                onRenameCheckList!!(listIndex, newName)
+                                onRenameCheckList!!(listIndex as Int, newName)
                             }
                             (checkBoxTitle != null) -> {
-                                onRenameCheckBox!!(listIndex, checkBoxTitle, newName)
+                                onRenameCheckBox!!(listIndex as Int, checkBoxTitle, newName)
                             }
                             else -> {}
                         }
@@ -87,12 +93,15 @@ fun AcceptRenameDeleteButton(newName: String,
                     ),
                     onClick = {
                         when(true){
+                            (folderId != null) -> {
+                                onDeleteFolder!!(folderId as Long)
+                            }
                             (checkList != null) -> {
-                                onRenameCheckList!!(listIndex, "")
+                                onRenameCheckList!!(listIndex as Int, "")
                                 onEnabledChange(!isEnabled)
                             }
                             (checkBoxTitle != null) -> {
-                                onDeleteCheckBox!!(listIndex, checkBoxTitle)
+                                onDeleteCheckBox!!(listIndex as Int, checkBoxTitle)
                             }
                             else -> {}
                         }

@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,89 +38,6 @@ import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun NewCheckListLazyColumn(
-//    vm: AddNewEntityViewModel,
-//    lazyListState: LazyListState,
-//    innerPadding: PaddingValues,
-//    topAppBarScrollBehavior: TopAppBarScrollBehavior) {
-//
-//    val modifier = Modifier
-//    var entityName = vm.newEntity?.entityName ?: ""
-//    var showPopUp by rememberSaveable { mutableStateOf(false) }
-//
-//    LaunchedEffect(vm.newEntity?.entityName) {
-//        entityName = vm.newEntity?.entityName ?: ""
-//    }
-//
-//    LazyColumn(
-//        modifier = modifier.nestedScroll(
-//            connection = topAppBarScrollBehavior.nestedScrollConnection
-//        ),
-//        state = lazyListState,
-//        contentPadding = innerPadding
-//    ) {
-//        item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
-//        item { NewEntityRow(entityName) { vm.renameNewEntity(it) } }
-//        vm.newChecklists.forEachIndexed { listIndex, checkList ->
-//
-//            // Новый подсписок
-//            item(checkList.index + 1000) {
-//                Box(
-//                    modifier = modifier
-//                        .padding(bottom = 0.dp)
-//                        .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-//                        .background(MaterialTheme.colorScheme.surfaceContainer)
-//                        .animateItem()
-//                ) {
-//                    NewCheckListRow(vm, modifier.animateItem(), listIndex, checkList)
-//                }
-//            }
-//            // чеклисты
-//            items(
-//                items = vm.newCheckBoxes[listIndex], key = { item -> item.index })
-//            {
-//                Box(
-//                    modifier = modifier
-//                        .animateContentSize().animateItem()
-//                        .background(MaterialTheme.colorScheme.surfaceContainer)
-//                ) {
-//                    NewCheckBoxRow(vm, modifier.animateItem(), listIndex, it)
-//                }
-//            }
-//            // создание нового чеклиста
-//            item {
-//                Box(
-//                    modifier = modifier
-//                        .padding(bottom = 20.dp)
-//                        .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
-//                        .background(MaterialTheme.colorScheme.surfaceContainer)
-//                        .animateItem()
-//                ) {
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(10.dp),
-//                        horizontalArrangement = Arrangement.SpaceBetween,
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        DeleteCheckListButton(showPopUp) { showPopUp = it }
-//                        AddNewCheckBoxButton(listIndex)  { vm.addNewCheckBox(it) }
-//                    }
-//
-//                }
-//            }
-//        }
-//        // создание нового подсписка
-//        item { AddNewChecklistButton() { vm.addNewCheckList() } }
-//        item { Spacer(Modifier.size(80.dp)) }
-//
-//    }
-//
-//}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewCheckListLazyColumn(
@@ -130,6 +48,8 @@ fun NewCheckListLazyColumn(
 
     val modifier = Modifier
     var entityName = vm.newEntity?.entityName ?: ""
+    val folderId = vm.newEntity?.folderId
+    val folders by vm.folders.observeAsState(listOf())
 
     LaunchedEffect(vm.newEntity?.entityName) {
         entityName = vm.newEntity?.entityName ?: ""
@@ -143,6 +63,7 @@ fun NewCheckListLazyColumn(
         contentPadding = innerPadding
     ) {
         item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
+        item { CurrentFolderName(folders, folderId) { vm.changeFolder(it) } }
         item { NewEntityRow(entityName) { vm.renameNewEntity(it) } }
         vm.newChecklists.forEachIndexed { listIndex, checkList ->
             // Новый раздел

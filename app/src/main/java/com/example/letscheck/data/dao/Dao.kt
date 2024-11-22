@@ -112,7 +112,7 @@ interface Dao {
     suspend fun getFolderByName(folderName: String): Folder?
 
     // ЗАГОЛОВКИ
-    @Query("SELECT * FROM user_entities WHERE activity_id LIKE :folderId")
+    @Query("SELECT * FROM user_entities WHERE folder_id LIKE :folderId")
     fun getUserEntities(folderId: Long): List<UserEntity>
 
     // Получение entity по ID
@@ -122,23 +122,23 @@ interface Dao {
     // Получение entity по имени
     @Query(
         "SELECT * FROM user_entities WHERE " +
-                "entity_name LIKE :entityName AND activity_id LIKE :userId LIMIT 1"
+                "entity_name LIKE :entityName AND folder_id LIKE :folderId LIMIT 1"
     )
-    fun getUserEntityByName(entityName: String, userId: Long): UserEntity?
+    fun getUserEntityByName(entityName: String, folderId: Long): UserEntity?
 
     // JointUserActivity (JointUserActivity + JointEntities + JointChecklists)
 
     @Transaction
     @Query("SELECT * FROM folders")
-    fun getJointUserActivities(): LiveData<List<JointFolder>>
+    fun getJointFolders(): LiveData<List<JointFolder>>
 
     @Transaction
     @Query("SELECT * FROM folders WHERE folders.id LIKE :id LIMIT 1")
-    suspend fun getJointUserActivityById(id: Long): JointFolder?
+    suspend fun getJointFolderById(id: Long): JointFolder?
 
     @Transaction
     @Query("SELECT * FROM folders WHERE folder_name LIKE :name LIMIT 1")
-    suspend fun getJointUserActivityByName(name: String): JointFolder?
+    suspend fun getJointFolderByName(name: String): JointFolder?
 
     // JOINT ENTITY
 

@@ -8,9 +8,11 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.repository.ChecklistRepository
@@ -24,6 +26,8 @@ class AddNewEntityViewModel(
     private val vmScope: CoroutineScope,
     private val repository: ChecklistRepository,
     private val application: Application): ViewModel() {
+
+    val folders: LiveData<List<Folder>> = repository.folders
 
     var entityId: Long by mutableLongStateOf(0L)
         private set
@@ -60,6 +64,7 @@ class AddNewEntityViewModel(
     }
 
     fun renameNewEntity(str: String) { newEntity = newEntity!!.copy( entityName = str ) }
+    fun changeFolder(id: Long?) { newEntity = newEntity!!.copy( folderId = id ) }
 
     // new image
     fun addNewImageUri(uri: Uri?){

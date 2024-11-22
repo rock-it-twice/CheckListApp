@@ -35,6 +35,7 @@ class SettingsViewModel(
         vmScope.launch {
             withContext(Dispatchers.Default){
                 repository.initializeSettings()
+                println("settings initialized")
             }
             getSettings()
         }

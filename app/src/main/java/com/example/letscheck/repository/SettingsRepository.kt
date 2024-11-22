@@ -17,12 +17,15 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         settingsDao.updateTheme(appSettings)
     }
 
-    suspend fun isSettingsCreated(): Boolean{
+    private suspend fun isSettingsCreated(): Boolean{
         return ( settingsDao.count() > 0 )
     }
 
     suspend fun initializeSettings(){
-        if (!isSettingsCreated()) insertSettings(appSettings = AppSettings())
+        if (!isSettingsCreated())
+            println("settings not created yet")
+            insertSettings(appSettings = AppSettings())
+            println("NOW ITS CREATED")
     }
 
 }

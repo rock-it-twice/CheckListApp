@@ -17,7 +17,7 @@ import com.example.letscheck.data.classes.main.UserEntity
         Folder::class,
         UserEntity::class,
         CheckList::class,
-        CheckBoxTitle::class], version = 4
+        CheckBoxTitle::class], version = 5
 )
 abstract class MainDb : RoomDatabase() {
 

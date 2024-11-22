@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.letscheck.repository.ChecklistRepository
@@ -21,8 +22,6 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     val folders: LiveData<List<Folder>> = repository.folders
 
-    var folderName: String by mutableStateOf( "" )
-
     var currentFolderId: Long by mutableLongStateOf(0)
         private set
 
@@ -35,25 +34,34 @@ open class MainViewModel( private val vmScope: CoroutineScope,
     //______________________________________________________________________________________________
 
     // Folder
-    fun addFolder() {
+    fun addFolder(folderName: String) {
         vmScope.launch(Dispatchers.Default) {
-            repository.addUserActivity(Folder(folderName = checkName(folderName)))
+            repository.addFolder(Folder(folderName = folderName))
         }
-    }
-
-    private fun checkName(value: String): String {
-        return if (value != "") value else "undefined activity"
     }
 
     fun getFolderId(id:Long) { currentFolderId = id }
 
     fun getJointFolderById() {
         vmScope.launch(Dispatchers.Default) {
-            currentJointFolder = repository.getJointUserActivityById(currentFolderId)
+            currentJointFolder = repository.getJointFolderById(currentFolderId)
         }
     }
 
-    fun changeFolderName(value: String) { folderName = value }
+    //______________________________________________________________________________________________
+
+
+    // Folders
+    fun renameFolder(name: String, folder: Folder) {
+        vmScope.launch(Dispatchers.Default) {
+            repository.updateFolder(folder.copy(folderName = name))
+        }
+    }
+
+    fun deleteFolder(id: Long) {
+        vmScope.launch(Dispatchers.Default) { repository.deleteFolder(id) }
+    }
+
 
     //______________________________________________________________________________________________
 
@@ -75,11 +83,6 @@ open class MainViewModel( private val vmScope: CoroutineScope,
 
     //______________________________________________________________________________________________
 
-    // Clear operations
-    // Not implemented yet...
-    fun deleteFolder(id: Long) {
-        vmScope.launch(Dispatchers.Default) { repository.deleteUserActivity(id) }
-    }
 
     fun isGridVisible(): Boolean { return  currentJointFolder != null }
 

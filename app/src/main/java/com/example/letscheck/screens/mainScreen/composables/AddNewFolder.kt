@@ -17,15 +17,21 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.viewModels.MainViewModel
 
 
 @Composable
-fun CreateNewFolder(vm: MainViewModel, visible: Boolean, onValueChange: (Boolean) -> Unit ) {
+fun AddNewFolder(
+    visible: Boolean,
+    onValueChange: (Boolean) -> Unit,
+    onAddNewFolder: (String) -> Unit ) {
     AnimatedVisibility(visible = visible, enter = fadeIn(), exit = fadeOut()) {
         Row(
             Modifier
@@ -33,24 +39,23 @@ fun CreateNewFolder(vm: MainViewModel, visible: Boolean, onValueChange: (Boolean
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 20.dp, end = 10.dp)
         ) {
+            var folderName by remember { mutableStateOf("") }
+
             OutlinedTextField(
-                value = vm.folderName,
+                value = folderName,
                 modifier = Modifier
                     .padding(end = 20.dp)
                     .weight(0.75F, true),
-                onValueChange = { vm.changeFolderName(it) },
+                onValueChange = { folderName = it },
                 placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.add_new_activity_type),
-
-                    )
+                    Text( text = stringResource(id = R.string.add_new_folder_name) )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                 )
             )
             Button(
                 onClick = {
-                    vm.addFolder()
+                    onAddNewFolder(folderName)
                     onValueChange(!visible)
                 },
                 shape = RoundedCornerShape(2.dp),

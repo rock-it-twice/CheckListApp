@@ -15,7 +15,7 @@ data class JointFolder(
     @Relation(
         entity = UserEntity::class,
         parentColumn = "id",
-        entityColumn = "activity_id"
+        entityColumn = "folder_id"
     )
     val entities: List<JointEntity>
 

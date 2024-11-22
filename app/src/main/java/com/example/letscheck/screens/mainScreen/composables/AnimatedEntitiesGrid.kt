@@ -98,11 +98,19 @@ fun AnimatedEntitiesGrid(
             contentPadding = PaddingValues(20.dp),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             content = {
-                items(
-                    items= entities,
-                    key = {item -> item.entity.id}) {
+                items( items= entities, key = {item -> item.entity.id}) {
+
                     val progressObserver by vm.getCheckedList(it.entity.id).observeAsState(listOf())
-                    EntityBox(vm, navController, cellSize, it, progressObserver, showPopUp, getEntityId)
+
+                    EntityBox(
+                        vm,
+                        navController,
+                        cellSize,
+                        it,
+                        progressObserver,
+                        showPopUp,
+                        getEntityId)
+
                 }
                 item {
                     AddNewEntityBox(navController, cellSize){ getEntityId(0L) }
