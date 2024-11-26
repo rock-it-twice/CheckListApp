@@ -64,7 +64,24 @@ class AddNewEntityViewModel(
     }
 
     fun renameNewEntity(str: String) { newEntity = newEntity!!.copy( entityName = str ) }
+
     fun changeFolder(id: Long?) { newEntity = newEntity!!.copy( folderId = id ) }
+
+    fun addFolder(name: String) {
+        vmScope.launch(Dispatchers.Default) {
+            repository.addFolder(Folder(folderName = name))
+        }
+    }
+
+    fun renameFolder(id: Long, name: String) {
+        vmScope.launch(Dispatchers.Default){
+            repository.updateFolder(Folder(id = id, folderName = name))
+        }
+    }
+
+    fun deleteFolder(id: Long){
+        vmScope.launch(Dispatchers.Default){ repository.deleteFolder(id) }
+    }
 
     // new image
     fun addNewImageUri(uri: Uri?){

@@ -37,6 +37,7 @@ fun MainScreen(
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var showPopUp by rememberSaveable { mutableStateOf(false) }
+    var showPopUpEditFolder by rememberSaveable { mutableStateOf(false) }
     var entityId by rememberSaveable { mutableLongStateOf(0L) }
 
 
@@ -72,11 +73,11 @@ fun MainScreen(
     PopUpBox(
         showPopUp = showPopUp,
         size = DpSize(360.dp, 240.dp),
-        onDismiss = { showPopUp = it },
+        onPopUpClose = { showPopUp = it },
         content = {
             DeleteWarningPopUp(
                 onClose = { showPopUp = it },
-                delete  = { vm.deleteEntityById(entityId)
+                onDelete  = { vm.deleteEntityById(entityId)
                             vm.getJointFolderById()
                 }
             )

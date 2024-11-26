@@ -40,12 +40,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun FolderModalMenu(
-    vm: MainViewModel,
-    scope: CoroutineScope,
-    drawerState: DrawerState,
-    isVisible: Boolean,
-    onValueChange: (Boolean) -> Unit
+fun FolderModalMenu(vm: MainViewModel,
+                    scope: CoroutineScope,
+                    drawerState: DrawerState,
+                    isVisible: Boolean,
+                    onValueChange: (Boolean) -> Unit
 ) {
 
     if (drawerState.isClosed) onValueChange(false)
@@ -84,8 +83,7 @@ fun FolderModalMenu(
             ) {
                 Text(
                     text = stringResource(id = R.string.add_new_folder),
-                    fontSize = 24.sp,
-
+                    fontSize = 18.sp
                 )
                 when(!isVisible){
                     true -> Icon(
@@ -112,9 +110,9 @@ fun FolderModalMenu(
 fun FolderRow(scope: CoroutineScope,
               folder: Folder,
               drawerState: DrawerState,
-              onChooseFolder: (Long) -> Unit,
+              onChooseFolder: (Long)   -> Unit,
               onRenameFolder: (String) -> Unit,
-              onDeleteFolder: (Long) -> Unit
+              onDeleteFolder: (Long)   -> Unit
 ) {
 
     var isEnabled  by remember { mutableStateOf(true) }
@@ -145,12 +143,12 @@ fun FolderRow(scope: CoroutineScope,
             )
         }
         AcceptRenameDeleteButton(
-            newName = folderName,
-            folderId = folder.id,
+            newName   = folderName,
+            folderId  = folder.id,
             isEnabled = isEnabled,
             onEnabledChange = { isEnabled = it },
-            onRenameFolder = { onRenameFolder(it) },
-            onDeleteFolder = { onDeleteFolder(it) }
+            onRenameFolder  = { onRenameFolder(it) },
+            onDeleteFolder  = { onDeleteFolder(it) }
         )
     }
 }

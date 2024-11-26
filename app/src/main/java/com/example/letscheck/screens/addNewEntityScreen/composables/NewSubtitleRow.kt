@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.CheckList
@@ -46,6 +49,7 @@ fun NewSubtitleRow(modifier: Modifier,
 
         var isVisible by remember { mutableStateOf( newName.isNotBlank() ) }
         LaunchedEffect(isEnabled) { isVisible = newName.isNotBlank() }
+        LaunchedEffect(isVisible) { isEnabled = newName.isNotBlank() }
 
         AnimatedVisibility(visible = !isVisible) {
             Row(
@@ -53,10 +57,14 @@ fun NewSubtitleRow(modifier: Modifier,
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(
+                TextButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { isVisible = !isVisible }
-                ) { Text(text = "Добавить подзаголовок") }
+                    onClick = { isVisible = !isVisible },
+                    colors = ButtonDefaults
+                        .textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.secondary
+                        )
+                ) { Text(text = stringResource(R.string.add_new_subtitle)) }
             }
         }
         AnimatedVisibility(visible = isVisible) {

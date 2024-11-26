@@ -43,7 +43,7 @@ fun NewCheckBoxRow(modifier: Modifier,
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
-    )
+    ).copy()
 
     Row(
         modifier = modifier

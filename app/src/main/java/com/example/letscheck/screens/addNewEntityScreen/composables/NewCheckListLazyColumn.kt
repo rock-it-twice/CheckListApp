@@ -22,7 +22,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -33,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.screens.common_composables.DeleteCheckListPopUp
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.viewModels.AddNewEntityViewModel
@@ -42,14 +42,17 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 @Composable
 fun NewCheckListLazyColumn(
     vm: AddNewEntityViewModel,
+    folders: List<Folder>,
+    showPopUpEditFolder: Boolean,
     lazyListState: LazyListState,
     innerPadding: PaddingValues,
-    topAppBarScrollBehavior: TopAppBarScrollBehavior) {
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    onShowPopUpChange: (Boolean)-> Unit
+) {
 
     val modifier = Modifier
     var entityName = vm.newEntity?.entityName ?: ""
     val folderId = vm.newEntity?.folderId
-    val folders by vm.folders.observeAsState(listOf())
 
     LaunchedEffect(vm.newEntity?.entityName) {
         entityName = vm.newEntity?.entityName ?: ""
@@ -63,8 +66,15 @@ fun NewCheckListLazyColumn(
         contentPadding = innerPadding
     ) {
         item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
-        item { CurrentFolderName(folders, folderId) { vm.changeFolder(it) } }
-        item { NewEntityRow(entityName) { vm.renameNewEntity(it) } }
+        item { CurrentFolderMenu(
+            folders = folders,
+            id = folderId,
+            showPopUp = showPopUpEditFolder,
+            onFolderChange = { vm.changeFolder(it) },
+            onShowPopUpChange = { onShowPopUpChange(it) }
+            )
+        }
+        item { NewTitleRow(entityName) { vm.renameNewEntity(it) } }
         vm.newChecklists.forEachIndexed { listIndex, checkList ->
             // Новый раздел
             item(checkList.index + 1000) {
@@ -109,7 +119,7 @@ fun NewCheckListLazyColumn(
                     PopUpBox(
                         showPopUp = showPopUp,
                         size = DpSize(300.dp, 200.dp) ,
-                        onDismiss = { showPopUp = it }
+                        onPopUpClose = { showPopUp = it }
                     ) {
                         DeleteCheckListPopUp(
                             listIndex = listIndex,

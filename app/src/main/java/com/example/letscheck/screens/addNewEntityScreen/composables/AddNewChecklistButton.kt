@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
-import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
 @Composable
@@ -28,6 +27,6 @@ fun AddNewChecklistButton(onAddNewChecklist: () -> Unit){
             containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.onSecondary
         )
-    ) { Text( text = stringResource(id = R.string.add_new_subtitle) ) }
+    ) { Text( text = stringResource(id = R.string.add_new_checklist_section) ) }
 
 }

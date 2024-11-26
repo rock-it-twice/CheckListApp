@@ -73,7 +73,7 @@ fun CurrentEntityScreen(
     PopUpBox(
         size = DpSize(360.dp, 240.dp),
         showPopUp = showPopUp,
-        onDismiss = { showPopUp = it },
+        onPopUpClose = { showPopUp = it },
         content = { GoToMainScreenPopUp(navController) { showPopUp = it } }
     )
 }

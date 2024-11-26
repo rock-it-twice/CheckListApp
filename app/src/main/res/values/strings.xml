@@ -19,6 +19,11 @@
     <string name="no_image_added">изображение не выбрано</string>
     <string name="progress_bar_text">прогресс:</string>
 
+    <!-- Folder menu -->
+    <string name="folder_title">Выбор папки: </string>
+    <string name="folder_no_folder">без папки</string>
+    <string name="folder_edit">Изменить</string>
+
     <!-- Entity DropDown menu -->
     <string name="entity_reset">Сбросить прогресс</string>
     <string name="entity_edit">Изменить</string>
@@ -29,15 +34,14 @@
 
     <!-- Add New entity screen -->
         <!-- Buttons -->
-    <string name="add_new_subtitle">Новый раздел</string>
+    <string name="add_new_subtitle">Новый подзаголовок</string>
+    <string name="add_new_checklist_section">Новый раздел</string>
     <string name="add_new_checkbox">Добавить чекбокс</string>
     <string name="add_new_accept">Принять</string>
     <string name="add_new_edit">Изменить</string>
     <string name="add_new_delete_checklist">Удалить раздел</string>
     <string name="add_new_delete">Удалить</string>
         <!-- Fields and labels -->
-    <string name="new_folder_title">Выбор папки: </string>
-    <string name="new_folder_no_folder">без папки</string>
     <string name="new_title_label">Заголовок</string>
     <string name="new_subtitle_label">Подзаголовок</string>
     <string name="new_entity_name">Новый список</string>
@@ -45,10 +49,15 @@
     <string name="new_checkbox_name">Новый чекбокс</string>
 
     <!-- PopUps -->
-    <string name="pop_up_delete_warning_title">Удалить список?</string>
-    <string name="pop_up_delete_warning_message">После подтверждения, список будет удалён безвозвратно.</string>
-    <string name="pop_up_delete_warning_accept">Подтвердить</string>
-    <string name="pop_up_delete_warning_decline">Отменить</string>
+    <string name="pop_up_edit_folders_title">Диспетчер папок</string>
+    <string name="pop_up_edit_folders_message"></string>
+    <string name="pop_up_edit_folders_add">создать папку</string>
+    <string name="pop_up_edit_folders_close">закрыть</string>
+
+    <string name="pop_up_delete_entity_warning_title">Удалить список?</string>
+    <string name="pop_up_delete_entity_warning_message">После подтверждения, список будет удалён безвозвратно.</string>
+    <string name="pop_up_delete_entity_warning_accept">Подтвердить</string>
+    <string name="pop_up_delete_entity_warning_decline">Отменить</string>
 
     <string name="pop_up_complete_title">Все элементы списка отмечены!</string>
     <string name="pop_up_complete_message">Вернуться на главный экран?</string>

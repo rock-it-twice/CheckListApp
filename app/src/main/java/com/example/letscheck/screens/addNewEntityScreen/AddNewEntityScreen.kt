@@ -6,20 +6,23 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListLazyColumn
 import com.example.letscheck.screens.addNewEntityScreen.composables.SaveResultToDataBaseButton
+import com.example.letscheck.screens.common_composables.EditFoldersPopUp
+import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
@@ -49,6 +52,10 @@ fun AddNewEntityScreen(
         }
     }
 
+    val folders by vm.folders.observeAsState(listOf())
+
+    var showPopUp by remember { mutableStateOf(false) }
+    val popUpSize = DpSize(500.dp, 500.dp)
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val fabVisibility by remember {
@@ -68,12 +75,32 @@ fun AddNewEntityScreen(
                 addNewVM = vm,
                 settings = settings,
                 onSettingsChange = onSettingsChange,
-                scrollBehavior = topBarScrollBehavior,
+                scrollBehavior   = topBarScrollBehavior,
             )
         },
         content   = { innerPadding ->
-            NewCheckListLazyColumn(vm = vm, lazyListState, innerPadding, topBarScrollBehavior)
+            NewCheckListLazyColumn(
+                vm = vm,
+                folders = folders,
+                showPopUpEditFolder = showPopUp,
+                lazyListState = lazyListState,
+                innerPadding  = innerPadding,
+                topAppBarScrollBehavior = topBarScrollBehavior,
+                onShowPopUpChange = { showPopUp = it }
+            )
                     },
         floatingActionButton = { SaveResultToDataBaseButton(vm, navController, fabVisibility) }
     )
+    PopUpBox(
+        showPopUp = showPopUp,
+        size = popUpSize,
+        onPopUpClose = { showPopUp = it }
+    ) {
+        EditFoldersPopUp(
+            folders  = folders,
+            onAdd    = { vm.addFolder(it) },
+            onRename = { id, name -> vm.renameFolder(id, name) },
+            onDelete = { vm.deleteFolder(it) }
+        )
+    }
 }

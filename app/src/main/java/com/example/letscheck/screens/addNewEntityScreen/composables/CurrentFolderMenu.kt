@@ -1,15 +1,16 @@
 package com.example.letscheck.screens.addNewEntityScreen.composables
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,19 +20,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.Folder
-import com.example.letscheck.viewModels.MainViewModel
 
 @Composable
-fun CurrentFolderName(folders: List<Folder>, id: Long?, onFolderChange: (Long?) -> Unit){
+fun CurrentFolderMenu(
+    folders: List<Folder>,
+    id: Long?,
+    showPopUp: Boolean,
+    onFolderChange: (Long?) -> Unit,
+    onShowPopUpChange: (Boolean) -> Unit
+){
 
     var expanded by remember { mutableStateOf(false) }
-    val noFolder = stringResource(id = R.string.new_folder_no_folder)
+    val noFolder = stringResource(id = R.string.folder_no_folder)
     var folderName by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.padding(bottom = 10.dp),
     ) {
-        Text(stringResource(R.string.new_folder_title))
+        Text(stringResource(R.string.folder_title))
         TextButton(
             colors = ButtonDefaults.textButtonColors(
                 contentColor = MaterialTheme.colorScheme.secondary
@@ -48,9 +54,16 @@ fun CurrentFolderName(folders: List<Folder>, id: Long?, onFolderChange: (Long?) 
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
+            DropdownMenuItem(
+                text    = { Text(text = noFolder) },
+                onClick = { folderName = noFolder
+                            onFolderChange(null)
+                            expanded = false
+                }
+            )
             folders.forEach {
                 DropdownMenuItem(
-                    text = { Text(text = it.folderName) },
+                    text    = { Text(text = it.folderName) },
                     onClick = {
                         folderName = it.folderName
                         onFolderChange(it.id)
@@ -58,6 +71,11 @@ fun CurrentFolderName(folders: List<Folder>, id: Long?, onFolderChange: (Long?) 
                     }
                 )
             }
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+            DropdownMenuItem(
+                text    = { Text(stringResource(R.string.folder_edit)) },
+                onClick = { onShowPopUpChange(!showPopUp) }
+            )
         }
     }
 }

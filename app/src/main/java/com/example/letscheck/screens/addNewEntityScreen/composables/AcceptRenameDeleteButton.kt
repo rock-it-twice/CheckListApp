@@ -35,11 +35,11 @@ fun AcceptRenameDeleteButton(newName: String,
 ) {
     Row {
         // изменить запись
-        AnimatedVisibility(visible = isEnabled) {
+        AnimatedVisibility(visible = !isEnabled) {
             IconButton(
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
                 onClick = { onEnabledChange(!isEnabled) },
-                enabled = isEnabled,
+                enabled = true,
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.onSecondary
@@ -51,7 +51,7 @@ fun AcceptRenameDeleteButton(newName: String,
             ) }
         }
         // принять изменения либо удалить
-        AnimatedVisibility(visible = !isEnabled) {
+        AnimatedVisibility(visible = isEnabled) {
             Row {
                 // Принять
                 IconButton(
@@ -74,8 +74,7 @@ fun AcceptRenameDeleteButton(newName: String,
                             else -> {}
                         }
                         onEnabledChange(!isEnabled)
-                    },
-                    enabled = !isEnabled
+                    }
                 ) { Icon(
                     imageVector = Icons.Default.Done,
                     modifier = Modifier.size(15.dp),
