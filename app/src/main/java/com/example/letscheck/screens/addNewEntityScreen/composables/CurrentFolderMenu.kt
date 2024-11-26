@@ -18,21 +18,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.letscheck.R
 import com.example.letscheck.data.classes.main.Folder
+import com.example.letscheck.navigation.Routes
 
 @Composable
 fun CurrentFolderMenu(
+    navController: NavController,
     folders: List<Folder>,
     id: Long?,
-    showPopUp: Boolean,
-    onFolderChange: (Long?) -> Unit,
-    onShowPopUpChange: (Boolean) -> Unit
+    onFolderChange: (Long?) -> Unit
 ){
 
     var expanded by remember { mutableStateOf(false) }
     val noFolder = stringResource(id = R.string.folder_no_folder)
     var folderName by remember { mutableStateOf("") }
+    val route = navController.currentDestination!!.route
 
     Column(
         modifier = Modifier.padding(bottom = 10.dp),
@@ -74,7 +76,11 @@ fun CurrentFolderMenu(
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             DropdownMenuItem(
                 text    = { Text(stringResource(R.string.folder_edit)) },
-                onClick = { onShowPopUpChange(!showPopUp) }
+                onClick = {
+                    navController.navigate(
+                        route = "${Routes.FolderDispatcherScreen.route}/${route}"
+                    )
+                }
             )
         }
     }

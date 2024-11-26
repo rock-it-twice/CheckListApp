@@ -47,23 +47,9 @@ class AddNewEntityViewModel(
     var newCheckBoxes: List<List<CheckBoxTitle>> by mutableStateOf( listOf() )
         private set
 
+    //----------------------------------------------------------------------------------------------
 
-    // New entity
-    fun createNewEntity(folderId: Long, str: String) {
-        newEntity = UserEntity( folderId = folderId, entityName = str )
-        addNewImageUri(null)
-        clearNewCheckLists()
-        clearNewCheckBoxes()
-    }
-
-    fun clearNewEntity(){
-        newEntity = null
-        addNewImageUri(null)
-        clearNewCheckLists()
-        clearNewCheckBoxes()
-    }
-
-    fun renameNewEntity(str: String) { newEntity = newEntity!!.copy( entityName = str ) }
+    // Folder
 
     fun changeFolder(id: Long?) { newEntity = newEntity!!.copy( folderId = id ) }
 
@@ -83,7 +69,111 @@ class AddNewEntityViewModel(
         vmScope.launch(Dispatchers.Default){ repository.deleteFolder(id) }
     }
 
+    //----------------------------------------------------------------------------------------------
+
+    // Entity
+
+    fun createNewEntity(folderId: Long, str: String) {
+        newEntity = UserEntity( folderId = folderId, entityName = str )
+        addNewImageUri(null)
+        clearNewCheckLists()
+        clearNewCheckBoxes()
+    }
+
+    fun clearNewEntity(){
+        newEntity = null
+        addNewImageUri(null)
+        clearNewCheckLists()
+        clearNewCheckBoxes()
+    }
+
+    fun renameNewEntity(str: String) { newEntity = newEntity!!.copy( entityName = str ) }
+
+    fun getEntityId(id: Long) { entityId = id }
+
+    // Setting the current entity
+    fun setCurrentEntityAsNew(){
+        vmScope.launch {
+            var entity: JointEntity?
+            withContext(Dispatchers.Default){
+                entity = repository.getJointEntityById(entityId)
+            }
+            if (entity != null) {
+                newEntity = entity!!.entity
+                newImageUri = if (entity!!.entity.image != "") entity!!.entity.image.toUri() else null
+                newChecklists = entity!!.checkLists.map { it.checkList }
+                newCheckBoxes = entity!!.checkLists.map { it.checkBoxTitles.toList() }
+            }
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    // New checklists
+
+    fun addNewCheckList() {
+        val newList = newChecklists.toMutableList()
+        newList.add(CheckList())
+        newChecklists = newList.toList()
+
+        val newSubList = newCheckBoxes.toMutableList()
+        newSubList.add(listOf())
+        newCheckBoxes = newSubList.toList()
+    }
+
+    fun renameNewCheckList(index: Int, str: String) {
+        val newList = newChecklists.toMutableList()
+        newList[index].checkListName = str
+        newChecklists = newList.toList()
+    }
+
+    fun deleteNewCheckList(index: Int) {
+        val newList = newChecklists.toMutableList()
+        val newSubList = newCheckBoxes.toMutableList()
+        newSubList.removeAt(index)
+        newList.removeAt(index)
+        newCheckBoxes = newSubList
+        newChecklists = newList
+    }
+
+    private fun clearNewCheckLists(){
+        newChecklists = listOf()
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    // New CheckBoxTitles
+
+    fun addNewCheckBox(index: Int) {
+        val newSubLists = newCheckBoxes.toMutableList()
+        val newSubList = newSubLists[index].toMutableList()
+        newSubList.add(CheckBoxTitle())
+        newSubLists[index] = newSubList
+        newCheckBoxes = newSubLists.toList()
+    }
+
+    fun renameCheckBox(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
+        val newSubLists = newCheckBoxes.toMutableList()
+        newSubLists[index].find { it == checkBoxTitle }!!.text = str
+        newCheckBoxes = newSubLists
+    }
+
+    fun deleteCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
+        val newSubLists = newCheckBoxes.toMutableList()
+        val newSubList = newSubLists[listIndex].toMutableList()
+        newSubList.remove(checkBoxTitle)
+        newSubLists[listIndex] = newSubList
+        newCheckBoxes = newSubLists.toList()
+    }
+
+    private fun clearNewCheckBoxes(){
+        newCheckBoxes = listOf()
+    }
+
+    //----------------------------------------------------------------------------------------------
+
     // new image
+
     fun addNewImageUri(uri: Uri?){
         vmScope.launch(Dispatchers.Main) {
             newImageUri = uri
@@ -119,80 +209,7 @@ class AddNewEntityViewModel(
         newEntity = newEntity!!.copy( image = newImageUri?.toString() ?: "" )
     }
 
-    fun getEntityId(id: Long) { entityId = id }
-
-    // Setting the current entity
-    fun setCurrentEntityAsNew(){
-        vmScope.launch {
-            var entity: JointEntity?
-            withContext(Dispatchers.Default){
-                entity = repository.getJointEntityById(entityId)
-            }
-            if (entity != null) {
-                newEntity = entity!!.entity
-                newImageUri = if (entity!!.entity.image != "") entity!!.entity.image.toUri() else null
-                newChecklists = entity!!.checkLists.map { it.checkList }
-                newCheckBoxes = entity!!.checkLists.map { it.checkBoxTitles.toList() }
-            }
-        }
-    }
-
-    // New checklists
-    fun addNewCheckList() {
-        val newList = newChecklists.toMutableList()
-        newList.add(CheckList())
-        newChecklists = newList.toList()
-
-        val newSubList = newCheckBoxes.toMutableList()
-        newSubList.add(listOf())
-        newCheckBoxes = newSubList.toList()
-    }
-
-    fun renameNewCheckList(index: Int, str: String) {
-        val newList = newChecklists.toMutableList()
-        newList[index].checkListName = str
-        newChecklists = newList.toList()
-    }
-
-    fun deleteNewCheckList(index: Int) {
-        val newList = newChecklists.toMutableList()
-        val newSubList = newCheckBoxes.toMutableList()
-        newSubList.removeAt(index)
-        newList.removeAt(index)
-        newCheckBoxes = newSubList
-        newChecklists = newList
-    }
-
-    private fun clearNewCheckLists(){
-        newChecklists = listOf()
-    }
-
-    // New CheckBoxTitles
-    fun addNewCheckBox(index: Int) {
-        val newSubLists = newCheckBoxes.toMutableList()
-        val newSubList = newSubLists[index].toMutableList()
-        newSubList.add(CheckBoxTitle())
-        newSubLists[index] = newSubList
-        newCheckBoxes = newSubLists.toList()
-    }
-
-    fun renameCheckBox(index: Int, checkBoxTitle: CheckBoxTitle, str: String) {
-        val newSubLists = newCheckBoxes.toMutableList()
-        newSubLists[index].find { it == checkBoxTitle }!!.text = str
-        newCheckBoxes = newSubLists
-    }
-
-    fun deleteCheckBox(listIndex: Int, checkBoxTitle: CheckBoxTitle) {
-        val newSubLists = newCheckBoxes.toMutableList()
-        val newSubList = newSubLists[listIndex].toMutableList()
-        newSubList.remove(checkBoxTitle)
-        newSubLists[listIndex] = newSubList
-        newCheckBoxes = newSubLists.toList()
-    }
-
-    private fun clearNewCheckBoxes(){
-        newCheckBoxes = listOf()
-    }
+    //----------------------------------------------------------------------------------------------
 
     fun saveNewDataToDB() {
         vmScope.launch(Dispatchers.IO) {
@@ -202,12 +219,6 @@ class AddNewEntityViewModel(
                 checkBoxTitles = newCheckBoxes
             )
         }
-    }
-
-    fun isDifferentFolders(currentFolderId: Long): Boolean {
-        return try {
-            ( currentFolderId != newEntity!!.folderId )
-        } catch (e: NullPointerException) { true }
     }
 
 }

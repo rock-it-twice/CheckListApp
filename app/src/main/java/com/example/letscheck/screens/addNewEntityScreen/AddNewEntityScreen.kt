@@ -57,9 +57,6 @@ fun AddNewEntityScreen(
 
     val folders by vm.folders.observeAsState(listOf())
 
-    var showPopUp by remember { mutableStateOf(false) }
-    val popUpSize = DpSize(500.dp, 500.dp)
-
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val fabVisibility by remember {
@@ -84,27 +81,26 @@ fun AddNewEntityScreen(
         },
         content   = { innerPadding ->
             NewCheckListLazyColumn(
+                navController = navController,
                 vm = vm,
                 folders = folders,
-                showPopUpEditFolder = showPopUp,
                 lazyListState = lazyListState,
                 innerPadding  = innerPadding,
-                topAppBarScrollBehavior = topBarScrollBehavior,
-                onShowPopUpChange = { showPopUp = it }
+                topAppBarScrollBehavior = topBarScrollBehavior
             )
                     },
         floatingActionButton = { SaveResultToDataBaseButton(vm, navController, fabVisibility) }
     )
-    PopUpBox(
-        showPopUp = showPopUp,
-        size = popUpSize,
-        onPopUpClose = { showPopUp = it }
-    ) {
-        EditFoldersPopUp(
-            folders  = folders,
-            onAdd    = { vm.addFolder(it) },
-            onRename = { id, name -> vm.renameFolder(id, name) },
-            onDelete = { vm.deleteFolder(it) }
-        )
-    }
+//    PopUpBox(
+//        showPopUp = showPopUp,
+//        size = popUpSize,
+//        onPopUpClose = { showPopUp = it }
+//    ) {
+//        EditFoldersPopUp(
+//            folders  = folders,
+//            onAdd    = { vm.addFolder(it) },
+//            onRename = { id, name -> vm.renameFolder(id, name) },
+//            onDelete = { vm.deleteFolder(it) }
+//        )
+//    }
 }

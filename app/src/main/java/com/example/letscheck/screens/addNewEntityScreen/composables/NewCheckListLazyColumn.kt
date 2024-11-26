@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.screens.common_composables.DeleteCheckListPopUp
 import com.example.letscheck.screens.common_composables.PopUpBox
@@ -41,13 +42,12 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewCheckListLazyColumn(
+    navController: NavController,
     vm: AddNewEntityViewModel,
     folders: List<Folder>,
-    showPopUpEditFolder: Boolean,
     lazyListState: LazyListState,
     innerPadding: PaddingValues,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
-    onShowPopUpChange: (Boolean)-> Unit
 ) {
 
     val modifier = Modifier
@@ -67,11 +67,10 @@ fun NewCheckListLazyColumn(
     ) {
         item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
         item { CurrentFolderMenu(
+            navController = navController,
             folders = folders,
             id = folderId,
-            showPopUp = showPopUpEditFolder,
-            onFolderChange = { vm.changeFolder(it) },
-            onShowPopUpChange = { onShowPopUpChange(it) }
+            onFolderChange = { vm.changeFolder(it) }
             )
         }
         item { NewTitleRow(entityName) { vm.renameNewEntity(it) } }

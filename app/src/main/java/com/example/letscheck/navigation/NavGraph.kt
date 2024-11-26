@@ -10,9 +10,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.letscheck.data.classes.main.AppSettings
+import com.example.letscheck.screens.FolderDispatcher.FolderDispatcherScreen
 import com.example.letscheck.screens.mainScreen.MainScreen
 import com.example.letscheck.screens.addNewEntityScreen.AddNewEntityScreen
 import com.example.letscheck.screens.currentEntityScreen.CurrentEntityScreen
@@ -49,6 +52,21 @@ fun NavGraph( mainVM: MainViewModel,
                 settings = settings,
                 onSettingsChange = onSettingsChange
             )
+        }
+        composable(
+            route = "${Routes.FolderDispatcherScreen.route}/{previousRoute}",
+            arguments = listOf(navArgument("previousRoute") { type = NavType.StringType })
+        ){  backStackEntry ->
+
+            // получаем путь к предыдущему экрану, чтобы возвращаться именно к нему
+            val previousScreenRoute = backStackEntry.arguments?.getString("previousRoute")
+
+            FolderDispatcherScreen(
+                previousScreenRoute = previousScreenRoute,
+                navController = navController,
+                vm = addNewVM
+            )
+
         }
     }
 }

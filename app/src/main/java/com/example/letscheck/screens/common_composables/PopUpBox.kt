@@ -66,7 +66,6 @@ fun PopUpBox(showPopUp: Boolean,
              onPopUpClose: (Boolean) -> Unit,
              content: @Composable ()-> Unit
 ){
-
     AnimatedVisibility(
         visible = showPopUp,
         enter = fadeIn(),
@@ -92,17 +91,9 @@ fun PopUpBox(showPopUp: Boolean,
                             .size(size)
                             .clip(RoundedCornerShape(20.dp))
                             .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .padding(10.dp),
+                            .padding(20.dp),
                         contentAlignment = Alignment.Center,
-                        content = {
-                            Column(
-                                Modifier.fillMaxSize()
-                            ) {
-                                ClosePopUpIconButton(showPopUp) { onPopUpClose(!showPopUp) }
-                                content()
-                            }
-
-                        }
+                        content = { content() }
                     )
                 }
             )
@@ -110,7 +101,6 @@ fun PopUpBox(showPopUp: Boolean,
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EditFoldersPopUp(
     folders:  List<Folder>,
@@ -125,7 +115,7 @@ fun EditFoldersPopUp(
     ).copy()
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Заголовок
@@ -144,7 +134,7 @@ fun EditFoldersPopUp(
 //        Spacer(Modifier.size(10.dp))
     }
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(20.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -198,7 +188,7 @@ fun DeleteWarningPopUp(
     onDelete: () -> Unit){
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(20.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -246,7 +236,7 @@ fun DeleteWarningPopUp(
 @Composable
 fun GoToMainScreenPopUp(navController: NavController, onClose: (Boolean) -> Unit){
         Column(
-            modifier = Modifier.fillMaxSize().padding(20.dp),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -293,7 +283,7 @@ fun GoToMainScreenPopUp(navController: NavController, onClose: (Boolean) -> Unit
 @Composable
 fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline: () -> Unit){
     Column(
-        modifier = Modifier.fillMaxSize().padding(20.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -347,7 +337,7 @@ fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline
 @Composable
 fun DeleteCheckListPopUp(listIndex: Int, onAccept: (Int) -> Unit, onDecline: (Boolean) -> Unit){
     Column(
-        modifier = Modifier.fillMaxSize().padding(20.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
