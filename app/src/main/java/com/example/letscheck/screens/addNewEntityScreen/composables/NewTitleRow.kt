@@ -17,9 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,7 +36,8 @@ fun NewTitleRow(name: String,
                 onNameChange: (String) -> Unit
 ){
 
-    var isEnabled by rememberSaveable { mutableStateOf( name.isBlank() ) }
+    val _isEnabled by remember(name) { derivedStateOf { name.isBlank() }  }
+    var isEnabled by rememberSaveable { mutableStateOf( _isEnabled )  }
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
@@ -58,12 +60,11 @@ fun NewTitleRow(name: String,
             placeholder = { TextFieldPlaceholder(R.string.new_entity_name, isEnabled) },
             colors = textFieldColors
         )
-
-        AcceptOrEditEntityButton(
+        AcceptOrEditTitleButton(
             name = name,
             isEnabled = isEnabled,
             onNameChange = onNameChange,
-            onValueChange = { isEnabled = it}
+            onValueChange = { isEnabled = it }
         )
 
     }
@@ -71,7 +72,7 @@ fun NewTitleRow(name: String,
 }
 
 @Composable
-fun AcceptOrEditEntityButton(
+fun AcceptOrEditTitleButton(
                        name: String,
                        isEnabled: Boolean,
                        onNameChange: (String) -> Unit,
@@ -83,7 +84,6 @@ fun AcceptOrEditEntityButton(
                     onNameChange(name)
                     onValueChange(!isEnabled)
                 },
-                enabled = !isEnabled,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
@@ -93,7 +93,7 @@ fun AcceptOrEditEntityButton(
                 Icon(
                     imageVector = Icons.Default.Done,
                     modifier = Modifier.size(15.dp),
-                    contentDescription = "create"
+                    contentDescription = "accept"
                 )
             }
 
@@ -101,7 +101,6 @@ fun AcceptOrEditEntityButton(
         AnimatedVisibility(visible = isEnabled) {
             IconButton(
                 onClick = { onValueChange(!isEnabled) },
-                enabled = isEnabled,
                 modifier = Modifier.size(width = 50.dp, height = 25.dp),
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,

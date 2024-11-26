@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-open class MainViewModel( private val vmScope: CoroutineScope,
+class MainViewModel( private val vmScope: CoroutineScope,
                           private val repository: ChecklistRepository,
                           private val application: Application ) : ViewModel() {
 

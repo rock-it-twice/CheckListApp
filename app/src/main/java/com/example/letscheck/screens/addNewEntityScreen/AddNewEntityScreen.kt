@@ -1,7 +1,9 @@
 package com.example.letscheck.screens.addNewEntityScreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -27,7 +30,7 @@ import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopApp
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun AddNewEntityScreen(
     folderId: Long,
@@ -56,6 +59,7 @@ fun AddNewEntityScreen(
 
     var showPopUp by remember { mutableStateOf(false) }
     val popUpSize = DpSize(500.dp, 500.dp)
+
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val fabVisibility by remember {

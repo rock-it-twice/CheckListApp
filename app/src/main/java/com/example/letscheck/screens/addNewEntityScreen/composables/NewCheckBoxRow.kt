@@ -35,7 +35,7 @@ fun NewCheckBoxRow(modifier: Modifier,
 ) {
 
     var newName: String    by remember { mutableStateOf(checkBoxTitle.text) }
-    var isEnabled: Boolean by remember { mutableStateOf(checkBoxTitle.text != "") }
+    var isEnabled: Boolean by remember { mutableStateOf(checkBoxTitle.text == "") }
     var isChecked: Boolean by remember { mutableStateOf(false) }
 
     LaunchedEffect(checkBoxTitle.text) { newName = checkBoxTitle.text }
@@ -68,7 +68,7 @@ fun NewCheckBoxRow(modifier: Modifier,
                 .clickable { isChecked = !isChecked },
             value = newName,
             onValueChange = { newName = it },
-            enabled = !isEnabled,
+            enabled = isEnabled,
             colors = textFieldColors,
             placeholder = { TextFieldPlaceholder( R.string.new_checkbox_name, isEnabled ) },
             shape = RoundedCornerShape(20.dp)

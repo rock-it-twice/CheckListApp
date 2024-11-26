@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -32,6 +35,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -60,6 +66,7 @@ fun PopUpBox(showPopUp: Boolean,
              onPopUpClose: (Boolean) -> Unit,
              content: @Composable ()-> Unit
 ){
+
     AnimatedVisibility(
         visible = showPopUp,
         enter = fadeIn(),
@@ -85,7 +92,7 @@ fun PopUpBox(showPopUp: Boolean,
                             .size(size)
                             .clip(RoundedCornerShape(20.dp))
                             .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .padding(40.dp),
+                            .padding(10.dp),
                         contentAlignment = Alignment.Center,
                         content = {
                             Column(
@@ -103,6 +110,7 @@ fun PopUpBox(showPopUp: Boolean,
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EditFoldersPopUp(
     folders:  List<Folder>,
@@ -117,7 +125,7 @@ fun EditFoldersPopUp(
     ).copy()
 
     Column(
-        Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Заголовок
@@ -135,9 +143,8 @@ fun EditFoldersPopUp(
 //        )
 //        Spacer(Modifier.size(10.dp))
     }
-
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -155,8 +162,7 @@ fun EditFoldersPopUp(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
-                    modifier = Modifier
-                        .weight(1F),
+                    modifier = Modifier.weight(1F),
                     value = name,
                     enabled = isEnabled,
                     onValueChange = { name = it },
@@ -168,8 +174,8 @@ fun EditFoldersPopUp(
                     folderId = folder.id,
                     isEnabled = isEnabled,
                     onEnabledChange = { isEnabled = it },
-                    onRenameFolder = { onRename(folder.id, it) },
-                    onDeleteFolder = { onDelete(it) }
+                    onRenameFolder  = { onRename(folder.id, it) },
+                    onDeleteFolder  = { onDelete(it) }
                     )
             }
         }
@@ -187,9 +193,12 @@ fun EditFoldersPopUp(
 }
 
 @Composable
-fun DeleteWarningPopUp(onClose: (Boolean) -> Unit, onDelete: () -> Unit){
+fun DeleteWarningPopUp(
+    onClose: (Boolean) -> Unit,
+    onDelete: () -> Unit){
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -237,7 +246,7 @@ fun DeleteWarningPopUp(onClose: (Boolean) -> Unit, onDelete: () -> Unit){
 @Composable
 fun GoToMainScreenPopUp(navController: NavController, onClose: (Boolean) -> Unit){
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(20.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -284,7 +293,7 @@ fun GoToMainScreenPopUp(navController: NavController, onClose: (Boolean) -> Unit
 @Composable
 fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline: () -> Unit){
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -338,7 +347,7 @@ fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline
 @Composable
 fun DeleteCheckListPopUp(listIndex: Int, onAccept: (Int) -> Unit, onDecline: (Boolean) -> Unit){
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

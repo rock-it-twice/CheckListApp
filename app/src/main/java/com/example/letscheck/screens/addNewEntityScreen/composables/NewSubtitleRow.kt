@@ -17,6 +17,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,8 +39,11 @@ fun NewSubtitleRow(modifier: Modifier,
                    onRename: (Int, String) -> Unit
 ) {
 
-    var isEnabled by rememberSaveable { mutableStateOf( checkList.checkListName.isNotBlank() ) }
+
     var newName   by rememberSaveable { mutableStateOf( checkList.checkListName ) }
+    val _isEnabled by remember(newName) { derivedStateOf { newName.isBlank() }  }
+    var isEnabled by rememberSaveable { mutableStateOf( _isEnabled ) }
+
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
@@ -49,7 +53,7 @@ fun NewSubtitleRow(modifier: Modifier,
 
         var isVisible by remember { mutableStateOf( newName.isNotBlank() ) }
         LaunchedEffect(isEnabled) { isVisible = newName.isNotBlank() }
-        LaunchedEffect(isVisible) { isEnabled = newName.isNotBlank() }
+        LaunchedEffect(isVisible) { isEnabled = newName.isBlank() }
 
         AnimatedVisibility(visible = !isVisible) {
             Row(
@@ -77,7 +81,7 @@ fun NewSubtitleRow(modifier: Modifier,
                 TextField(
                     value = newName,
                     modifier = Modifier.weight(1F).fillMaxWidth(),
-                    enabled = !isEnabled,
+                    enabled = isEnabled,
                     onValueChange = { newName = it },
                     textStyle = MaterialTheme.typography.titleLarge,
                     colors = textFieldColors,
