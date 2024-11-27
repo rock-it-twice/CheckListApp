@@ -21,8 +21,8 @@ import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.currentEntityScreen.composables.CurrentEntityColumn
-import com.example.letscheck.screens.common_composables.GoToMainScreenPopUp
 import com.example.letscheck.screens.common_composables.PopUpBox
+import com.example.letscheck.screens.common_composables.popups.GoToMainScreenPopUp
 import com.example.letscheck.viewModels.CurrentEntityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

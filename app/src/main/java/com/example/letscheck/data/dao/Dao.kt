@@ -134,7 +134,7 @@ interface Dao {
 
     @Transaction
     @Query("SELECT * FROM folders WHERE folders.id LIKE :id LIMIT 1")
-    suspend fun getJointFolderById(id: Long): JointFolder?
+    suspend fun getJointFolderById(id: Long?): JointFolder?
 
     @Transaction
     @Query("SELECT * FROM folders WHERE folder_name LIKE :name LIMIT 1")

@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.FolderDispatcher
+package com.example.letscheck.screens.FolderDispatcherScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -109,7 +109,7 @@ class AddNewEntityViewModel(
 
     //----------------------------------------------------------------------------------------------
 
-    // New checklists
+    // Checklists
 
     fun addNewCheckList() {
         val newList = newChecklists.toMutableList()
@@ -142,7 +142,7 @@ class AddNewEntityViewModel(
 
     //----------------------------------------------------------------------------------------------
 
-    // New CheckBoxTitles
+    // CheckBoxTitles
 
     fun addNewCheckBox(index: Int) {
         val newSubLists = newCheckBoxes.toMutableList()

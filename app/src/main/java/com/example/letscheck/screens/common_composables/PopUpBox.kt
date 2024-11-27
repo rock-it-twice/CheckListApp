@@ -182,103 +182,10 @@ fun EditFoldersPopUp(
     }
 }
 
-@Composable
-fun DeleteWarningPopUp(
-    onClose: (Boolean) -> Unit,
-    onDelete: () -> Unit){
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Заголовок
-        Text(
-            text = stringResource(R.string.pop_up_delete_entity_warning_title),
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.size(20.dp))
-        // Сообщение
-        Text(
-            text = stringResource(R.string.pop_up_delete_entity_warning_message),
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.size(10.dp))
-        // Кнопки
-        Row(modifier = Modifier
-            .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Button(
-                onClick = { onDelete() ; onClose( false ) },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Text(stringResource(R.string.pop_up_delete_entity_warning_accept))
-            }
-            Button(
-                onClick = { onClose( false ) },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Text(stringResource(R.string.pop_up_delete_entity_warning_decline))
-            }
-        }
-        Spacer(Modifier.size(10.dp))
 
-    }
-}
 
-@Composable
-fun GoToMainScreenPopUp(navController: NavController, onClose: (Boolean) -> Unit){
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Заголовок
-            Text(
-                text = stringResource(R.string.pop_up_complete_title),
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center
-            )
-            Spacer(Modifier.size(20.dp))
-            // Сообщение
-            Text(
-                text = stringResource(R.string.pop_up_complete_message),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center
-            )
-            Spacer(Modifier.size(10.dp))
-            // Кнопки
-            Row(modifier = Modifier
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Button(
-                    onClick = { navController.navigate(route = Routes.Home.route) },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    )
-                ) {
-                    Text(stringResource(R.string.pop_up_complete_accept))
-                }
-                Button(
-                    onClick = { onClose( false ) },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    )
-                ) {
-                    Text(stringResource(R.string.pop_up_complete_decline))
-                }
-            }
-            Spacer(Modifier.size(10.dp))
-        }
-}
+// Unused-------------------
 
 @Composable
 fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline: () -> Unit){
@@ -334,50 +241,7 @@ fun NewEntityPopUp(navController: NavController, onAccept: () -> Unit, onDecline
 
 }
 
-@Composable
-fun DeleteCheckListPopUp(listIndex: Int, onAccept: (Int) -> Unit, onDecline: (Boolean) -> Unit){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Заголовок
-        Text(
-            text = stringResource(R.string.pop_up_delete_check_list_title),
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.size(20.dp))
-        // Кнопки
-        Row(modifier = Modifier
-            .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Button(
-                onClick = {
-                    onAccept(listIndex)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Text(stringResource(R.string.pop_up_delete_check_list_accept))
-            }
-            Button(
-                onClick = {
-                    onDecline(false)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Text(stringResource(R.string.pop_up_delete_entity_warning_decline))
-            }
-        }
-        Spacer(Modifier.size(10.dp))
-    }
 
-}
 
 @Composable
 fun ClosePopUpIconButton(showPopUp: Boolean, onClose: (Boolean) -> Unit){

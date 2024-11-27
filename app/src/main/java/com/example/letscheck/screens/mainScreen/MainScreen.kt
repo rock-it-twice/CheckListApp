@@ -1,5 +1,7 @@
 package com.example.letscheck.screens.mainScreen
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -7,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -18,10 +21,12 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
+import com.example.letscheck.screens.common_composables.FolderMenu
 import com.example.letscheck.screens.mainScreen.composables.ChooseFolderColumn
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
-import com.example.letscheck.screens.common_composables.DeleteWarningPopUp
 import com.example.letscheck.screens.common_composables.PopUpBox
+import com.example.letscheck.screens.common_composables.popups.DeleteWarningPopUp
+import com.example.letscheck.screens.mainScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.viewModels.MainViewModel
 
 
@@ -33,6 +38,8 @@ fun MainScreen(
     settings: AppSettings,
     onSettingsChange: () -> Unit
     ) {
+
+    val folders by vm.folders.observeAsState(listOf())
 
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -49,25 +56,47 @@ fun MainScreen(
         topBar    = {
             CommonTopAppBar(
                 navController = navController,
-                mainVM = vm,
+                mainVM   = vm,
                 settings = settings,
                 onSettingsChange = onSettingsChange,
-                scrollBehavior = topBarScrollBehavior,
+                scrollBehavior   = topBarScrollBehavior,
             )
         },
         content   = {
             innerPadding ->
-            ChooseFolderColumn(
-                vm = vm,
-                navController = navController,
-                lazyGridState = lazyGridState,
-                innerPadding = innerPadding,
-                topBarScrollBehavior = topBarScrollBehavior,
-                showPopUp = { showPopUp = it },
-                getEntityId = { entityId = it
-                                vm.getEntityId(it)
-                }
-            )
+            val topPadding = innerPadding.calculateTopPadding()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = topPadding, bottom = 40.dp, start = 10.dp, end = 10.dp)
+            ) {
+                FolderMenu(
+                    navController = navController,
+                    folders = folders,
+                    id = vm.currentFolderId,
+                    onFolderChange = { vm.changeFolder(it) }
+                )
+                // Сетка со списком чеклистов
+                AnimatedEntitiesGrid(
+                    vm = vm,
+                    navController = navController,
+                    state = lazyGridState,
+                    topBarScrollBehavior = topBarScrollBehavior,
+                    showPopUp = { showPopUp = it },
+                    getEntityId = { entityId = it ; vm.getEntityId(it) }
+                )
+            }
+//            ChooseFolderColumn(
+//                vm = vm,
+//                navController = navController,
+//                lazyGridState = lazyGridState,
+//                innerPadding  = innerPadding,
+//                topBarScrollBehavior = topBarScrollBehavior,
+//                showPopUp   = { showPopUp = it },
+//                getEntityId = { entityId = it
+//                                vm.getEntityId(it)
+//                }
+//            )
         }
     )
     PopUpBox(
@@ -76,9 +105,10 @@ fun MainScreen(
         onPopUpClose = { showPopUp = it },
         content = {
             DeleteWarningPopUp(
-                onClose = { showPopUp = it },
-                onDelete  = { vm.deleteEntityById(entityId)
-                            vm.getJointFolderById()
+                onClose   = { showPopUp = it },
+                onDelete  = {
+                    vm.deleteEntityById(entityId)
+                    vm.getJointFolderById()
                 }
             )
         }

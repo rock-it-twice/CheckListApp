@@ -22,7 +22,7 @@ class MainViewModel( private val vmScope: CoroutineScope,
 
     val folders: LiveData<List<Folder>> = repository.folders
 
-    var currentFolderId: Long by mutableLongStateOf(0)
+    var currentFolderId: Long? by mutableStateOf(null)
         private set
 
     var currentJointFolder: JointFolder? by mutableStateOf( null )
@@ -40,7 +40,7 @@ class MainViewModel( private val vmScope: CoroutineScope,
         }
     }
 
-    fun getFolderId(id:Long) { currentFolderId = id }
+    fun getFolderId(id: Long?) { currentFolderId = id }
 
     fun getJointFolderById() {
         vmScope.launch(Dispatchers.Default) {
@@ -48,20 +48,10 @@ class MainViewModel( private val vmScope: CoroutineScope,
         }
     }
 
-    //______________________________________________________________________________________________
-
-
-    // Folders
-    fun renameFolder(name: String, folder: Folder) {
-        vmScope.launch(Dispatchers.Default) {
-            repository.updateFolder(folder.copy(folderName = name))
-        }
+    fun changeFolder(id: Long?){
+        getFolderId(id)
+        getJointFolderById()
     }
-
-    fun deleteFolder(id: Long) {
-        vmScope.launch(Dispatchers.Default) { repository.deleteFolder(id) }
-    }
-
 
     //______________________________________________________________________________________________
 

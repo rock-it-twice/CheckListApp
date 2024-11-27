@@ -34,8 +34,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.Folder
-import com.example.letscheck.screens.common_composables.DeleteCheckListPopUp
+import com.example.letscheck.screens.common_composables.FolderMenu
 import com.example.letscheck.screens.common_composables.PopUpBox
+import com.example.letscheck.screens.common_composables.popups.DeleteCheckListPopUp
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
@@ -66,7 +67,7 @@ fun NewCheckListLazyColumn(
         contentPadding = innerPadding
     ) {
         item { PhotoPicker(vm.newImageUri) { vm.addNewImageUri(uri = it) } }
-        item { CurrentFolderMenu(
+        item { FolderMenu(
             navController = navController,
             folders = folders,
             id = folderId,
@@ -99,7 +100,7 @@ fun NewCheckListLazyColumn(
                         )
                         vm.newCheckBoxes[listIndex].forEachIndexed { _, it ->
                             NewCheckBoxRow(
-                                modifier = modifier.animateItem(),
+                                modifier  = modifier.animateItem(),
                                 listIndex = listIndex,
                                 checkBoxTitle = it,
                                 onRename = { i, item, name ->  vm.renameCheckBox(i, item, name) },
@@ -122,7 +123,7 @@ fun NewCheckListLazyColumn(
                     ) {
                         DeleteCheckListPopUp(
                             listIndex = listIndex,
-                            onAccept = { vm.deleteNewCheckList(it) },
+                            onAccept  = { vm.deleteNewCheckList(it) },
                             onDecline = { showPopUp = it }
                         )
                     }

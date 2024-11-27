@@ -29,7 +29,7 @@ class ChecklistRepository(private val userDao: Dao) {
 
 
     // FOLDERS
-    suspend fun getJointFolderById(id: Long): JointFolder? {
+    suspend fun getJointFolderById(id: Long?): JointFolder? {
         return withContext(Dispatchers.IO)
         { return@withContext userDao.getJointFolderById(id) }
     }

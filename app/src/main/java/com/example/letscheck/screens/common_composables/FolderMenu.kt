@@ -1,4 +1,4 @@
-package com.example.letscheck.screens.addNewEntityScreen.composables
+package com.example.letscheck.screens.common_composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +24,7 @@ import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.navigation.Routes
 
 @Composable
-fun CurrentFolderMenu(
+fun FolderMenu(
     navController: NavController,
     folders: List<Folder>,
     id: Long?,
@@ -39,7 +39,9 @@ fun CurrentFolderMenu(
     Column(
         modifier = Modifier.padding(bottom = 10.dp),
     ) {
+        // Заголовок
         Text(stringResource(R.string.folder_title))
+        // Текущая папка
         TextButton(
             colors = ButtonDefaults.textButtonColors(
                 contentColor = MaterialTheme.colorScheme.secondary
@@ -51,11 +53,12 @@ fun CurrentFolderMenu(
             else folderName
             )
         }
-
+        // Выпадающее меню
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
+            // Без папки
             DropdownMenuItem(
                 text    = { Text(text = noFolder) },
                 onClick = { folderName = noFolder
@@ -63,6 +66,7 @@ fun CurrentFolderMenu(
                             expanded = false
                 }
             )
+            // Список папок
             folders.forEach {
                 DropdownMenuItem(
                     text    = { Text(text = it.folderName) },
@@ -74,6 +78,7 @@ fun CurrentFolderMenu(
                 )
             }
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
+            // Кнопка перехода на экран управления папками
             DropdownMenuItem(
                 text    = { Text(stringResource(R.string.folder_edit)) },
                 onClick = {
