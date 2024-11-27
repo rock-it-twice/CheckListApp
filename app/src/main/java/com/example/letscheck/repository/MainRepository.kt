@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-class ChecklistRepository(private val userDao: Dao) {
+class MainRepository(private val userDao: Dao) {
 
     val folders = userDao.getAllFolders()
 
@@ -32,6 +32,15 @@ class ChecklistRepository(private val userDao: Dao) {
     suspend fun getJointFolderById(id: Long?): JointFolder? {
         return withContext(Dispatchers.IO)
         { return@withContext userDao.getJointFolderById(id) }
+    }
+
+    suspend fun getNullFolderWithAllEntities(): JointFolder {
+        return withContext(Dispatchers.IO)
+        {
+            val entities = userDao.getAllJointEntities()
+            val jointFolder = JointFolder(null, entities)
+            return@withContext jointFolder
+        }
     }
 
     suspend fun updateFolder(folder: Folder){

@@ -115,9 +115,13 @@ interface Dao {
     @Query("SELECT * FROM user_entities WHERE folder_id LIKE :folderId")
     fun getUserEntities(folderId: Long): List<UserEntity>
 
-    // Получение entity по ID
     @Query("SELECT * FROM user_entities WHERE id LIKE :entityId LIMIT 1")
-    fun getUserEntityById(entityId: Long): UserEntity?
+    fun getUserEntity(entityId: Long): UserEntity?
+
+    // Получение всех списков
+    @Transaction
+    @Query("SELECT * FROM user_entities")
+    fun getAllJointEntities(): List<JointEntity>
 
     // Получение entity по имени
     @Query(
@@ -135,6 +139,7 @@ interface Dao {
     @Transaction
     @Query("SELECT * FROM folders WHERE folders.id LIKE :id LIMIT 1")
     suspend fun getJointFolderById(id: Long?): JointFolder?
+
 
     @Transaction
     @Query("SELECT * FROM folders WHERE folder_name LIKE :name LIMIT 1")

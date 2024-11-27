@@ -2,12 +2,8 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import android.content.Context
-import android.media.MediaActionSound
 import android.media.MediaPlayer
-import android.os.Build
-import android.os.CombinedVibration
 import android.os.VibrationEffect
-import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -16,18 +12,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.output.JointEntity
-import com.example.letscheck.repository.ChecklistRepository
+import com.example.letscheck.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CurrentEntityViewModel(
     private val vmScope: CoroutineScope,
-    private val repository: ChecklistRepository,
+    private val repository: MainRepository,
     private val application: Application): ViewModel() {
 
 

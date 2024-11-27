@@ -9,13 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
@@ -25,10 +19,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.compose.Theme
 import com.example.letscheck.data.dao.Dao
 import com.example.letscheck.data.MainDb
-import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.data.dao.SettingsDao
 import com.example.letscheck.navigation.NavGraph
-import com.example.letscheck.repository.ChecklistRepository
+import com.example.letscheck.repository.MainRepository
 import com.example.letscheck.repository.SettingsRepository
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 import com.example.letscheck.viewModels.CurrentEntityViewModel
@@ -40,8 +33,6 @@ import com.example.letscheck.viewModels.factory.MainViewModelFactory
 import com.example.letscheck.viewModels.factory.SettingsViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +47,7 @@ class MainActivity : ComponentActivity() {
             val settingsDao: SettingsDao = database.settingsDao()
 
             val settingsRepository = SettingsRepository(settingsDao)
-            val mainRepository = ChecklistRepository(userDao)
+            val mainRepository = MainRepository(userDao)
 
             val vmScope = CoroutineScope(Dispatchers.Main)
 

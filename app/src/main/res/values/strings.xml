@@ -21,6 +21,7 @@
 
     <!-- Folder menu -->
     <string name="folder_title">Выбор папки: </string>
+    <string name="folder_all">все списки</string>
     <string name="folder_no_folder">без папки</string>
     <string name="folder_edit">Изменить</string>
 

@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.common_composables.FolderMenu
-import com.example.letscheck.screens.mainScreen.composables.ChooseFolderColumn
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.screens.common_composables.popups.DeleteWarningPopUp

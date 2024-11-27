@@ -10,7 +10,7 @@ import com.example.letscheck.data.classes.main.UserEntity
 data class JointFolder(
 
     @Embedded
-    val folder: Folder,
+    val folder: Folder?,
 
     @Relation(
         entity = UserEntity::class,

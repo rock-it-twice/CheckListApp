@@ -15,7 +15,7 @@ import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
 import com.example.letscheck.data.classes.output.JointEntity
-import com.example.letscheck.repository.ChecklistRepository
+import com.example.letscheck.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ import java.io.File
 
 class AddNewEntityViewModel(
     private val vmScope: CoroutineScope,
-    private val repository: ChecklistRepository,
+    private val repository: MainRepository,
     private val application: Application): ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders

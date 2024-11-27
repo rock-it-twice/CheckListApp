@@ -33,6 +33,7 @@ fun FolderMenu(
 
     var expanded by remember { mutableStateOf(false) }
     val noFolder = stringResource(id = R.string.folder_no_folder)
+    val allFolders = stringResource(id = R.string.folder_all)
     var folderName by remember { mutableStateOf("") }
     val route = navController.currentDestination!!.route
 
@@ -58,6 +59,16 @@ fun FolderMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
+            // Все списки
+            if (route == Routes.Home.route){
+                DropdownMenuItem(
+                    text    = { Text(text = allFolders) },
+                    onClick = { folderName = allFolders
+                                onFolderChange(0)
+                                expanded = false
+                    }
+                )
+            }
             // Без папки
             DropdownMenuItem(
                 text    = { Text(text = noFolder) },

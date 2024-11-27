@@ -5,10 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.letscheck.repository.ChecklistRepository
+import com.example.letscheck.repository.MainRepository
 import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
 import kotlinx.coroutines.CoroutineScope
@@ -16,9 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MainViewModel( private val vmScope: CoroutineScope,
-                          private val repository: ChecklistRepository,
-                          private val application: Application ) : ViewModel() {
+class MainViewModel(private val vmScope: CoroutineScope,
+                    private val repository: MainRepository,
+                    private val application: Application ) : ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
 
@@ -40,11 +39,14 @@ class MainViewModel( private val vmScope: CoroutineScope,
         }
     }
 
-    fun getFolderId(id: Long?) { currentFolderId = id }
+    private fun getFolderId(id: Long?) { currentFolderId = id }
 
     fun getJointFolderById() {
         vmScope.launch(Dispatchers.Default) {
-            currentJointFolder = repository.getJointFolderById(currentFolderId)
+            when (currentFolderId) {
+                0L   -> currentJointFolder = repository.getNullFolderWithAllEntities()
+                else -> currentJointFolder = repository.getJointFolderById(currentFolderId)
+            }
         }
     }
 
