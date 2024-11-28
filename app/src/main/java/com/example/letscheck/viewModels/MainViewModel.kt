@@ -2,6 +2,7 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,6 +27,8 @@ class MainViewModel(private val vmScope: CoroutineScope,
 
     var currentJointFolder: JointFolder? by mutableStateOf( null )
         private set
+
+    var counter: Int by mutableIntStateOf(0)
 
     var entityId: Long by mutableLongStateOf(0L)
         private set
@@ -58,6 +61,16 @@ class MainViewModel(private val vmScope: CoroutineScope,
     //______________________________________________________________________________________________
 
     // Entities
+
+    fun countEntities() {
+        vmScope.launch(Dispatchers.Default) {
+            counter = when(currentFolderId)  {
+                0L   -> { repository.countEntities() }
+                else -> { repository.countEntitiesByFolderId(currentFolderId) }
+            }
+        }
+    }
+
     fun getEntityId(id: Long) { entityId = id }
 
     fun deleteEntityById(id: Long) {
@@ -79,9 +92,9 @@ class MainViewModel(private val vmScope: CoroutineScope,
     fun isGridVisible(): Boolean { return  currentJointFolder != null }
 
     fun clear() = vmScope.launch {
-        currentFolderId = 0
         currentJointFolder = null
-        entityId = 0
+        currentFolderId = null
+        entityId = 0L
     }
 
 }

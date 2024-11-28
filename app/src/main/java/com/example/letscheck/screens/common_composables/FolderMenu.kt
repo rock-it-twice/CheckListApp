@@ -38,7 +38,7 @@ fun FolderMenu(
     val route = navController.currentDestination!!.route
 
     Column(
-        modifier = Modifier.padding(bottom = 10.dp),
+        modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
     ) {
         // Заголовок
         Text(stringResource(R.string.folder_title))

@@ -111,6 +111,12 @@ interface Dao {
     @Query("SELECT * FROM folders WHERE folder_name LIKE :folderName LIMIT 1")
     suspend fun getFolderByName(folderName: String): Folder?
 
+    @Query("SELECT COUNT(*) FROM user_entities WHERE folder_id LIKE :folderId")
+    suspend fun countEntitiesByFolderId(folderId: Long?): Int
+
+    @Query("SELECT COUNT(*) FROM user_entities")
+    suspend fun countAllEntities(): Int
+
     // ЗАГОЛОВКИ
     @Query("SELECT * FROM user_entities WHERE folder_id LIKE :folderId")
     fun getUserEntities(folderId: Long): List<UserEntity>

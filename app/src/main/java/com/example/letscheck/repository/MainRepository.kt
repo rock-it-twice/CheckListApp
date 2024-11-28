@@ -52,6 +52,19 @@ class MainRepository(private val userDao: Dao) {
     }
 
     // USER ENTITIES
+
+    suspend fun countEntitiesByFolderId(folderId: Long?): Int {
+        return withContext(Dispatchers.IO) {
+            return@withContext userDao.countEntitiesByFolderId(folderId)
+        }
+    }
+
+    suspend fun countEntities(): Int {
+        return withContext(Dispatchers.IO) {
+            return@withContext userDao.countAllEntities()
+        }
+
+    }
     suspend fun getJointEntityById(entityId: Long): JointEntity? {
         return withContext(Dispatchers.IO) {
             return@withContext userDao.getJointEntity(entityId)
