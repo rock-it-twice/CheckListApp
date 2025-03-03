@@ -1,6 +1,7 @@
 package com.example.letscheck.screens.common_composables
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,33 +29,40 @@ import com.example.letscheck.navigation.Routes
 fun FolderMenu(
     navController: NavController,
     folders: List<Folder>,
+    foldersAndCounts: Map<Folder, Int>,
     id: Long?,
     onFolderChange: (Long?) -> Unit
 ){
-
-    var expanded by remember { mutableStateOf(false) }
-    val noFolder = stringResource(id = R.string.folder_no_folder)
-    val allFolders = stringResource(id = R.string.folder_all)
-    var folderName by remember { mutableStateOf("") }
     val route = navController.currentDestination!!.route
+    var expanded by remember { mutableStateOf(false) }
+
+    val noFolder    = stringResource(id = R.string.folder_no_folder)
+    val allFolders  = stringResource(id = R.string.folder_all)
+    val folderName  = when(id) {
+                                null -> { noFolder }
+                                0L   -> { allFolders }
+                                else -> { folders.find { it.id == id }?.folderName ?: noFolder }
+                                }
 
     Column(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
     ) {
-        // Заголовок
-        Text(stringResource(R.string.folder_title))
-        // Текущая папка
-        TextButton(
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = MaterialTheme.colorScheme.secondary
-            ),
-            onClick = { expanded = true }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text( text =
-            if (folderName == "") folders.find { it.id == id }?.folderName ?: noFolder
-            else folderName
-            )
+            // Заголовок
+            Text(stringResource(R.string.folder_title))
+            // Текущая папка
+            TextButton(
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.secondary
+                ),
+                onClick = { expanded = true }
+            ) {
+                Text( text = folderName )
+            }
         }
+
         // Выпадающее меню
         DropdownMenu(
             expanded = expanded,
@@ -63,8 +72,7 @@ fun FolderMenu(
             if (route == Routes.Home.route){
                 DropdownMenuItem(
                     text    = { Text(text = allFolders) },
-                    onClick = { folderName = allFolders
-                                onFolderChange(0)
+                    onClick = { onFolderChange(0L)
                                 expanded = false
                     }
                 )
@@ -72,18 +80,16 @@ fun FolderMenu(
             // Без папки
             DropdownMenuItem(
                 text    = { Text(text = noFolder) },
-                onClick = { folderName = noFolder
-                            onFolderChange(null)
+                onClick = { onFolderChange(null)
                             expanded = false
                 }
             )
             // Список папок
-            folders.forEach {
+            foldersAndCounts.forEach {
                 DropdownMenuItem(
-                    text    = { Text(text = it.folderName) },
+                    text    = { Text(text = "${ it.key.folderName } ..... ${it.value}")},
                     onClick = {
-                        folderName = it.folderName
-                        onFolderChange(it.id)
+                        onFolderChange(it.key.id)
                         expanded = false
                     }
                 )

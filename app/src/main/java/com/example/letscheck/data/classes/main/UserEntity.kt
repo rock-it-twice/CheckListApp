@@ -21,7 +21,7 @@ import androidx.room.PrimaryKey
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long = 0,
+    val id: Long = 0L,
     @ColumnInfo(name = "folder_id")
     var folderId: Long? = null,
     @ColumnInfo(name = "entity_name")

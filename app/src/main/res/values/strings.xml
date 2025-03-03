@@ -20,14 +20,14 @@
     <string name="progress_bar_text">прогресс:</string>
 
     <!-- Folder menu -->
-    <string name="folder_title">Выбор папки: </string>
-    <string name="folder_all">без фильтра</string>
+    <string name="folder_title">Выбрать папку: </string>
+    <string name="folder_all">все папки</string>
     <string name="folder_no_folder">без папки</string>
     <string name="folder_edit">Изменить</string>
 
     <!-- Empty folder surface -->
     <string name="empty_folder_surface_title">Здесь пока пусто</string>
-    <string name="empty_folder_surface_message">Создайте свой первый список</string>
+    <string name="empty_folder_surface_message"></string>
     <string name="empty_folder_surface_create">Создать список</string>
 
     <!-- Entity DropDown menu -->

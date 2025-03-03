@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.MapColumn
 import com.example.letscheck.repository.MainRepository
 import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
@@ -21,6 +22,7 @@ class MainViewModel(private val vmScope: CoroutineScope,
                     private val application: Application ) : ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
+    val foldersAndCounts: LiveData<Map<Folder, @MapColumn("count") Int>> = repository.foldersAndCounts
 
     var currentFolderId: Long? by mutableStateOf(null)
         private set
@@ -36,19 +38,14 @@ class MainViewModel(private val vmScope: CoroutineScope,
     //______________________________________________________________________________________________
 
     // Folder
-    fun addFolder(folderName: String) {
-        vmScope.launch(Dispatchers.Default) {
-            repository.addFolder(Folder(folderName = folderName))
-        }
-    }
 
     private fun getFolderId(id: Long?) { currentFolderId = id }
 
     fun getJointFolderById() {
         vmScope.launch(Dispatchers.Default) {
-            when (currentFolderId) {
-                0L   -> currentJointFolder = repository.getNullFolderWithAllEntities()
-                else -> currentJointFolder = repository.getJointFolderById(currentFolderId)
+            currentJointFolder = when (currentFolderId) {
+                0L   -> repository.getNullFolderWithAllEntities()
+                else -> repository.getJointFolderById(currentFolderId)
             }
         }
     }

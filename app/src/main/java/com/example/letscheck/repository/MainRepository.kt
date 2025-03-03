@@ -15,10 +15,12 @@ import kotlinx.coroutines.withContext
 class MainRepository(private val userDao: Dao) {
 
     val folders = userDao.getAllFolders()
+    val foldersAndCounts = userDao.getAllFoldersAndCounts()
 
     // INSERT INTO
     suspend fun addFolder(folder: Folder) {
-        userDao.addFolder(folder)
+        val id = userDao.addFolder(folder)
+        println(id)
     }
 
     suspend fun addNewDataToDB(entity: UserEntity,

@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -54,6 +55,7 @@ fun NewCheckListLazyColumn(
     val modifier = Modifier
     var entityName = vm.newEntity?.entityName ?: ""
     val folderId = vm.newEntity?.folderId
+    val foldersSizes by vm.foldersAndCounts.observeAsState(mapOf())
 
     LaunchedEffect(vm.newEntity?.entityName) {
         entityName = vm.newEntity?.entityName ?: ""
@@ -71,6 +73,7 @@ fun NewCheckListLazyColumn(
             navController = navController,
             folders = folders,
             id = folderId,
+            foldersAndCounts = foldersSizes,
             onFolderChange = { vm.changeFolder(it) }
             )
         }

@@ -3,6 +3,8 @@ package com.example.letscheck.data.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.MapColumn
+import androidx.room.MapInfo
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
@@ -98,9 +100,15 @@ interface Dao {
 
     // ЗАПРОСЫ К БД --------------------------------------------
 
-    // Получение списка всех пользователей
+    // Получение списка всех папок
     @Query("SELECT * FROM folders")
     fun getAllFolders(): LiveData<List<Folder>>
+
+
+    @Transaction
+    @Query("SELECT *, COUNT(folder_id) as count " +
+            "FROM folders LEFT JOIN user_entities ON folders.id = user_entities.folder_id GROUP BY folders.id")
+    fun getAllFoldersAndCounts(): LiveData<Map<Folder, @MapColumn(columnName = "count") Int>>
 
     // Получение пользователя по id
     @Query("SELECT * FROM folders WHERE id LIKE :folderId LIMIT 1")
@@ -116,6 +124,9 @@ interface Dao {
 
     @Query("SELECT COUNT(*) FROM user_entities")
     suspend fun countAllEntities(): Int
+
+    @Query("SELECT COUNT(folder_id) FROM user_entities WHERE folder_id = null")
+    fun countEntitiesWithoutFolder(): Int
 
     // ЗАГОЛОВКИ
     @Query("SELECT * FROM user_entities WHERE folder_id LIKE :folderId")

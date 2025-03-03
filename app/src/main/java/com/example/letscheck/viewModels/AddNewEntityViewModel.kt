@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.MapColumn
 import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.Folder
@@ -28,6 +29,7 @@ class AddNewEntityViewModel(
     private val application: Application): ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
+    val foldersAndCounts: LiveData<Map<Folder, @MapColumn("count") Int>> = repository.foldersAndCounts
 
     var entityId: Long by mutableLongStateOf(0L)
         private set

@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 data class Folder(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long = 0,
+    val id: Long = 0L,
     @ColumnInfo("folder_name")
     val folderName: String
 )

@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,9 +25,9 @@ import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.navigation.Routes
 import com.example.letscheck.screens.common_composables.FolderMenu
-import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.screens.common_composables.popups.DeleteWarningPopUp
+import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.mainScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.mainScreen.composables.EmptyFolderSurface
 import com.example.letscheck.viewModels.MainViewModel
@@ -44,6 +43,7 @@ fun MainScreen(
     ) {
 
     val folders by vm.folders.observeAsState(listOf())
+    val foldersAndCounts by vm.foldersAndCounts.observeAsState(emptyMap())
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var showPopUp by rememberSaveable { mutableStateOf(false) }
@@ -51,8 +51,6 @@ fun MainScreen(
 
     LaunchedEffect(vm.currentFolderId){
         vm.countEntities()
-        println("folderId = ${vm.currentFolderId}")
-        println("counter = ${vm.counter}")
     }
 
     Scaffold(
@@ -80,6 +78,7 @@ fun MainScreen(
                 FolderMenu(
                     navController = navController,
                     folders = folders,
+                    foldersAndCounts = foldersAndCounts,
                     id = vm.currentFolderId,
                     onFolderChange = { vm.changeFolder(it) }
                 )

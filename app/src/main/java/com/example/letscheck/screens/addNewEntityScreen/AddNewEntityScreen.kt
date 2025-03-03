@@ -1,9 +1,7 @@
 package com.example.letscheck.screens.addNewEntityScreen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -12,25 +10,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.screens.addNewEntityScreen.composables.NewCheckListLazyColumn
 import com.example.letscheck.screens.addNewEntityScreen.composables.SaveResultToDataBaseButton
-import com.example.letscheck.screens.common_composables.EditFoldersPopUp
-import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewEntityScreen(
     folderId: Long,
@@ -56,6 +48,7 @@ fun AddNewEntityScreen(
     }
 
     val folders by vm.folders.observeAsState(listOf())
+
 
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

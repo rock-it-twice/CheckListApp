@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
@@ -24,7 +25,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.R
+import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.screens.addNewEntityScreen.composables.AcceptRenameDeleteButton
 import com.example.letscheck.viewModels.AddNewEntityViewModel
 
@@ -49,7 +53,10 @@ fun FolderDispatcherScreen(
 ){
 
     val route = previousScreenRoute ?: "home"
-    val folders by vm.folders.observeAsState( listOf() )
+    val folders by vm.foldersAndCounts.observeAsState(emptyMap())
+    LaunchedEffect(key1 = Unit) {
+        println("folders size is: ${folders.size}")
+    }
 
     val textFieldColors = TextFieldDefaults.colors(
         disabledContainerColor = Color.Transparent,
@@ -59,23 +66,6 @@ fun FolderDispatcherScreen(
     Surface(
         Modifier.fillMaxSize().padding(vertical = 40.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            // Заголовок
-
-
-    //        // Сообщение
-    //        Text(
-    //            text = stringResource(R.string.pop_up_edit_folders_message),
-    //            style = MaterialTheme.typography.titleLarge,
-    //            textAlign = TextAlign.Center
-    //        )
-    //        Spacer(Modifier.size(10.dp))
-        }
         LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(20.dp),
             verticalArrangement = Arrangement.Center,
@@ -91,7 +81,7 @@ fun FolderDispatcherScreen(
             }
             item{ Spacer(Modifier.size(20.dp)) }
             // поля
-            items(folders){ folder ->
+            items(items = folders.keys.toList(), key = { it.id }){ folder ->
 
                 var isEnabled by remember { mutableStateOf(false) }
                 var name by remember { mutableStateOf(folder.folderName) }
@@ -121,6 +111,7 @@ fun FolderDispatcherScreen(
                     )
                 }
             }
+            // Создать папку
             item{
                 TextButton(
                     onClick = { vm.addFolder("Новая папка") },
