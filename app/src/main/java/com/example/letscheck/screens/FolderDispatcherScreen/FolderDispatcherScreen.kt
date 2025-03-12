@@ -53,7 +53,8 @@ fun FolderDispatcherScreen(
 ){
 
     val route = previousScreenRoute ?: "home"
-    val folders by vm.foldersAndCounts.observeAsState(emptyMap())
+    val folders by vm.folders.observeAsState(emptyList())
+    val foldersWithCounts by vm.foldersAndCounts.observeAsState(emptyMap())
     LaunchedEffect(key1 = Unit) {
         println("folders size is: ${folders.size}")
     }
@@ -81,7 +82,7 @@ fun FolderDispatcherScreen(
             }
             item{ Spacer(Modifier.size(20.dp)) }
             // поля
-            items(items = folders.keys.toList(), key = { it.id }){ folder ->
+            items(items = folders, key = { it.id }){ folder ->
 
                 var isEnabled by remember { mutableStateOf(false) }
                 var name by remember { mutableStateOf(folder.folderName) }

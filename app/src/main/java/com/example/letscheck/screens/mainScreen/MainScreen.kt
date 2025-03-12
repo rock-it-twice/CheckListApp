@@ -31,6 +31,7 @@ import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopApp
 import com.example.letscheck.screens.mainScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.mainScreen.composables.EmptyFolderSurface
 import com.example.letscheck.viewModels.MainViewModel
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +52,15 @@ fun MainScreen(
 
     LaunchedEffect(vm.currentFolderId){
         vm.countEntities()
+    }
+
+    // Проверка, потом удалить
+    LaunchedEffect(Unit) {
+        delay(2000)
+        println("Folders and counts:")
+        foldersAndCounts.forEach {
+            println("folder_id: ${ it.key }, count: ${ it.value }")
+        }
     }
 
     Scaffold(

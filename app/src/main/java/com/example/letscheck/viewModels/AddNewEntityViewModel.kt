@@ -15,6 +15,7 @@ import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
+import com.example.letscheck.data.classes.output.FolderWithCount
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +30,7 @@ class AddNewEntityViewModel(
     private val application: Application): ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
-    val foldersAndCounts: LiveData<Map<Folder, @MapColumn("count") Int>> = repository.foldersAndCounts
+    val foldersAndCounts: LiveData<Map<Long?, @MapColumn("count") Int>> = repository.foldersAndCounts
 
     var entityId: Long by mutableLongStateOf(0L)
         private set

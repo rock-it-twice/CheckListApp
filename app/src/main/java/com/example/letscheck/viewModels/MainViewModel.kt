@@ -12,6 +12,7 @@ import androidx.room.MapColumn
 import com.example.letscheck.repository.MainRepository
 import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
+import com.example.letscheck.data.classes.output.FolderWithCount
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class MainViewModel(private val vmScope: CoroutineScope,
                     private val application: Application ) : ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
-    val foldersAndCounts: LiveData<Map<Folder, @MapColumn("count") Int>> = repository.foldersAndCounts
+    val foldersAndCounts: LiveData<Map<Long?, @MapColumn("count") Int>> = repository.foldersAndCounts
 
     var currentFolderId: Long? by mutableStateOf(null)
         private set

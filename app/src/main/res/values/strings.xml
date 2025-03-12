@@ -8,7 +8,7 @@
     <string name="home">choose_UserActivity</string>
     <string name="create">create new screen</string>
     <!-- Modal menu-->
-    <string name="choose_folder">выбрать папку</string>
+    <string name="choose_folder">Фильтр</string>
     <string name="add_new_folder">создать папку</string>
     <string name="add_new_folder_name">введите имя папки</string>
     <string name="add_button">+</string>
@@ -20,8 +20,9 @@
     <string name="progress_bar_text">прогресс:</string>
 
     <!-- Folder menu -->
-    <string name="folder_title">Выбрать папку: </string>
-    <string name="folder_all">все папки</string>
+    <string name="folder_title">Фильтр: </string>
+    <string name="folder_folders">папки</string>
+    <string name="folder_all">все списки</string>
     <string name="folder_no_folder">без папки</string>
     <string name="folder_edit">Изменить</string>
 

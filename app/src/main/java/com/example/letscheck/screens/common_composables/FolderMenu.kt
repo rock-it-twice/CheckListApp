@@ -1,13 +1,24 @@
 package com.example.letscheck.screens.common_composables
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -18,6 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,7 +43,7 @@ import com.example.letscheck.navigation.Routes
 fun FolderMenu(
     navController: NavController,
     folders: List<Folder>,
-    foldersAndCounts: Map<Folder, Int>,
+    foldersAndCounts: Map<Long?, Int>,
     id: Long?,
     onFolderChange: (Long?) -> Unit
 ){
@@ -71,37 +85,79 @@ fun FolderMenu(
             // Все списки
             if (route == Routes.Home.route){
                 DropdownMenuItem(
-                    text    = { Text(text = allFolders) },
+                    text    = { Text(text = "${allFolders} (${foldersAndCounts.values.sum()})") },
                     onClick = { onFolderChange(0L)
                                 expanded = false
                     }
                 )
             }
+
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .background(color = MaterialTheme.colorScheme.surface)
+            ){
+                Row(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.folder_icon),
+                            contentDescription = "folder_icon",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Spacer( Modifier.size(10.dp) )
+                        Text( stringResource(R.string.folder_folders) )
+                        Spacer( Modifier.size(10.dp) )
+                        }
+
+                    // Кнопка перехода на экран управления папками
+                    IconButton(
+                        onClick = {
+                            expanded = false
+                            navController.navigate(
+                                route = "${Routes.FolderDispatcherScreen.route}/${route}"
+                            )
+                        },
+                        modifier = Modifier.clip(shape = RoundedCornerShape(10.dp))
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "edit_icon",
+                            modifier = Modifier.size(15.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+
+
+                folders.forEach {
+                    val count = foldersAndCounts[it.id] ?: 0
+                    // Список папок
+                    DropdownMenuItem(
+                        text    = { Text(text = "${it.folderName} (${count})")},
+                        onClick = {
+                            onFolderChange(it.id)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+
             // Без папки
             DropdownMenuItem(
-                text    = { Text(text = noFolder) },
-                onClick = { onFolderChange(null)
-                            expanded = false
-                }
-            )
-            // Список папок
-            foldersAndCounts.forEach {
-                DropdownMenuItem(
-                    text    = { Text(text = "${ it.key.folderName } ..... ${it.value}")},
-                    onClick = {
-                        onFolderChange(it.key.id)
-                        expanded = false
-                    }
-                )
-            }
-            HorizontalDivider(modifier = Modifier.fillMaxWidth())
-            // Кнопка перехода на экран управления папками
-            DropdownMenuItem(
-                text    = { Text(stringResource(R.string.folder_edit)) },
+                text    = { Text(text = "$noFolder (${foldersAndCounts[null]})") },
                 onClick = {
-                    navController.navigate(
-                        route = "${Routes.FolderDispatcherScreen.route}/${route}"
-                    )
+                    onFolderChange(null)
+                    expanded = false
                 }
             )
         }

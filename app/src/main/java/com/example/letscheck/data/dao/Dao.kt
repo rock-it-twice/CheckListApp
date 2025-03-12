@@ -15,6 +15,7 @@ import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
+import com.example.letscheck.data.classes.output.FolderWithCount
 import com.example.letscheck.data.classes.output.JointEntity
 
 @Dao
@@ -104,11 +105,10 @@ interface Dao {
     @Query("SELECT * FROM folders")
     fun getAllFolders(): LiveData<List<Folder>>
 
-
-    @Transaction
-    @Query("SELECT *, COUNT(folder_id) as count " +
-            "FROM folders LEFT JOIN user_entities ON folders.id = user_entities.folder_id GROUP BY folders.id")
-    fun getAllFoldersAndCounts(): LiveData<Map<Folder, @MapColumn(columnName = "count") Int>>
+    @Query("SELECT user_entities.folder_id as id, COUNT(user_entities.id) as count " +
+            "FROM user_entities GROUP BY user_entities.folder_id")
+    fun getAllFoldersAndCounts():
+            LiveData<Map<@MapColumn(columnName = "id")Long?, @MapColumn(columnName = "count") Int>>
 
     // Получение пользователя по id
     @Query("SELECT * FROM folders WHERE id LIKE :folderId LIMIT 1")
