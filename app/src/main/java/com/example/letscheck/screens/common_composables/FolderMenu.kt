@@ -85,7 +85,7 @@ fun FolderMenu(
             // Все списки
             if (route == Routes.Home.route){
                 DropdownMenuItem(
-                    text    = { Text(text = "${allFolders} (${foldersAndCounts.values.sum()})") },
+                    text    = { Text(text = "$allFolders (${foldersAndCounts.values.sum()})") },
                     onClick = { onFolderChange(0L)
                                 expanded = false
                     }
@@ -100,7 +100,7 @@ fun FolderMenu(
             ){
                 Row(
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(start = 10.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
@@ -122,10 +122,10 @@ fun FolderMenu(
                     // Кнопка перехода на экран управления папками
                     IconButton(
                         onClick = {
-                            expanded = false
                             navController.navigate(
                                 route = "${Routes.FolderDispatcherScreen.route}/${route}"
                             )
+                            expanded = false
                         },
                         modifier = Modifier.clip(shape = RoundedCornerShape(10.dp))
                     ){
@@ -138,6 +138,7 @@ fun FolderMenu(
                     }
                 }
 
+                HorizontalDivider(Modifier.fillMaxWidth())
 
                 folders.forEach {
                     val count = foldersAndCounts[it.id] ?: 0

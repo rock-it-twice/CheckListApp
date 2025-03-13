@@ -15,7 +15,6 @@ import com.example.letscheck.data.classes.main.CheckBoxTitle
 import com.example.letscheck.data.classes.main.CheckList
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
-import com.example.letscheck.data.classes.output.FolderWithCount
 import com.example.letscheck.data.classes.output.JointEntity
 import com.example.letscheck.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope

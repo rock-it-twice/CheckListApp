@@ -15,7 +15,6 @@ import com.example.letscheck.data.classes.output.JointCheckList
 import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
 import com.example.letscheck.data.classes.main.UserEntity
-import com.example.letscheck.data.classes.output.FolderWithCount
 import com.example.letscheck.data.classes.output.JointEntity
 
 @Dao
@@ -119,7 +118,8 @@ interface Dao {
     @Query("SELECT * FROM folders WHERE folder_name LIKE :folderName LIMIT 1")
     suspend fun getFolderByName(folderName: String): Folder?
 
-    @Query("SELECT COUNT(*) FROM user_entities WHERE folder_id LIKE :folderId")
+    @Query("SELECT COUNT(*) FROM user_entities WHERE folder_id = :folderId" +
+            " OR (folder_id IS NULL AND :folderId IS NULL)")
     suspend fun countEntitiesByFolderId(folderId: Long?): Int
 
     @Query("SELECT COUNT(*) FROM user_entities")
@@ -167,6 +167,11 @@ interface Dao {
     @Transaction
     @Query("SELECT * FROM user_entities WHERE id LIKE :entityId LIMIT 1")
     suspend fun getJointEntity(entityId: Long): JointEntity?
+
+    @Transaction
+    @Query("SELECT * FROM user_entities WHERE folder_id = :folderId " +
+            "OR (folder_id IS NULL AND :folderId IS NULL)")
+    suspend fun getJointEntitiesByFolderId(folderId: Long?): List<JointEntity>
 
     // ПОДЗАГОЛОВКИ
     @Query("SELECT * FROM check_lists WHERE entity_id LIKE :entityId")

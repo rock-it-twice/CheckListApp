@@ -33,10 +33,21 @@ class MainRepository(private val userDao: Dao) {
     // FOLDERS
     suspend fun getJointFolderById(id: Long?): JointFolder? {
         return withContext(Dispatchers.IO)
-        { return@withContext userDao.getJointFolderById(id) }
+        {
+            return@withContext userDao.getJointFolderById(id)
+        }
     }
 
-    suspend fun getNullFolderWithAllEntities(): JointFolder {
+    suspend fun getNullJointFolder(): JointFolder {
+        return withContext(Dispatchers.IO)
+        {
+            val entities = userDao.getJointEntitiesByFolderId(null)
+            val jointFolder = JointFolder(null, entities)
+            return@withContext jointFolder
+        }
+    }
+
+    suspend fun getAllJointEntities(): JointFolder {
         return withContext(Dispatchers.IO)
         {
             val entities = userDao.getAllJointEntities()

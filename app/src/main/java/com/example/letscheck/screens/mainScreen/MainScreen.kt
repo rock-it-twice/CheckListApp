@@ -43,25 +43,13 @@ fun MainScreen(
     onSettingsChange: () -> Unit
     ) {
 
+    val isFolderEmpty = vm.currentJointFolder?.entities?.isEmpty() ?: true
     val folders by vm.folders.observeAsState(listOf())
     val foldersAndCounts by vm.foldersAndCounts.observeAsState(emptyMap())
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var showPopUp by rememberSaveable { mutableStateOf(false) }
     var entityId by rememberSaveable { mutableLongStateOf(0L) }
-
-    LaunchedEffect(vm.currentFolderId){
-        vm.countEntities()
-    }
-
-    // Проверка, потом удалить
-    LaunchedEffect(Unit) {
-        delay(2000)
-        println("Folders and counts:")
-        foldersAndCounts.forEach {
-            println("folder_id: ${ it.key }, count: ${ it.value }")
-        }
-    }
 
     Scaffold(
         modifier  = Modifier
@@ -92,7 +80,7 @@ fun MainScreen(
                     id = vm.currentFolderId,
                     onFolderChange = { vm.changeFolder(it) }
                 )
-                if (vm.counter == 0){
+                if ( isFolderEmpty ){
                     // Предложение создать первый список
                     EmptyFolderSurface { navController.navigate(Routes.AddNewEntityScreen.route) }
                 } else {
@@ -102,22 +90,11 @@ fun MainScreen(
                         navController = navController,
                         state = lazyGridState,
                         topBarScrollBehavior = topBarScrollBehavior,
-                        showPopUp = { showPopUp = it },
+                        showPopUp   = { showPopUp = it },
                         getEntityId = { entityId = it ; vm.getEntityId(it) }
                     )
                 }
             }
-//            ChooseFolderColumn(
-//                vm = vm,
-//                navController = navController,
-//                lazyGridState = lazyGridState,
-//                innerPadding  = innerPadding,
-//                topBarScrollBehavior = topBarScrollBehavior,
-//                showPopUp   = { showPopUp = it },
-//                getEntityId = { entityId = it
-//                                vm.getEntityId(it)
-//                }
-//            )
         }
     )
     PopUpBox(

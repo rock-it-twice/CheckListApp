@@ -12,7 +12,6 @@ import androidx.room.MapColumn
 import com.example.letscheck.repository.MainRepository
 import com.example.letscheck.data.classes.output.JointFolder
 import com.example.letscheck.data.classes.main.Folder
-import com.example.letscheck.data.classes.output.FolderWithCount
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,8 +30,6 @@ class MainViewModel(private val vmScope: CoroutineScope,
     var currentJointFolder: JointFolder? by mutableStateOf( null )
         private set
 
-    var counter: Int by mutableIntStateOf(0)
-
     var entityId: Long by mutableLongStateOf(0L)
         private set
 
@@ -45,7 +42,8 @@ class MainViewModel(private val vmScope: CoroutineScope,
     fun getJointFolderById() {
         vmScope.launch(Dispatchers.Default) {
             currentJointFolder = when (currentFolderId) {
-                0L   -> repository.getNullFolderWithAllEntities()
+                0L   -> repository.getAllJointEntities()
+                null -> repository.getNullJointFolder()
                 else -> repository.getJointFolderById(currentFolderId)
             }
         }
@@ -59,15 +57,6 @@ class MainViewModel(private val vmScope: CoroutineScope,
     //______________________________________________________________________________________________
 
     // Entities
-
-    fun countEntities() {
-        vmScope.launch(Dispatchers.Default) {
-            counter = when(currentFolderId)  {
-                0L   -> { repository.countEntities() }
-                else -> { repository.countEntitiesByFolderId(currentFolderId) }
-            }
-        }
-    }
 
     fun getEntityId(id: Long) { entityId = id }
 
