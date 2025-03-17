@@ -76,8 +76,8 @@ fun AnimatedEntitiesGrid(
 ){
 
     vm.getJointFolderById()
-    val cellSize = DpSize(135.dp, 135.dp)
-    val entities = ( vm.currentJointFolder?.entities ?: listOf() )
+    val boxSize = DpSize(135.dp, 135.dp)
+    val entities = ( vm.currentJointFolder?.entities ?: emptyList() )
 
     AnimatedVisibility(
         visible = vm.isGridVisible(),
@@ -92,28 +92,42 @@ fun AnimatedEntitiesGrid(
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll( connection = topBarScrollBehavior.nestedScrollConnection ),
-            columns = GridCells.Adaptive(cellSize.width),
+                .nestedScroll(connection = topBarScrollBehavior.nestedScrollConnection),
+            columns = GridCells.Adaptive(boxSize.width),
             state = state,
             contentPadding = PaddingValues(20.dp),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             content = {
-                items( items= entities, key = {item -> item.entity.id}) {
 
-                    val progressObserver by vm.getCheckedList(it.entity.id).observeAsState(listOf())
+                items( items= entities, key = {item -> item.entity.id}) {
+                    jointEntity ->
+                    val progressObserver by
+                    vm.getCheckedList(jointEntity.entity.id).observeAsState(emptyList())
 
                     EntityBox(
-                        vm,
-                        navController,
-                        cellSize,
-                        it,
-                        progressObserver,
-                        showPopUp,
-                        getEntityId)
+                        boxSize = boxSize,
+                        jointEntity   = jointEntity,
+                        progressObserver = progressObserver,
+                        showPopUp     = showPopUp,
+                        getEntityId   = getEntityId,
+                        resetProgress = { entityId: Long -> vm.resetCheckBoxes(entityId) },
+                        navigateToAddNewEntityScreen  = {
+                            navController.navigate( route = Routes.AddNewEntityScreen.route )
+                        },
+                        navigateToCurrentEntityScreen = {
+                            navController.navigate( route = Routes.CurrentEntityScreen.route )
+                        }
+                    )
 
                 }
                 item {
-                    AddNewEntityBox(navController, cellSize){ getEntityId(0L) }
+                    AddNewEntityBox(
+                        size = boxSize,
+                        getEntityId = { getEntityId(0L) },
+                        navigateToAddNewEntityScreen = {
+                            navController.navigate( Routes.AddNewEntityScreen.route )
+                        }
+                    )
                 }
             }
         )
@@ -122,13 +136,14 @@ fun AnimatedEntitiesGrid(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EntityBox(vm: MainViewModel,
-              navController: NavController,
-              gridSize: DpSize,
+fun EntityBox(boxSize: DpSize,
               jointEntity: JointEntity,
               progressObserver: List<Boolean>,
               showPopUp: (Boolean) -> Unit,
-              getEntityId: (Long) -> Unit
+              getEntityId: (Long) -> Unit,
+              resetProgress: (Long) -> Unit,
+              navigateToAddNewEntityScreen: () -> Unit,
+              navigateToCurrentEntityScreen: () -> Unit
 ){
 
     val entityId by remember { mutableLongStateOf(jointEntity.entity.id) }
@@ -142,28 +157,28 @@ fun EntityBox(vm: MainViewModel,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(modifier = Modifier
-            .size(gridSize)
+            .size(boxSize)
             .clip(RoundedCornerShape(20.dp))
             .combinedClickable(
                 onClick = {
-                    vm.getEntityId(entityId)
-                    navController.navigate( route = Routes.CurrentEntityScreen.route )
-                          },
+                    getEntityId(entityId)
+                    navigateToCurrentEntityScreen()
+                },
                 onLongClick = { isExpanded = !isExpanded },
                 onLongClickLabel = stringResource(R.string.long_click_label)
             ),
             contentAlignment = Alignment.BottomCenter
         ){
             DropDownContextMenu(
-                navController = navController,
+                size       = boxSize,
+                entityId   = entityId,
                 isExpanded = isExpanded,
-                size = gridSize,
-                entityId = entityId,
-                isResetEnabled = isResetEnabled,
-                resetProgress = { vm.resetCheckBoxes(it) },
+                isResetEnabled   = isResetEnabled,
+                resetProgress    = { resetProgress(it) },
                 onExpandedChange = { isExpanded = it },
-                showPopUp = showPopUp,
-                getEntityId= getEntityId
+                showPopUp   = showPopUp,
+                getEntityId = getEntityId,
+                navigateToEditScreen = { navigateToAddNewEntityScreen() }
             )
 
             if (jointEntity.entity.image != "") {
@@ -198,7 +213,10 @@ fun ProgressIndicator(progress: Int, listSize: Int){
         visible = (progress == listSize),
         enter = fadeIn(),
         exit = fadeOut(),
-        content = { Box( Modifier.fillMaxSize().alpha(0.5f).background(checkedDeepGreen) ) }
+        content = { Box( Modifier
+            .fillMaxSize()
+            .alpha(0.5f)
+            .background(checkedDeepGreen) ) }
     )
     if (progress == listSize) {
 
@@ -269,7 +287,11 @@ fun NoImageBox(progress: Int, listSize: Int){
 }
 
 @Composable
-fun AddNewEntityBox(navController: NavController, size: DpSize, onClick: () -> Unit) {
+fun AddNewEntityBox(
+    size: DpSize,
+    getEntityId: () -> Unit,
+    navigateToAddNewEntityScreen: () -> Unit
+) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
@@ -277,10 +299,12 @@ fun AddNewEntityBox(navController: NavController, size: DpSize, onClick: () -> U
                 .size(size.width, size.height)
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .clickable(onClick = {
-                    onClick()
-                    navController.navigate(route = Routes.AddNewEntityScreen.route)
-                }),
+                .clickable(
+                    onClick = {
+                        getEntityId()
+                        navigateToAddNewEntityScreen()
+                    }
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(

@@ -2,7 +2,6 @@ package com.example.letscheck.viewModels
 
 import android.app.Application
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,9 +21,10 @@ class MainViewModel(private val vmScope: CoroutineScope,
                     private val application: Application ) : ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
-    val foldersAndCounts: LiveData<Map<Long?, @MapColumn("count") Int>> = repository.foldersAndCounts
+    val folderIDsWithCounts: LiveData<Map<Long?, @MapColumn("count") Int>> =
+        repository.folderIDsWithCounts
 
-    var currentFolderId: Long? by mutableStateOf(null)
+    var currentFolderId: Long? by mutableStateOf(0L)
         private set
 
     var currentJointFolder: JointFolder? by mutableStateOf( null )
@@ -79,8 +79,8 @@ class MainViewModel(private val vmScope: CoroutineScope,
     fun isGridVisible(): Boolean { return  currentJointFolder != null }
 
     fun clear() = vmScope.launch {
-        currentJointFolder = null
-        currentFolderId = null
+        currentFolderId = 0L
+        getJointFolderById()
         entityId = 0L
     }
 

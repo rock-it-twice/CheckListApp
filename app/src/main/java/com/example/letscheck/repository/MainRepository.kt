@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 class MainRepository(private val userDao: Dao) {
 
     val folders = userDao.getAllFolders()
-    val foldersAndCounts = userDao.getAllFoldersAndCounts()
+    val folderIDsWithCounts = userDao.getAllFoldersAndCounts()
 
     // INSERT INTO
     suspend fun addFolder(folder: Folder) {

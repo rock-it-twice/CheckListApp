@@ -36,7 +36,7 @@ fun NavGraph( mainVM: MainViewModel,
             CurrentEntityScreen(vm = currentVM, navController = navController, entityId = mainVM.entityId, settings = settings, onSettingsChange = onSettingsChange)
         }
         composable( route = Routes.AddNewEntityScreen.route ){
-            val folderId = mainVM.currentJointFolder?.folder?.id ?: 0L
+            val folderId: Long? = mainVM.currentJointFolder?.folder?.id
             AddNewEntityScreen(
                 folderId = folderId,
                 entityId = mainVM.entityId,

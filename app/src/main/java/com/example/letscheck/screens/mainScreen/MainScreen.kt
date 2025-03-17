@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,14 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.letscheck.data.classes.main.AppSettings
 import com.example.letscheck.navigation.Routes
-import com.example.letscheck.screens.common_composables.FolderMenu
+import com.example.letscheck.screens.common_composables.FilterMenu
 import com.example.letscheck.screens.common_composables.PopUpBox
 import com.example.letscheck.screens.common_composables.popups.DeleteWarningPopUp
 import com.example.letscheck.screens.common_composables.top_app_bar.CommonTopAppBar
 import com.example.letscheck.screens.mainScreen.composables.AnimatedEntitiesGrid
 import com.example.letscheck.screens.mainScreen.composables.EmptyFolderSurface
 import com.example.letscheck.viewModels.MainViewModel
-import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,11 +43,15 @@ fun MainScreen(
 
     val isFolderEmpty = vm.currentJointFolder?.entities?.isEmpty() ?: true
     val folders by vm.folders.observeAsState(listOf())
-    val foldersAndCounts by vm.foldersAndCounts.observeAsState(emptyMap())
+    val folderIDsWithCounts by vm.folderIDsWithCounts.observeAsState(emptyMap())
     val lazyGridState = rememberLazyGridState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var showPopUp by rememberSaveable { mutableStateOf(false) }
     var entityId by rememberSaveable { mutableLongStateOf(0L) }
+
+    LaunchedEffect(key1 = Unit){
+        vm.getJointFolderById()
+    }
 
     Scaffold(
         modifier  = Modifier
@@ -73,10 +75,10 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(top = topPadding, bottom = 40.dp, start = 10.dp, end = 10.dp)
             ) {
-                FolderMenu(
+                FilterMenu(
                     navController = navController,
                     folders = folders,
-                    foldersAndCounts = foldersAndCounts,
+                    foldersAndCounts = folderIDsWithCounts,
                     id = vm.currentFolderId,
                     onFolderChange = { vm.changeFolder(it) }
                 )

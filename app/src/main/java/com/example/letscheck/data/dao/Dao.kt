@@ -101,7 +101,7 @@ interface Dao {
     // ЗАПРОСЫ К БД --------------------------------------------
 
     // Получение списка всех папок
-    @Query("SELECT * FROM folders")
+    @Query("SELECT * FROM folders ORDER BY id DESC")
     fun getAllFolders(): LiveData<List<Folder>>
 
     @Query("SELECT user_entities.folder_id as id, COUNT(user_entities.id) as count " +
@@ -137,7 +137,7 @@ interface Dao {
 
     // Получение всех списков
     @Transaction
-    @Query("SELECT * FROM user_entities")
+    @Query("SELECT * FROM user_entities ORDER BY folder_id DESC")
     fun getAllJointEntities(): List<JointEntity>
 
     // Получение entity по имени

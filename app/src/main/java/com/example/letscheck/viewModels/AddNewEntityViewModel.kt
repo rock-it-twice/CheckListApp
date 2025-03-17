@@ -29,7 +29,7 @@ class AddNewEntityViewModel(
     private val application: Application): ViewModel() {
 
     val folders: LiveData<List<Folder>> = repository.folders
-    val foldersAndCounts: LiveData<Map<Long?, @MapColumn("count") Int>> = repository.foldersAndCounts
+    val foldersAndCounts: LiveData<Map<Long?, @MapColumn("count") Int>> = repository.folderIDsWithCounts
 
     var entityId: Long by mutableLongStateOf(0L)
         private set
@@ -75,7 +75,7 @@ class AddNewEntityViewModel(
 
     // Entity
 
-    fun createNewEntity(folderId: Long, str: String) {
+    fun createNewEntity(folderId: Long?, str: String) {
         newEntity = UserEntity( folderId = folderId, entityName = str )
         addNewImageUri(null)
         clearNewCheckLists()

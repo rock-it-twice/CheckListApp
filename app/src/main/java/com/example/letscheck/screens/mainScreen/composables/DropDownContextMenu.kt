@@ -13,22 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
-import androidx.navigation.NavController
 import com.example.letscheck.R
-import com.example.letscheck.navigation.Routes
-
 
 
 @Composable
-fun DropDownContextMenu(navController: NavController,
-                        isExpanded: Boolean,
-                        size: DpSize,
+fun DropDownContextMenu(size: DpSize,
                         entityId: Long,
+                        isExpanded: Boolean,
                         isResetEnabled: Boolean,
                         resetProgress: (Long) -> Unit,
                         onExpandedChange: (Boolean) -> Unit,
                         showPopUp: (Boolean) -> Unit,
-                        getEntityId: (Long) -> Unit
+                        getEntityId: (Long) -> Unit,
+                        navigateToEditScreen: () -> Unit
 ){
     DropdownMenu(
         expanded         = isExpanded,
@@ -53,7 +50,7 @@ fun DropDownContextMenu(navController: NavController,
             text         = { Text(stringResource(R.string.add_new_edit)) },
             onClick      = {
                 getEntityId(entityId)
-                navController.navigate( route = Routes.AddNewEntityScreen.route )
+                navigateToEditScreen()
                 onExpandedChange(!isExpanded)
             },
             leadingIcon  = { Icon(Icons.Default.Edit, stringResource(R.string.add_new_edit)) }

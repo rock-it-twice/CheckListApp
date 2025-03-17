@@ -25,7 +25,7 @@ import com.example.letscheck.viewModels.AddNewEntityViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewEntityScreen(
-    folderId: Long,
+    folderId: Long?,
     entityId: Long,
     navController: NavController,
     vm: AddNewEntityViewModel,
@@ -48,7 +48,6 @@ fun AddNewEntityScreen(
     }
 
     val folders by vm.folders.observeAsState(listOf())
-
 
     val lazyListState = rememberLazyListState()
     val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
